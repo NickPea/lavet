@@ -1,16 +1,22 @@
 <?php
 
+use App\Profile;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+
+        //user
+        factory(User::class, 5)->create();
+        //profile
+        User::all()->each(function ($user)
+        {
+            // $user->profile->save(factory(Profile::class)->make());
+        });
+        
+
     }
 }

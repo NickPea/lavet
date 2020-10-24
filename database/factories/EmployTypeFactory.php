@@ -1,0 +1,12 @@
+<?php
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\EmployType;
+use Faker\Generator as Faker;
+
+$factory->define(EmployType::class, function (Faker $faker) {
+    return [
+        //
+    ];
+});
