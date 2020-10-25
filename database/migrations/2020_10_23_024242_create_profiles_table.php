@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 
 class CreateProfilesTable extends Migration
@@ -15,9 +16,12 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
-            $table->boolean('available')->default(true);
+            $table->boolean('is_available_now')->default(true);
+            $table->string('work_status')->nullable()->default("I\'m looking for work");
             $table->text('about')->nullable();
             $table->timestamps();
+            //FK
+            $table->foreignId('user_id')->constrained('users', 'id');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCredentialsTable extends Migration
+class CreatePositionablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateCredentialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('credentials', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('institution');
-            $table->date('end_at');
+        Schema::create('positionables', function (Blueprint $table) {
+            $table->boolean('is_main')->default(false);
             $table->timestamps();
             //FK
-            $table->foreignId('profile_id')->constrained('profiles', 'id');
+            $table->foreignId('position_id')->constrained('positions', 'id');
+            $table->foreignId('positionable_id');
+            $table->string('positionable_type');
         });
     }
 
@@ -31,6 +30,6 @@ class CreateCredentialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('credentials');
+        Schema::dropIfExists('positionables');
     }
 }

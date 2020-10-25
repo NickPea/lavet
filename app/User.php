@@ -13,30 +13,56 @@ class User extends Authenticatable
     use Notifiable;
     use ModelHelper;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /** methods */
+    public function profile()
+    {
+        return $this->hasOne('App\Profile');
+    }
+
+    public function business()
+    {
+        return $this->hasMany('App\Business');
+    }
+
+    public function event()
+    {
+        return $this->hasMany('App\Event');
+    }
+
+    public function rsvp()
+    {
+        return $this->hasMany('App\Rsvp');
+    }
+
+    public function role()
+    {
+        return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id');
+    }
+
+    public function reference()
+    {
+        return $this->hasMany('App\Reference');
+    }
+
+    public function message()
+    {
+        return $this->hasMany('App\Message', 'author_id', 'id');
+    }
+
+    public function message_user()
+    {
+        return $this->hasMany('App\MessageUser');
+    }
 }

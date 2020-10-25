@@ -14,8 +14,13 @@ class CreateReferencesTable extends Migration
     public function up()
     {
         Schema::create('references', function (Blueprint $table) {
-            $table->id();
+            $table->text('body');
             $table->timestamps();
+            //FK
+            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('profile_id')->constrained('profiles', 'id');
+            //PK
+            $table->primary(['user_id', 'profile_id']);
         });
     }
 

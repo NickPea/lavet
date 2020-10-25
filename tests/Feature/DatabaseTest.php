@@ -53,11 +53,11 @@ class DatabaseTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->withoutExceptionHandling();
     }
 
     /** @test */
-    public function hasTablesWithAtrributesAndRelationships()
-    /*************************************** */
+    public function databaseHasTablesWithAtrributesAndRelationships()
     {
         //user
         $this->assertTrue(Schema::hasColumns('users', [
@@ -123,7 +123,7 @@ class DatabaseTest extends TestCase
             'name', 'institution', 'end_at',
             'profile_id' //FK
         ]));
-        $this->assertInstanceOf(Credential::class, Credential::anyOf()->profile); //has one profie
+        $this->assertInstanceOf(Profile::class, Credential::anyOf()->profile); //has one profie
 
         //reference
         $this->assertTrue(Schema::hasColumns('references', [
@@ -163,7 +163,9 @@ class DatabaseTest extends TestCase
         ]));
 
         //employ-type
-        $this->assertTrue(Schema::hasColumns('employ_types', ['name']));
+        $this->assertTrue(Schema::hasColumns('employ_types', [
+            'name'
+            ]));
         $this->assertInstanceOf(Collection::class, EmployType::anyOf()->listing); //has many listings
 
         //event
@@ -172,7 +174,7 @@ class DatabaseTest extends TestCase
             'user_id' //FK
         ]));
         $this->assertInstanceOf(User::class, Event::anyOf()->user); //has one user
-        $this->assertInstanceOf(Rsvp::class, Event::anyOf()->rsvp); //has many rsvp (event_user)
+        $this->assertInstanceOf(Collection::class, Event::anyOf()->rsvp); //has many rsvp (event_user)
         $this->assertInstanceOf(Collection::class, Event::anyOf()->image); //has morphed to many (& one main) images
         $this->assertInstanceOf(Collection::class, Event::anyOf()->location); //has morphed to many (& one main) location
 
@@ -193,6 +195,8 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(Rsvp::class, Comment::anyOf()->rsvp); //has one rsvp
         $this->assertInstanceOf(Collection::class, Comment::anyOf()->image); //has morphed to many (& one main) images
 
+        /*****************************************MESSAGE******************************************* */
+ 
         //message
         $this->assertTrue(Schema::hasColumns('messages', [
             'subject', 'body',
@@ -203,12 +207,13 @@ class DatabaseTest extends TestCase
 
         //message-user
         $this->assertTrue(Schema::hasColumns('message_users', [
-            'is_read',
+            'read_at',
             'message_id', 'user_id', //FK
         ]));
         $this->assertInstanceOf(Message::class, MessageUser::anyOf()->message); //has one message
         $this->assertInstanceOf(User::class, MessageUser::anyOf()->user); //has one user
 
+        /*****************************************END MESSAGE******************************************* */
 
         /*****************************************IMAGE******************************************* */
 
@@ -216,12 +221,15 @@ class DatabaseTest extends TestCase
         $this->assertTrue(Schema::hasColumns('images', [
             'path'
         ]));
-        $this->assertInstanceOf(Collection::class, Image::anyOf()->imageable);
-            //has morphed by many user OR business OR listing OR event Or comment
+        $this->assertInstanceOf(Collection::class, Image::anyOf()->profile); //has morphed by many profile
+        $this->assertInstanceOf(Collection::class, Image::anyOf()->business); //has morphed by many business
+        $this->assertInstanceOf(Collection::class, Image::anyOf()->listing); //has morphed by many listing
+        $this->assertInstanceOf(Collection::class, Image::anyOf()->event); //has morphed by many event
+        $this->assertInstanceOf(Collection::class, Image::anyOf()->comment); //has morphed by many comment
 
         //imageable (laravel many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('imageables', [
-            'is_main', 'is_shown', 'is_logo', //...
+            'is_main', 'is_shown', 'is_logo', //...withPivot
             'image_id', 'imageable_id', 'imageable_type' //FK 
         ]));
 
@@ -261,20 +269,23 @@ class DatabaseTest extends TestCase
        
         //location
         $this->assertTrue(Schema::hasColumns('locations', [
-            'township_id', 'city_id', 'province_id', 'areacode_id', 'country_id' //FK ... & PK
+            'township_id', 'city_id', 'province_id', 'area_code_id', 'country_id' //FK ... & PK
         ]));
         $this->assertInstanceOf(Township::class, AppLocation::anyOf()->township); //has one township
         $this->assertInstanceOf(City::class, AppLocation::anyOf()->city); //has one city
         $this->assertInstanceOf(Province::class, AppLocation::anyOf()->province); //has one province
         $this->assertInstanceOf(AreaCode::class, AppLocation::anyOf()->area_code); //has one area-code
         $this->assertInstanceOf(Country::class, AppLocation::anyOf()->country); //has one country
-        $this->assertInstanceOf(Collection::class, AppLocation::anyOf()->locationable); 
-            //has morphed by many profile, business, listing, event
+
+        $this->assertInstanceOf(Collection::class, AppLocation::anyOf()->profile); //has morphed by many profile
+        $this->assertInstanceOf(Collection::class, AppLocation::anyOf()->business); //has morphed by many business
+        $this->assertInstanceOf(Collection::class, AppLocation::anyOf()->listing); //has morphed by many listing
+        $this->assertInstanceOf(Collection::class, AppLocation::anyOf()->event);  //has morphed by many event
 
         //locationable (many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('locationables', [
-            'description', 'is_main',//....
-            'location_id', 'locationable_id', 'location_type' //FK
+            'description', 'is_main',//....withPivot
+            'location_id', 'locationable_id', 'locationable_type' //FK
         ]));
         
 
@@ -287,12 +298,12 @@ class DatabaseTest extends TestCase
         $this->assertTrue(Schema::hasColumns('positions', [
             'name'
         ]));
-        $this->assertInstanceOf(Collection::class, Position::anyOf()->positionable);
-            //has morphed by many profile, listing
+        $this->assertInstanceOf(Collection::class, Position::anyOf()->profile); //has morph by many profile
+        $this->assertInstanceOf(Collection::class, Position::anyOf()->listing); //has morphed by many listing
 
         //positionable (laravel many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('positionables', [
-            'is_main', //...
+            'is_main', //...withPivot
             'position_id', 'positionable_id', 'positionable_type' //FK 
         ]));
 
@@ -300,12 +311,12 @@ class DatabaseTest extends TestCase
         $this->assertTrue(Schema::hasColumns('fields', [
             'name'
         ]));
-        $this->assertInstanceOf(Collection::class, Field::anyOf()->fieldable);
-            //has morphed by many profile, listing
+        $this->assertInstanceOf(Collection::class, Field::anyOf()->profile); //has morphed by many profile
+        $this->assertInstanceOf(Collection::class, Field::anyOf()->listing); //has morphed by many listing
 
         //fieldable (laravel many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('fieldables', [
-            'is_main', //...
+            'is_main', //...withPivot
             'field_id', 'fieldable_id', 'fieldable_type' //FK 
         ]));
 
@@ -313,12 +324,12 @@ class DatabaseTest extends TestCase
         $this->assertTrue(Schema::hasColumns('skills', [
             'name'
         ]));
-        $this->assertInstanceOf(Collection::class, Skill::anyOf()->skillable);
-            //has morphed by many profile, listing
+        $this->assertInstanceOf(Collection::class, Skill::anyOf()->profile); //has morphed by many profile
+        $this->assertInstanceOf(Collection::class, Skill::anyOf()->listing); //has morphed by many listing
 
         //skillable (laravel many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('skillables', [
-            'is_main', //...
+            'is_main', //...withPivot
             'skill_id', 'skillable_id', 'skillable_type' //FK 
         ]));
 

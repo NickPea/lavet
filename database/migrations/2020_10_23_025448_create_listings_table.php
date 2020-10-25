@@ -15,7 +15,12 @@ class CreateListingsTable extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('pay_rate')->nullable()->default('none provided');
+            $table->text('about')->nullable();;
             $table->timestamps();
+            //FK
+            $table->foreignId('business_id')->constrained('businesses', 'id');
         });
     }
 

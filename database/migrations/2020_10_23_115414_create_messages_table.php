@@ -15,7 +15,12 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->string('subject')->nullable();
+            $table->text('body');
             $table->timestamps();
+            //FK
+            $table->foreignId('author_id')->constrained('users', 'id');
+            $table->foreignId('parent_id')->nullable()->constrained('messages', 'id');
         });
     }
 

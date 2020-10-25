@@ -7,6 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Rsvp::class, function (Faker $faker) {
     return [
+        'status' => $faker->word,
         //
     ];
 });

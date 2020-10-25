@@ -18,6 +18,8 @@ class CreateBusinessesTable extends Migration
             $table->string('name');
             $table->text('about')->nullable();
             $table->timestamps();
+            //FK
+            $table->foreignId('user_id')->constrained('users','id');
         });
     }
 

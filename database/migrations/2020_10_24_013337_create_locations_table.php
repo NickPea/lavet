@@ -15,6 +15,11 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('country_id')->nullable()->constrained('countries', 'id');
+            $table->foreignId('area_code_id')->nullable()->constrained('area_codes', 'id');
+            $table->foreignId('province_id')->nullable()->constrained('provinces', 'id');
+            $table->foreignId('city_id')->nullable()->constrained('cities', 'id');
+            $table->foreignId('township_id')->nullable()->constrained('townships', 'id');
             $table->timestamps();
         });
     }

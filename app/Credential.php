@@ -9,4 +9,11 @@ class Credential extends Model
 {
     //
     use ModelHelper;
+
+    /** methods */
+
+    public function profile()
+    {
+        return $this->belongsTo('App\Profile');
+    }
 }

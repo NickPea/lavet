@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCredentialsTable extends Migration
+class CreatePermissionRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateCredentialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('credentials', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('institution');
-            $table->date('end_at');
+        Schema::create('permission_role', function (Blueprint $table) {
             $table->timestamps();
             //FK
-            $table->foreignId('profile_id')->constrained('profiles', 'id');
+            $table->foreignId('role_id')->constrained('roles', 'id');
+            $table->foreignId('permission_id')->constrained('permissions', 'id');
+            //PK
+            $table->primary(['role_id', 'permission_id']);
         });
     }
 
@@ -31,6 +30,6 @@ class CreateCredentialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('credentials');
+        Schema::dropIfExists('permission_role');
     }
 }

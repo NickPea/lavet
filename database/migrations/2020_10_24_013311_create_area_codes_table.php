@@ -15,6 +15,7 @@ class CreateAreaCodesTable extends Migration
     {
         Schema::create('area_codes', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }
