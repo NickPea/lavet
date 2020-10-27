@@ -16,6 +16,7 @@ use App\Image;
 use App\Listing;
 use App\Location as AppLocation;
 use App\Message;
+use App\MessageActivity;
 use App\MessageUser;
 use App\Permission;
 use App\Position;
@@ -33,7 +34,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 
-class DatabaseTest extends TestCase
+class DatabaseSchemaTest extends TestCase
 {
 
     /** Models
@@ -44,7 +45,7 @@ class DatabaseTest extends TestCase
      * Business, Listing, EmployType
      * Event, Rsvp, Comments
      * Position, Discipline/Field, Skills, Images, Location (country, area-cdde, provine, city, township)
-     * Message, Message_User,...MessageGroup, UserMessageGroup, Reminders
+     * Message, MessageActivity,...MessageGroup, UserMessageGroup, Reminders
      */
 
     use RefreshDatabase;
@@ -70,7 +71,7 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(Collection::class, User::anyOf()->role); //has many role
         $this->assertInstanceOf(Collection::class, User::anyOf()->reference); //has many reference
         $this->assertInstanceOf(Collection::class, User::anyOf()->message); //has many message
-        $this->assertInstanceOf(Collection::class, User::anyOf()->message_user); //has many message_user
+        $this->assertInstanceOf(Collection::class, User::anyOf()->message_activity); //has many message_user
 
         //role_user (laravel pivot table)
         $this->assertTrue(Schema::hasColumns('role_user', [
@@ -203,15 +204,23 @@ class DatabaseTest extends TestCase
             'parent_id', 'author_id' //FK
         ]));
         $this->assertInstanceOf(User::class, Message::anyOf()->user); //has one user
-        $this->assertInstanceOf(Collection::class, Message::anyOf()->message_user); //has many message-user
+        $this->assertInstanceOf(Collection::class, Message::anyOf()->message_activity); //has many message-user
+        $this->assertInstanceOf(Collection::class, Message::anyParent()->message_child); //has many (child) message
+        $this->assertInstanceOf(Message::class, Message::anyChild()); //has one (parent) message
+        /*
+        could add a messageOnMessage reply relationship here (parent_parent_id) 
+        here to allow 2nd level replying which would be handy in group chats
+        or could even make a conversation table with a hasMany message table
+        ...that then had a 2nd tier message relationship
+        */
 
-        //message-user
-        $this->assertTrue(Schema::hasColumns('message_users', [
+        //message-activity
+        $this->assertTrue(Schema::hasColumns('message_activities', [
             'read_at',
-            'message_id', 'user_id', //FK
+            'message_id', 'recipient_id', //FK
         ]));
-        $this->assertInstanceOf(Message::class, MessageUser::anyOf()->message); //has one message
-        $this->assertInstanceOf(User::class, MessageUser::anyOf()->user); //has one user
+        $this->assertInstanceOf(Message::class, MessageActivity::anyOf()->message); //has one message
+        $this->assertInstanceOf(User::class, MessageActivity::anyOf()->user); //has one user
 
         /*****************************************END MESSAGE******************************************* */
 

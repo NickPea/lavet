@@ -14,11 +14,11 @@ trait ModelTestingHelper
     }
     static public function anyParent()
     {
-        return static::all()->where('parent_message_id', null)->random();
+        return static::all()->where('parent_id', null)->random();
     }
     static public function anyChild()
     {
-        return static::all()->where('parent_message_id', '<>', null)->random();
+        return static::all()->where('parent_id', '<>', null)->random();
     }
 }
 

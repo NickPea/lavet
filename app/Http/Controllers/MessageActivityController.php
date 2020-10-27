@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\MessageUser;
+use App\MessageActivity;
 use Illuminate\Http\Request;
 
-class MessageUserController extends Controller
+class MessageActivityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class MessageUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\MessageUser  $messageUser
+     * @param  \App\MessageActivity  $messageActivity
      * @return \Illuminate\Http\Response
      */
-    public function show(MessageUser $messageUser)
+    public function show(MessageActivity $messageActivity)
     {
         //
     }
@@ -52,10 +52,10 @@ class MessageUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\MessageUser  $messageUser
+     * @param  \App\MessageActivity  $messageActivity
      * @return \Illuminate\Http\Response
      */
-    public function edit(MessageUser $messageUser)
+    public function edit(MessageActivity $messageActivity)
     {
         //
     }
@@ -64,10 +64,10 @@ class MessageUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MessageUser  $messageUser
+     * @param  \App\MessageActivity  $messageActivity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MessageUser $messageUser)
+    public function update(Request $request, MessageActivity $messageActivity)
     {
         //
     }
@@ -75,10 +75,10 @@ class MessageUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\MessageUser  $messageUser
+     * @param  \App\MessageActivity  $messageActivity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MessageUser $messageUser)
+    public function destroy(MessageActivity $messageActivity)
     {
         //
     }

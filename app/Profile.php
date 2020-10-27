@@ -2,14 +2,11 @@
 
 namespace App;
 
-use App\Traits\ModelHelper;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Profile extends Model
 {
     //
-    use ModelHelper;
 
     /** methods */
 

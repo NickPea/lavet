@@ -2,22 +2,24 @@
 
 namespace App;
 
-use App\Traits\ModelHelper;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageUser extends Model
+class MessageActivity extends Model
 {
-    //
-    use ModelHelper;
+
+    /** properties */
+    
+    protected $guarded = [];
 
     /** methods */
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'recipient_id');
     }
     public function message()
     {
         return $this->belongsTo('App\Message');
     }
+
 }

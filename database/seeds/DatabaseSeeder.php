@@ -14,6 +14,7 @@ use App\Image;
 use App\Listing;
 use App\Location;
 use App\Message;
+use App\MessageActivity;
 use App\MessageUser;
 use App\Permission;
 use App\Position;
@@ -24,11 +25,13 @@ use App\Role;
 use App\Rsvp;
 use App\Skill;
 use App\Township;
+use App\Traits\ModelHelper;
 use App\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+
     public function run()
     {
 
@@ -106,11 +109,20 @@ class DatabaseSeeder extends Seeder
             $user->message()->save(factory(Message::class)->make());
 
         });
-        //message_user
+        //message_child
         Message::all()->each(function ($message)
         {
-            $message->message_user()->save(factory(MessageUser::class)->make([
-                'user_id' => User::anyOf()->id,
+            for ($i=0; $i < 5; $i++) { 
+                $message->message_child()->save(factory(Message::class)->make([
+                    'author_id' => User::anyOf()->id
+                ]));    
+            }
+        });
+        //message_activity
+        Message::all()->each(function ($message)
+        {
+            $message->message_activity()->save(factory(MessageActivity::class)->make([
+                'recipient_id' => User::anyOf()->id,
             ]));
         });
         //image

@@ -17,7 +17,7 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_available_now')->default(true);
-            $table->string('work_status')->nullable()->default("I\'m looking for work");
+            $table->string('work_status')->nullable()->default("Looking for work");
             $table->text('about')->nullable();
             $table->timestamps();
             //FK

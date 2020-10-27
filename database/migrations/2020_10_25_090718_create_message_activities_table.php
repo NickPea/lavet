@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMessageUsersTable extends Migration
+class CreateMessageActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateMessageUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('message_users', function (Blueprint $table) {
+        Schema::create('message_activities', function (Blueprint $table) {
             $table->id();
             $table->dateTime('read_at')->nullable();
             $table->timestamps();
             //FK
-            $table->foreignId('user_id')->constrained('users', 'id');
+            $table->foreignId('recipient_id')->constrained('users', 'id');
             $table->foreignId('message_id')->constrained('messages', 'id');
+            //PK
+            $table->unique(['recipient_id', 'message_id']);
         });
     }
 
@@ -30,6 +32,6 @@ class CreateMessageUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('message_users');
+        Schema::dropIfExists('message_activities');
     }
 }

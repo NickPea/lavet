@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Traits\ModelHelper;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +10,6 @@ class User extends Authenticatable
 {
     //
     use Notifiable;
-    use ModelHelper;
 
     protected $fillable = [
         'name', 'email', 'password',
@@ -61,8 +59,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Message', 'author_id', 'id');
     }
 
-    public function message_user()
+    public function message_activity()
     {
-        return $this->hasMany('App\MessageUser');
+        return $this->hasMany('App\MessageActivity', 'recipient_id');
     }
 }

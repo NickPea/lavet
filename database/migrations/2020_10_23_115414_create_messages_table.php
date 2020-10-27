@@ -17,6 +17,7 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->string('subject')->nullable();
             $table->text('body');
+            
             $table->timestamps();
             //FK
             $table->foreignId('author_id')->constrained('users', 'id');
