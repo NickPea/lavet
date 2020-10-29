@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Reference extends Model
 {
     //
+    /** properties */
+    protected $guarded = [];
 
     /** methods */
 

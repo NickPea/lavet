@@ -136,43 +136,24 @@ class DatabaseSeeder extends Seeder
             Comment::anyOf()->image()->save($image);
         });
 
-        //location
-        factory(Country::class, 5)->create();
-        factory(AreaCode::class, 5)->create();
-        factory(Province::class, 5)->create();
-        factory(City::class, 5)->create();
-        factory(Township::class, 5)->create();
+        //location & parents
+        for ($i=0; $i < 10; $i++) { 
+            Country::firstOrCreate(factory(Country::class)->raw());
+            AreaCode::firstOrCreate(factory(AreaCode::class)->raw());
+            Province::firstOrCreate(factory(Province::class)->raw());
+            City::firstOrCreate(factory(City::class)->raw());
+            Township::firstOrCreate(factory(Township::class)->raw());
+        }//used instead of save() due to unique integrity constraint
+        for ($i=0; $i <10 ; $i++) { 
+            Location::firstOrCreate(factory(Location::class)->raw());
+        }//used instead of save() due to unique integrity constraint
 
         User::all()->each(function ($user)
         {
-            $user->profile->location()->save(factory(Location::class)->make([
-                   'country_id' => Country::anyOf(),
-                   'area_code_id' => AreaCode::anyOf(),
-                   'province_id' => Province::anyOf(),
-                   'city_id' => City::anyOf(),
-                   'township_id' => Township::anyOf(),
-                ]));
-            $user->business->random()->location()->save(factory(Location::class)->make([
-                   'country_id' => Country::anyOf(),
-                   'area_code_id' => AreaCode::anyOf(),
-                   'province_id' => Province::anyOf(),
-                   'city_id' => City::anyOf(),
-                   'township_id' => Township::anyOf(),
-                ]));
-            $user->business->random()->listing->random()->location()->save(factory(Location::class)->make([
-                   'country_id' => Country::anyOf(),
-                   'area_code_id' => AreaCode::anyOf(),
-                   'province_id' => Province::anyOf(),
-                   'city_id' => City::anyOf(),
-                   'township_id' => Township::anyOf(),
-                ]));
-            $user->event->random()->location()->save(factory(Location::class)->make([
-                   'country_id' => Country::anyOf(),
-                   'area_code_id' => AreaCode::anyOf(),
-                   'province_id' => Province::anyOf(),
-                   'city_id' => City::anyOf(),
-                   'township_id' => Township::anyOf(),
-                ]));
+            $user->profile->location()->save(Location::anyOf());
+            $user->business->random()->location()->save(Location::anyOf());
+            $user->business->random()->listing->random()->location()->save(Location::anyOf());
+            $user->event->random()->location()->save(Location::anyOf());
         });
 
         //position
@@ -190,14 +171,17 @@ class DatabaseSeeder extends Seeder
         });
         
         //field
+        for ($i=0; $i < 5; $i++) { 
+            Field::firstOrCreate(factory(Field::class)->raw());
+        }
         User::all()->each(function ($user)
         {
-            $user->profile->field()->save(factory(Field::class)->make());
+            $user->profile->field()->save(Field::anyOf());
             $user->business->each(function($business)
             {
                 $business->listing->each(function ($listing)
                 {
-                    $listing->field()->save(factory(Field::class)->make());
+                    $listing->field()->save(Field::anyOf());
                 });
                 
             });

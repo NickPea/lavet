@@ -9,7 +9,6 @@ class Message extends Model
     //
 
     /** properties */
-
     protected $guarded = [];
     protected $touches = ['message_parent'];
 

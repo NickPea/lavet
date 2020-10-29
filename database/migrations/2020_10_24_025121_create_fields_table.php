@@ -17,6 +17,8 @@ class CreateFieldsTable extends Migration
             $table->id();
             $table->string('name');
             $table->timestamps();
+            //UNIQUE
+            $table->unique('name');
         });
     }
 

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Credential extends Model
 {
     //
+    /** properties */
+    protected $guarded = [];
 
     /** methods */
 

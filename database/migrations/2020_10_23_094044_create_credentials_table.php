@@ -17,7 +17,7 @@ class CreateCredentialsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('institution');
-            $table->date('end_at');
+            $table->year('end_year');
             $table->timestamps();
             //FK
             $table->foreignId('profile_id')->constrained('profiles', 'id');

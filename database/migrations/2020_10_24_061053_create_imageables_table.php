@@ -16,7 +16,7 @@ class CreateImageablesTable extends Migration
         Schema::create('imageables', function (Blueprint $table) {
             $table->boolean('is_main')->nullable()->default(false);
             $table->boolean('is_shown')->nullable()->default(true);
-            $table->boolean('is_logo')->nullable()->default(true);
+            $table->boolean('is_logo')->nullable()->default(false);
             $table->timestamps();
             //FK
             $table->foreignId('image_id')->constrained('images', 'id');
