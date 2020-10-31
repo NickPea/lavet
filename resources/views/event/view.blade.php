@@ -1,0 +1,4 @@
+
+<div>
+    {{$event->about}}
+</div>

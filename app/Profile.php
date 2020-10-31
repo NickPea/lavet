@@ -8,6 +8,13 @@ class Profile extends Model
 {
     //
 
+    /** helpers */
+    public function path()
+    {
+        $className = strtolower(class_basename($this));
+        return "{$className}/{$this->id}";
+    }
+
     /** methods */
 
     public function user()

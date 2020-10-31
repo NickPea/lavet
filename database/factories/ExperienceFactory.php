@@ -9,6 +9,8 @@ $factory->define(Experience::class, function (Faker $faker) {
     return [
         'organisation' => $faker->company,
         'work_role' => $faker->jobTitle,
+        'start_at' => $faker->date,
+        'end_at' => $faker->date,
         
         //
     ];

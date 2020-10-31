@@ -46,7 +46,8 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        return view('event.view', ['event' => $event]);
+
     }
 
     /**

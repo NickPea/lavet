@@ -1,0 +1,4 @@
+
+<div>
+    {{$listing->about}}
+</div>

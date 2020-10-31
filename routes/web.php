@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('', 'WelcomeController');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+/** View Main Objects */
+//profile
+Route::get('profile/{profile}', 'ProfileController@show');
+Route::get('listing/{listing}', 'ListingController@show');
+Route::get('event/{event}', 'EventController@show');
