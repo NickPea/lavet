@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Listing extends Model
 {
     //
+    /** properties */
+    protected $dates = ['created_at', 'updated_at'];
 
     /** helpers */
     public function path()
