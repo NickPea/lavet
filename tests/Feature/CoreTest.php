@@ -24,24 +24,52 @@ class CoreTest extends TestCase
     // Main Application Testing // ----------------------------------------------------------------------------------------
 
     //a guest or user views the welcome page
+    
     /** @test */
     public function view_the_welcome_page()
     {
         //given we have data
-        $profiles = Profile::all();
-        $listings = Listing::all();
-        $events = Event::all();
+        $models = collect([Profile::all(), Listing::all(), Event::all()]);
 
         //when request welcome page
-        $response = $this->get('');
+        $response = $this->get("/");
 
         //then check data present
-        $response->assertViewIs('welcome')->assertViewHasAll([
-            'data' => [$profiles, $listings, $events]
-        ]);
+        $response->assertViewIs('welcome');
     }
 
     //user registers or logs in and is redirected to the main search page 
+
+    /** @test */
+    public function search_filter_and_paginate_search_results()
+    {
+        //given anyone
+        //when post request to searchpage
+
+        $response = $this->get('/', [
+            'what' => 'vet',
+            'where' => 'brisbane',
+            'profile_is_checked' => 'true',
+            'listing_is_checked' => 'true',
+            'event_is_checked' => 'true',
+        ]);
+
+        $response->assertViewIs('welcome')->assertViewHas(['profile', 'listing', 'event']);
+
+
+
+
+        //then assert results filtered and paginated
+    }
+    
+
+
+
+
+
+
+
+
 
     //user clicks on search object and retrieves...
 
@@ -76,3 +104,4 @@ class CoreTest extends TestCase
         $response->assertViewIs('event.view')->assertViewHasAll(['event' => $event]);
     }
 }
+

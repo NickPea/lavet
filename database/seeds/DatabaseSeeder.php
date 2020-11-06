@@ -24,6 +24,7 @@ use App\Reference;
 use App\Role;
 use App\Rsvp;
 use App\Skill;
+use App\Tag;
 use App\Township;
 use App\Traits\ModelHelper;
 use App\User;
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
     {
 
         //user
-        factory(User::class, 5)->create();
+        factory(User::class, 10)->create();
         //role
         User::all()->each(function ($user) {
             $user->role()->attach(factory(Role::class)->create());
@@ -86,9 +87,26 @@ class DatabaseSeeder extends Seeder
             ]));
         });
         //comment
-        Rsvp::all()->each(function ($rsvp) {
-            $rsvp->comment()->save(factory(Comment::class)->make());
+        Event::all()->each(function ($event)
+        {
+            for ($i=0; $i < 3; $i++) { 
+                $event->comment()->create(factory(Comment::class)->raw([
+                    'user_id' => User::anyOf(),
+                ]));
+            }
         });
+
+        //comment children
+        Comment::all()->each(function ($comment)
+        {
+            if (rand(0,1)) {
+                $comment->comment_child()->save(factory(Comment::class)->make([
+                    'user_id' => User::anyOf(),
+                    'event_id' => $comment->event_id,
+                ]));
+            }
+        });
+
         //message
         User::all()->each(function ($user) {
             $user->message()->save(factory(Message::class)->make());
@@ -126,14 +144,9 @@ class DatabaseSeeder extends Seeder
             {
                 $event->image()->attach(Image::anyOf());
             });
-            Comment::all()->each(function ($comment)
-            {
-                $comment->image()->attach(Image::anyOf());
-            });
             // Business::anyOf()->image()->save($image);
             // Listing::anyOf()->image()->save($image);
             // Event::anyOf()->image()->save($image);
-            // Comment::anyOf()->image()->save($image);
 
         //location & parents
         for ($i = 0; $i < 10; $i++) {
@@ -186,5 +199,19 @@ class DatabaseSeeder extends Seeder
                 });
             });
         });
+
+        //tag
+        factory(Tag::class, 10)->create();
+        Tag::all()->each(function ($tag)
+        {
+            $tag->listing()->save(Listing::anyOf());
+        });
+        Tag::all()->each(function ($tag)
+        {
+            $tag->event()->save(Event::anyOf());
+        });
+        
+
+
     }
 }

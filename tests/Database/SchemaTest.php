@@ -26,6 +26,7 @@ use App\Reference;
 use App\Role;
 use App\Rsvp;
 use App\Skill;
+use App\Tag;
 use App\Township;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -157,6 +158,7 @@ class SchemaTest extends TestCase
         $this->assertInstanceOf(Collection::class, Listing::anyOf()->position); //has morphed to many (& one main) position
         $this->assertInstanceOf(Collection::class, Listing::anyOf()->field); //has morphed to many field
         $this->assertInstanceOf(Collection::class, Listing::anyOf()->skill); //has morphed to many skill
+        $this->assertInstanceOf(Collection::class, Listing::anyOf()->tag); //has morphed to many skill
 
         //employ-type-listing (laravel pivot table)
         $this->assertTrue(Schema::hasColumns('employ_type_listing', [
@@ -171,13 +173,14 @@ class SchemaTest extends TestCase
 
         //event
         $this->assertTrue(Schema::hasColumns('events', [
-            'title', 'about', 'start_at', 'end_at',
+            'title', 'about', 'access', 'seat_num', 'start_at', 'end_at', 
             'user_id' //FK
         ]));
         $this->assertInstanceOf(User::class, Event::anyOf()->user); //has one user
         $this->assertInstanceOf(Collection::class, Event::anyOf()->rsvp); //has many rsvp (event_user)
         $this->assertInstanceOf(Collection::class, Event::anyOf()->image); //has morphed to many (& one main) images
         $this->assertInstanceOf(Collection::class, Event::anyOf()->location); //has morphed to many (& one main) location
+        $this->assertInstanceOf(Collection::class, Event::anyOf()->tag); //has morphed to many (& one main) tag
 
         //rsvp
         $this->assertTrue(Schema::hasColumns('rsvps', [
@@ -186,15 +189,16 @@ class SchemaTest extends TestCase
         ]));
         $this->assertInstanceOf(User::class, Rsvp::anyOf()->user); //has one user
         $this->assertInstanceOf(Event::class, Rsvp::anyOf()->event); //has one event
-        $this->assertInstanceOf(Collection::class, Rsvp::anyOf()->comment); //has many comments
 
         //comment
         $this->assertTrue(Schema::hasColumns('comments', [
             'body',
-            'rsvp_id' //FK
+            'user_id', 'event_id', 'parent_id' //FK
         ]));
-        $this->assertInstanceOf(Rsvp::class, Comment::anyOf()->rsvp); //has one rsvp
-        $this->assertInstanceOf(Collection::class, Comment::anyOf()->image); //has morphed to many (& one main) images
+        $this->assertInstanceOf(User::class, Comment::anyOf()->user); //has one user
+        $this->assertInstanceOf(Event::class, Comment::anyOf()->event); //has one event
+        $this->assertInstanceOf(Collection::class, Comment::anyOf()->comment_child); //has one event
+        $this->assertInstanceOf(Comment::class, Comment::anyOf()->comment_parent); //has one event
 
         /*****************************************MESSAGE******************************************* */
  
@@ -234,7 +238,6 @@ class SchemaTest extends TestCase
         $this->assertInstanceOf(Collection::class, Image::anyOf()->business); //has morphed by many business
         $this->assertInstanceOf(Collection::class, Image::anyOf()->listing); //has morphed by many listing
         $this->assertInstanceOf(Collection::class, Image::anyOf()->event); //has morphed by many event
-        $this->assertInstanceOf(Collection::class, Image::anyOf()->comment); //has morphed by many comment
 
         //imageable (laravel many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('imageables', [
@@ -344,6 +347,19 @@ class SchemaTest extends TestCase
 
         /*****************************************END POSITION, FIELD, SKILL********************************************/
         
+        //tag
+        $this->assertTrue(Schema::hasColumns('tags', [
+            'name'
+        ]));
+        $this->assertInstanceOf(Collection::class, Tag::anyOf()->listing); //has morphed by many listing
+        $this->assertInstanceOf(Collection::class, Tag::anyOf()->event); //has morphed by many event
+
+        //taggable (laravel many-to-many polymorph table)
+        $this->assertTrue(Schema::hasColumns('taggables', [
+            'tag_id', 'taggable_id', 'taggable_type' //FK 
+        ]));
+        
+
         /**
          * V2 features
          * 

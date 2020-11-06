@@ -338,30 +338,30 @@ class QueryTest extends TestCase
     /** @test */
     public function referencing___create_or_update_an_rsvp_or_get_an_rsvp_and_add_a_comment()
     {
-        //given a user and an event
-        $user = User::anyOf();
-        $event = Event::anyOf();
-        $data = [
-            'rsvp_status' => 'attending',
-            'comment' => 'Im coming!',
-        ];
+        // //given a user and an event
+        // $user = User::anyOf();
+        // $event = Event::anyOf();
+        // $data = [
+        //     'rsvp_status' => 'attending',
+        //     'comment' => 'Im coming!',
+        // ];
 
-        //create an rsvp
-        $rsvp = $user->rsvp()->updateOrCreate(
-            ['event_id' => $event->id],
-            ['status' => $data['rsvp_status']]
-        );
+        // //create an rsvp
+        // $rsvp = $user->rsvp()->updateOrCreate(
+        //     ['event_id' => $event->id],
+        //     ['status' => $data['rsvp_status']]
+        // );
 
-        //add an optional intial commment
-        if (Arr::has($data, 'comment')) {
-            $rsvp->comment()->save(Comment::make([
-                'body' => $data['comment'],
-            ]));
-        }
+        // //add an optional intial commment
+        // if (Arr::has($data, 'comment')) {
+        //     $rsvp->comment()->save(Comment::make([
+        //         'body' => $data['comment'],
+        //     ]));
+        // }
 
-        //check database
-        $this->assertDatabaseHas('rsvps', $rsvp->toArray());
-        $this->assertDatabaseHas('comments', $rsvp->comment->where(['body' => $data['comment']])->toArray());
+        // //check database
+        // $this->assertDatabaseHas('rsvps', $rsvp->toArray());
+        // $this->assertDatabaseHas('comments', $rsvp->comment->where(['body' => $data['comment']])->toArray());
     }
 
     /**------------------------------------------------Search & Paginate------------------------------------------------------- */

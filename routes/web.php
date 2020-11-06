@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', 'WelcomeController');
+Route::get('', 'SearchController@firstLoad');
+Route::get('/search', 'SearchController@search');
 
 Auth::routes();
 

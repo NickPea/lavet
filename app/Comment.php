@@ -12,14 +12,24 @@ class Comment extends Model
 
     /** methods */
 
-    public function rsvp()
+    public function event()
     {
-        return $this->belongsTo('App\Rsvp');
+        return $this->belongsTo('App\Event');
     }
-    public function image()
+
+    public function user()
     {
-        return $this->morphToMany('App\Image', 'imageable')
-            ->withPivot(['is_main', 'is_shown', 'is_logo'])
-            ->withTimestamps();
+        return $this->belongsTo('App\User');
     }
+
+    public function comment_child()
+    {
+        return $this->hasMany('App\Comment', 'parent_id');
+    }
+
+    public function comment_parent()
+    {
+        return $this->belongsTo('App\Comment', 'parent_id');
+    }
+
 }

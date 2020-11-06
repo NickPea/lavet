@@ -36,10 +36,4 @@ class Image extends Model
             ->withPivot(['is_main', 'is_shown', 'is_logo'])
             ->withTimestamps();
     }
-    public function comment()
-    {
-        return $this->morphedByMany('App\Comment', 'imageable')
-            ->withPivot(['is_main', 'is_shown', 'is_logo'])
-            ->withTimestamps();
-    }
 }

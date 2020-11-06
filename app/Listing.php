@@ -57,6 +57,11 @@ class Listing extends Model
             ->withPivot('is_main')
             ->withTimestamps();
     }
+    public function tag()
+    {
+        return $this->morphToMany('App\Tag', 'taggable')
+            ->withTimestamps();
+    }
 
 
 }

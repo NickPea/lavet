@@ -50,9 +50,10 @@
                             <h6>
                                 @include('components.SVG-location')
                                 <span class="text-muted font-weight-light">
-                                    {{$listing->location->first()->township->name}},
+                                    {{$listing->location->first()->city->name}},
                                     {{$listing->location->first()->province->name}},
                                     {{$listing->location->first()->area_code->name}},
+                                    {{$listing->location->first()->country->name}},
                                 </span>
                             </h6>
                         </div>
@@ -120,7 +121,7 @@
                                         <!-- business main -->
                                         <h5 class="card-title text-muted font-weight-lighter">Business</h5>
                                         <figure>
-                                            <img class="w-25 mx-3 my-1 float-left"
+                                            <img class="mx-3 my-1 float-left" style="width:100px; height:100px; border-radius:2rem "
                                                 src={{asset($listing->business->image->first()->path)}} alt="">
                                             <figcaption>
                                                 <b>

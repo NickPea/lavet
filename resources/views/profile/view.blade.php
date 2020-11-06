@@ -12,17 +12,40 @@
 
 @section('main')
 
-{{-- <div class="container">
+<div class="container">
     <div class="row">
-        <div class="col">
-            <!-- Squeezers-----------------------------------> --}}
+        <div class="col-10 offset-1">
+            <!-- Squeezers----------------------------------->
 
             <div class="container py-5">
 
+
+                <!-- row location -->
+                <div class="row mt-4">
+                    <!-- col 1 -->
+                    <div class="col-8">
+
+                        <!-- location -->
+                        <div>
+                            <h6>
+                                @include('components.SVG-location')
+                                <span class="text-muted font-weight-light">
+                                    {{$profile->location->first()->city->name}},
+                                    {{$profile->location->first()->province->name}},
+                                    {{$profile->location->first()->country->name}},
+                                    {{$profile->location->first()->area_code->name}},
+                                </span>
+                            </h6>
+                        </div>
+
+                    </div> <!-- end col 1 -->
+                </div> <!-- end row location -->
+
+
                 <!-- row 1 -->
-                <div class="row">
+                <div class="row mt-2">
                     <!-- left panel -->
-                    <div class="col-6">
+                    <div class="col-8">
 
                         <!-- Card -->
                         <div class="card p-2 rounded-lg shadow-lg">
@@ -69,184 +92,292 @@
                                     <div class="col">
 
                                         <!-- name, field & position -->
-                                        <h3 class="font-weight-bold">
-                                            {{$profile->user->name}}
-                                        </h3>
-                                        <h6 class="text-muted font-weight-lighter">
-                                            {{$profile->field->implode('name', ', ')}}
-                                        </h6>
-                                        <h5 class="text-secondary">
-                                            {{$profile->position->implode('name', ', ')}}
-                                        </h5>
+                                        <div class="h-100 d-flex flex-column">
+                                            <h3 class="font-weight-bold">
+                                                {{$profile->user->name}}
+                                            </h3>
+                                            <div class="mt-auto">
+                                                <h6 class="text-muted font-weight-lighter">
+                                                    {{$profile->field->implode('name', ', ')}}
+                                                </h6>
+                                                <h5 class="text-secondary">
+                                                    {{$profile->position->implode('name', ', ')}}
+                                                </h5>
+                                            </div>
+                                        </div>
 
                                     </div><!-- end inner col 2 -->
                                 </div> <!-- inner row -->
+
+                                <div class="row mt-4">
+                                    <div class="col">
+                                        <h5 class="m-0"><i>"{{$profile->work_status}}"</i></h5>
+                                    </div>
+                                </div>
 
                             </div> <!-- end card body -->
 
                         </div> <!-- end card -->
 
                     </div> <!-- end col 1 -->
-                </div> <!-- end row 1 -->
 
-
-                <!-- row location -->
-                <div class="row mt-4">
-                    <!-- col 1 -->
-                    <div class="col-8">
-
-                        <!-- location -->
-                        <div class="pl-3">
-                            <h6>
-                                @include('components.SVG-location')
-                                <span class="text-muted font-weight-light">
-                                    {{$profile->location->first()->township->name}},
-                                    {{$profile->location->first()->province->name}},
-                                    {{$profile->location->first()->area_code->name}},
-                                </span>
-                            </h6>
-                        </div>
-
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row location -->
-
-
-                <!-- row 2 -->
-                <div class="row mt-4">
-                    <!-- col 1 -->
-                    <div class="col-7 ">
+                    <!-- col-->
+                    <div class="col-4">
 
                         <!-- About me -->
                         <div>
-                            <h5 class="font-weight-light" style="color:grey">About</h5>
-                            <p class="m-0 p-3">{{$profile->about}}</p>
+                            <h5 class="font-weight-light" style="color:grey">Blurb</h5>
+                            <p class="m-0">{{$profile->about}}</p>
                         </div>
 
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row 2 -->
+                    </div> <!-- end col -->
 
+                </div> <!-- end row-->
 
-                <!-- row 3 -->
+                <!-- row 2 -->
                 <div class="row mt-4">
-                    <!-- column 1 -->
-                    <div class="col-8">
 
-                        <!-- Credentials -->
-                        <h5 class="font-weight-light" style="color:grey">Credentials</h5>
-                        <div class="p-3">
-                            @forelse ($profile->credential as $credential)
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="card p-3 rounded-lg text-center d-flex flex-column justify-content-around"
-                                        style="height:25vh;">
-                                        <small class="text-muted">{{$credential->institution}}</small>
-                                        <h5 class="card-title font-italic">{{$credential->name}}</h6>
-                                            <h6 class="card-text">{{$credential->end_year}}</h6>
-                                    </div>
+
+                    <!-- col -->
+                    <!-- left panel -->
+                    <div class="col-4" style="border-right:1px solid lightgrey">
+
+
+
+                        <!-- inner row 1 -->
+                        <div class="row py-3">
+                            <div class="col">
+
+                                <!-- Credentials -->
+                                <div class="d-flex">
+                                    <h5 class="font-weight-light" style="color:grey">Credentials
+                                        ({{$profile->credential->count()}}) </h5>
+                                    <small class="ml-auto"><a href="">See all</a></small>
                                 </div>
-                            </div>
-                            @empty
-                            No Credentials...
-                            @endforelse
-                        </div> <!-- end credentials -->
+                                @forelse ($profile->credential->take(2) as $credential)
+                                <div class="row">
+                                    <div class="col">
 
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row 3 -->
-
-
-                <!-- row 4 -->
-                <div class="row mt-4">
-                    <!-- col 1 -->
-                    <div class="col-8">
-
-                        <!-- Experience -->
-                        <h5 class="font-weight-light" style="color:grey">Experience</h5>
-                        <div class="p-3">
-                            @forelse ($profile->experience as $experience)
-                            <div class="card rounded-lg p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>{{$experience->organisation}}</span>
-                                    <span>{{$experience->work_role}}</span>
-                                    <span>{{$experience->start_at->format('M-Y')}}</span>
-                                    <span>{{$experience->end_at->format('M-Y')}}</span>
-                                </div>
-                            </div>
-                            @empty
-                            <p>No experience recorded</p>
-                            @endforelse
-                        </div> <!-- end experiences -->
-
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row 4 -->
-
-
-                <!-- row 5 -->
-                <div class="row mt-4">
-                    <!-- col 1 -->
-                    <div class="col-8">
-
-                        <!-- References -->
-                        <h5 class="font-weight-light" style="color:grey">References</h5>
-                        <div class="p-3">
-                            @forelse ($profile->reference as $reference)
-                            <q class="text-center font-weight-light font-italic">{{$reference->body}}</q>
-                            <div class="m-3">
-                                <div class="d-flex justify-content-end">
-                                    <a class="text-reset text-decoration-none"
-                                        href={{secure_url($reference->user->profile->path())}}>
-                                        <div class="card rounded-lg">
-                                            <div class="d-flex align-items-center p-1">
-                                                <img class="rounded m-1" style="width:2rem"
-                                                    src={{asset($reference->user->profile->image->first()->path)}}
-                                                    alt="reference image">
-                                                <span class="m-1 font-weight-bold">{{$reference->user->name}}</span>
-                                            </div>
+                                        <div class="card p-3 rounded-lg text-center d-flex flex-column justify-content-around"
+                                            style="height:25vh;">
+                                            <small class="text-muted">{{$credential->institution}}</small>
+                                            <h5 class="card-title font-italic">{{$credential->name}}</h6>
+                                                <h6 class="card-text">{{$credential->end_year}}</h6>
                                         </div>
-                                    </a>
-                                </div>
-                            </div>
-                            @empty
-                            <p>No references... <a href="">add one!</a></p>
-                            @endforelse
-                        </div> <!-- end references -->
 
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row 5 -->
-
-
-                <!-- row 6 -->
-                <div class="row mt-4">
-                    <!-- col 1 -->
-                    <div class="col-8">
-
-                        <!-- Colleagues // People who you have given references too-->
-                        <h5 class="font-weight-light" style="color:grey">Colleagues</h5>
-                        <div class="p-3">
-                            <div class="row">
-                                @forelse ($profile->user->reference->map->profile as $profile)
-                                <div class="col-2">
-
-                                    <div class="card">
-                                        <img class="w-100" src={{url($profile->image->first()->path)}}
-                                            alt="Colleague Image">
                                     </div>
                                 </div>
                                 @empty
-                                No Colleagues
+                                No Credentials...
                                 @endforelse
+                                <!-- end crednentials -->
+
+                            </div> <!-- end col -->
+                        </div> <!-- end inner row 1 -->
+
+
+                        <!-- inner row 2 -->
+                        <div class="row py-3" style="border-top:1px solid lightgrey">
+                            <!-- col 1 -->
+                            <div class="col">
+
+                                <!-- Colleagues // People who you have given references too-->
+                                <div class="d-flex">
+                                    <h5 class="font-weight-light" style="color:grey">Colleagues
+                                        ({{$profile->user->reference->map->profile->count()}})</h5>
+                                    <small class="ml-auto"><a href="">See all</a></small>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            @forelse ($profile->user->reference->map->profile->take(4) as $profile)
+                                            <div class="col-6">
+
+                                                <div>
+                                                    <a href={{secure_url($profile->path())}}>
+                                                        <img class="img-thumbnail"
+                                                            src={{url($profile->image->first()->path)}}
+                                                            alt="Colleague Image">
+                                                    </a>
+                                                    <a class="text-reset" href={{secure_url($profile->path())}}>
+                                                        <b>{{$profile->user->name}}</b>
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                            @empty
+                                            No Colleagues
+                                            @endforelse
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div> <!-- end col -->
+                        </div> <!-- end inner row 2 -->
+
+
+                        <!-- inner row 3 -->
+                        <div class="row py-3" style="border-top:1px solid lightgrey">
+                            <div class="col">
+
+                                <div>
+                                    <div class="d-flex">
+                                        <h5 class="font-weight-light" style="color:grey">Hosted Events & Listings
+                                            ({{$profile->user->event->count() + $profile->user->business->map->listing->count()}})
+                                        </h5>
+                                        <small class="ml-auto"><a href="">See all</a></small>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+
+                                            <div class="row">
+                                                @forelse($profile->user->event->concat($profile->user->business->map->listing)->flatten()->shuffle()
+                                                as $hosted)
+                                                <div class="col-6">
+                                                    <a href={{secure_url($hosted->path())}}>
+                                                        <img class="img-thumbnail"
+                                                            src={{url($hosted->image->first()->path)}}
+                                                            alt="Colleague Image">
+                                                    </a>
+                                                    <a class="text-reset" href={{secure_url($hosted->path())}}>
+                                                        <b>{{$hosted->title}}</b>
+                                                    </a>
+                                                </div>
+                                                @empty
+
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row 6 -->
+
+
+                        <!-- inner row 4-->
+                        <div class="row py-3" style="border-top:1px solid lightgrey">
+                            <div class="col">
+
+                                <div>
+                                    <div class="d-flex">
+                                        <h5 class="font-weight-light" style="color:grey">Recent Activity
+                                            ({{$profile->user->business->map->listing->count()}})</h5>
+                                        <small class="ml-auto"><a href="">See all</a></small>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div> <!-- end col -->
+                    <!-- end left panel -->
+
+
+                    <!-- col -->
+                    <!-- right panel -->
+                    <div class="col-8">
+
+
+                        <!-- inner row 1 -->
+                        <div class="row py-3">
+                            <!-- col -->
+                            <div class="col">
+
+                                <!-- Experience -->
+                                <div class="d-flex">
+                                    <h5 class="font-weight-light" style="color:grey">Experience
+                                        ({{$profile->experience->count()}})</h5>
+                                    <small class="ml-auto"><a href="">See all</a></small>
+                                </div>
+                                @forelse ($profile->experience->take(3) as $experience)
+                                <div class="card rounded-lg p-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>{{$experience->organisation}}</span>
+                                        <span>{{$experience->work_role}}</span>
+                                        <span>{{$experience->start_at->format('M-Y')}}</span>
+                                        <span>{{$experience->end_at->format('M-Y')}}</span>
+                                    </div>
+                                </div>
+                                @empty
+                                <p>No experience recorded</p>
+                                @endforelse
+                                <!-- end experiences -->
+
+                            </div> <!-- end col -->
+                        </div> <!-- end inner row 1 -->
+
+
+
+                        <!-- inner row 2 -->
+                        <div class="row py-3" style="border-top:1px solid lightgrey">
+                            <!-- inner col -->
+                            <div class="col">
+
+
+                                <!-- References -->
+                                <div class="d-flex">
+                                    <h5 class="font-weight-light" style="color:grey">References
+                                        ({{$profile->reference->count()}})</h5>
+                                    <small class="ml-auto"><a href="">See all</a></small>
+                                </div>
+
+                                <div>
+                                    @forelse ($profile->reference->take(3) as $reference)
+                                    <div class="rounded-lg mt-2 p-2" style="background-color: rgba(193, 206, 223, 0.3)">
+                                        <q class="text-center font-weight-light font-italic">{{$reference->body}}</q>
+                                        <div class="d-flex justify-content-end">
+                                            <a class="text-reset text-decoration-none"
+                                                href={{secure_url($reference->user->profile->path())}}>
+                                                <div class="card rounded-lg">
+                                                    <div class="d-flex align-items-center p-1">
+                                                        <img class="rounded m-1" style="width:2rem"
+                                                            src={{asset($reference->user->profile->image->first()->path)}}
+                                                            alt="reference image">
+                                                        <span
+                                                            class="m-1 font-weight-bold">{{$reference->user->name}}</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @empty
+                                    <p>No references... <a href="">add one!</a></p>
+                                    @endforelse
+                                </div> <!-- end references -->
+
+
+                            </div> <!-- end col -->
+                        </div> <!-- end innner row 2 -->
+
+
+                    </div> <!-- end col -->
+                    <!-- end right panel -->
+
+
+                </div> <!-- end row 2-->
+
+
+
+
+
+
 
 
             </div> <!-- end container -->
 
 
-            {{-- <!-- end Squeezers----------------------------------->
+            <!-- end Squeezers----------------------------------->
         </div>
     </div>
-</div> --}}
+</div>
 
 @endsection

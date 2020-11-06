@@ -19,9 +19,5 @@ class Rsvp extends Model
     {
         return $this->belongsTo('App\Event');
     }
-    public function comment()
-    {
-        return $this->hasMany('App\Comment');
-    }
 
 }

@@ -22,6 +22,7 @@ class CreateProfilesTable extends Migration
             $table->timestamps();
             //FK
             $table->foreignId('user_id')->constrained('users', 'id');
+            
         });
     }
 
