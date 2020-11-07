@@ -49,7 +49,7 @@
             <!-- attending stacked avatars count-->
             <div>
                 <span style="margin-right:15px">
-                    @forelse ($model->rsvp->map->user->take(3)->shuffle() as $user)
+                    @forelse ($model->rsvp->map->user->take(3) as $user)
                     <img style="object-fit:cover; margin-right:-15px; border-radius: 50%; width:35px; height:35px; border: 3px solid white;"
                         src={{$user->profile->image->first()->path}} alt="user image">
                     @empty

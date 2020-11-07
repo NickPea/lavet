@@ -6,31 +6,40 @@ use App\Profile;
 use App\Listing;
 use App\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
 
-    public function firstLoad()
+    public function welcome()
     {
-        $results = collect();
+        return view('welcome.welcome');
+    }
 
-        $results->push(Profile::all());
-        $results->push(Listing::all());
-        $results->push(Event::all());
-
-        return view('welcome', ['data' => $results]);
+    public function searchResultsPartial(Request $request)
+    {
+        $results = $this->retrieveData($request);
+        return view('search._search-results', ['data' => $results]);
     }
 
 
-    public function search(Request $request)
+
+
+
+
+
+    /*********************************************************************
+     * helper functions
+     */
+
+    protected function retrieveData($request)
     {
 
         $keyword = $request->what;
         $location = $request->where;
-        $profile_is_checked = isset($request->include_profiles);
-        $listing_is_checked = isset($request->include_listings);
-        $event_is_checked = isset($request->include_events);
-
+        $profile_is_checked = isset($request->profile_check);
+        $listing_is_checked = isset($request->listing_check);
+        $event_is_checked = isset($request->event_check);
 
         /** returned results bag */
         $results = collect();
@@ -64,15 +73,15 @@ class SearchController extends Controller
                                 $query->whereHas('city', function ($query) use ($location) {
                                     $query->where('name', 'like', "%{$location}%");
                                 })
-                                ->orWhereHas('province', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                })
-                                ->orWhereHas('country', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                })
-                                ->orWhereHas('area_code', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                });
+                                    ->orWhereHas('province', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    })
+                                    ->orWhereHas('country', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    })
+                                    ->orWhereHas('area_code', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    });
                             });
                     })
                     ->get()
@@ -84,7 +93,7 @@ class SearchController extends Controller
 
 
 
-                /**
+        /**
          * if include_listings = true, search listings by: username, fields, positions, about_me, work_status
          */
 
@@ -98,9 +107,8 @@ class SearchController extends Controller
                             ->orWhere('about', 'like', "%{$keyword}%")
                             ->orWhereHas('business', function ($query) use ($keyword) {
                                 $query->where('name', 'like', "%{$keyword}%")
-                                    ->orWhereHas('user', function ($query) use($keyword)
-                                    {
-                                        $query->where('name', 'like',"%{$keyword}%");
+                                    ->orWhereHas('user', function ($query) use ($keyword) {
+                                        $query->where('name', 'like', "%{$keyword}%");
                                     });
                             })
                             ->orWhereHas('employ_type', function ($query) use ($keyword) {
@@ -126,15 +134,15 @@ class SearchController extends Controller
                                 $query->whereHas('city', function ($query) use ($location) {
                                     $query->where('name', 'like', "%{$location}%");
                                 })
-                                ->orWhereHas('province', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                })
-                                ->orWhereHas('country', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                })
-                                ->orWhereHas('area_code', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                });
+                                    ->orWhereHas('province', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    })
+                                    ->orWhereHas('country', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    })
+                                    ->orWhereHas('area_code', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    });
                             });
                     })
                     ->get()
@@ -143,7 +151,7 @@ class SearchController extends Controller
             $results->push(collect()); //push empty collection
         }
 
-                /**
+        /**
          * if include_profiles = true, search profiles by: username, fields, positions, about_me, work_status
          */
 
@@ -162,17 +170,15 @@ class SearchController extends Controller
                                 $query->where('name', 'like', "%{$keyword}%");
                             })
                             ->orWhereHas('rsvp', function ($query) use ($keyword) {
-                                $query->whereHas('user', function ($query) use ($keyword)
-                                {
+                                $query->whereHas('user', function ($query) use ($keyword) {
                                     $query->where('name', 'like', "%{$keyword}%");
                                 });
                             })
                             ->orWhereHas('comment', function ($query) use ($keyword) {
                                 $query->where('about', 'like', "%{$keyword}%")
-                                ->orWhereHas('user', function ($query) use ($keyword)
-                                {
-                                    $query->where('name', 'like', "%{$keyword}%");
-                                });
+                                    ->orWhereHas('user', function ($query) use ($keyword) {
+                                        $query->where('name', 'like', "%{$keyword}%");
+                                    });
                             });
                     })
                     /** location */
@@ -182,15 +188,15 @@ class SearchController extends Controller
                                 $query->whereHas('city', function ($query) use ($location) {
                                     $query->where('name', 'like', "%{$location}%");
                                 })
-                                ->orWhereHas('province', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                })
-                                ->orWhereHas('country', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                })
-                                ->orWhereHas('area_code', function ($query) use ($location) {
-                                    $query->where('name', 'like', "%{$location}%");
-                                });
+                                    ->orWhereHas('province', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    })
+                                    ->orWhereHas('country', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    })
+                                    ->orWhereHas('area_code', function ($query) use ($location) {
+                                        $query->where('name', 'like', "%{$location}%");
+                                    });
                             });
                     })
                     ->get()
@@ -199,7 +205,8 @@ class SearchController extends Controller
             $results->push(collect()); //push empty collection
         }
 
-
-        return view('welcome', ['data' => $results]);
+        return $results->flatten();
     }
+
+
 }

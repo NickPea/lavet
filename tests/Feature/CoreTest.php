@@ -8,6 +8,7 @@ use App\Profile;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class CoreTest extends TestCase
@@ -28,9 +29,6 @@ class CoreTest extends TestCase
     /** @test */
     public function view_the_welcome_page()
     {
-        //given we have data
-        $models = collect([Profile::all(), Listing::all(), Event::all()]);
-
         //when request welcome page
         $response = $this->get("/");
 
@@ -38,38 +36,23 @@ class CoreTest extends TestCase
         $response->assertViewIs('welcome');
     }
 
-    //user registers or logs in and is redirected to the main search page 
-
     /** @test */
-    public function search_filter_and_paginate_search_results()
+    public function get_search_results_partial()
     {
-        //given anyone
-        //when post request to searchpage
-
-        $response = $this->get('/', [
-            'what' => 'vet',
-            'where' => 'brisbane',
-            'profile_is_checked' => 'true',
-            'listing_is_checked' => 'true',
-            'event_is_checked' => 'true',
+        //when requeting with search query
+        $response = $this->get('/search', [
+            'what' => '',
+            'where' => '',
+            'profile_check' => 'true',
+            'listing_check' => 'true',
+            'event_check' => 'true',
         ]);
+        //then assert
+        $response->assertViewIs('search._search-results');
 
-        $response->assertViewIs('welcome')->assertViewHas(['profile', 'listing', 'event']);
+        //NB: very difficult to test result of search controller helper function 'retrieve data'
 
-
-
-
-        //then assert results filtered and paginated
     }
-    
-
-
-
-
-
-
-
-
 
     //user clicks on search object and retrieves...
 
@@ -103,5 +86,18 @@ class CoreTest extends TestCase
         //then check
         $response->assertViewIs('event.view')->assertViewHasAll(['event' => $event]);
     }
+
+    //a user can login and sign up
+    /** @test */
+    public function login_or_register_from_front_page_or_navbar()
+    {
+        //given a guest
+        assert:$this->assertTrue(Auth::guest());
+        //when visitng front page
+        $response = $this->get('/');
+        //assert a ui card exists and able to post to login controller from here
+        $response->assertSeeText('Log in');
+    }
+    
 }
 
