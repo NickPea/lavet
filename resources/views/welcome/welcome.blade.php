@@ -27,25 +27,23 @@ Welcome
 </style>
 @endsection
 
-
-
 @section('main')
 
 <!-- header -->
 <div class="container">
     <div class="row" style="height:60vh;">
+
         <div class="col-6 offset-1 d-flex flex-column justify-content-center">
             <div>
-                <h1 class="display-3" style="color:lightsalmon;">La`Vet</h1>
-                <h3 class="font-weight-bold">Build <u>`your</u> Veterinary Network
-                </h3>
-                <h5 class="text-muted">...the easy way.</h5>
+                <h4 class="display-3 font-weight-bold" style="color:rgb(228, 115, 102);">La`Vet</h4>
+                <h3 class="text-muted font-weight-bold">Build <u>`your</u> Veterinary Network</h3>
+                <h5 class="text-muted text-center">...the easy way.</h5>
             </div>
         </div>
 
         <div class="col-4 d-flex flex-column justify-content-center">
 
-           @include('welcome.login-card')
+            @include('welcome.login-card')
 
         </div> <!-- //col -->
     </div><!-- //row -->
@@ -161,8 +159,9 @@ Welcome
     // window.addEventListener('pageshow', (e) => searchBarForm.reset()); 
     //reset search bar on back button if not using input[autocomplete]='off'
     searchBarForm.addEventListener('submit', (e) => fetchSearchResultsPartial(e));
-    searchBarForm.addEventListener('keyup', (e) => fetchSearchResultsPartial(e));
-    searchBarForm.addEventListener('change', (e) => fetchSearchResultsPartial(e));
+    // searchBarForm.addEventListener('keyup', (e) => fetchSearchResultsPartial(e));
+    // searchBarForm.addEventListener('change', (e) => fetchSearchResultsPartial(e));
+    searchBarForm.addEventListener('input', (e) => fetchSearchResultsPartial(e));
 </script>
 @endpush
 

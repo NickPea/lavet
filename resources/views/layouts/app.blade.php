@@ -32,8 +32,7 @@
 
 
     <footer>
-        <div class="mt-5" style="height:25vh; background-color:rgba(255, 160, 122, 0.1);">
-        </div>
+        <div class="row mt-5" style="height: 80vh"><div class="col"><hr></div></div>
     </footer>
 
 
