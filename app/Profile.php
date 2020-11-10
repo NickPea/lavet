@@ -8,6 +8,10 @@ class Profile extends Model
 {
     //
 
+    /** properties */
+
+    protected $guarded = [];
+
     /** helpers */
     public function path()
     {

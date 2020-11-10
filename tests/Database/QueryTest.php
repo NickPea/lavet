@@ -250,7 +250,7 @@ class QueryTest extends TestCase
                 ['organisation' => 'maccas', 'work_role' => 'burger-flipper', 4 - 4 - 2015, null,]
             ],
             'skill' => ['sister-punching', 'BOOGER EATING'],
-            'image' => '/path/to/image'
+            'image' => factory(Image::class)->raw()
         ];
 
         //get or create a profile for a user with all of the available data
@@ -290,7 +290,7 @@ class QueryTest extends TestCase
         //image
         if (Arr::has($data, 'image')) {
             //behind the scenes: store or retrieve images from public folder
-            $imageId = Image::firstOrCreate(['path' => $data['image'][0]])->id;
+            $imageId = Image::firstOrCreate($data['image'])->id;
             $profile->image()->sync([$imageId => ['is_main' => true]]);
         }
         //location

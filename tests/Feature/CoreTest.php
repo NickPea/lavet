@@ -3,12 +3,16 @@
 namespace Tests\Feature;
 
 use App\Event;
+use App\Image;
 use App\Listing;
 use App\Profile;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CoreTest extends TestCase
@@ -33,7 +37,7 @@ class CoreTest extends TestCase
         $response = $this->get("/");
 
         //then check data present
-        $response->assertViewIs('welcome');
+        $response->assertViewIs('welcome.welcome');
     }
 
     /** @test */
@@ -96,8 +100,51 @@ class CoreTest extends TestCase
         //when visitng front page
         $response = $this->get('/');
         //assert a ui card exists and able to post to login controller from here
-        $response->assertSeeText('Log in');
+        $response->assertSeeText('Log In');
     }
+
+    /** @test */
+    public function on_registration_a_profile_is_create_with_a_uploaded_or_default_image()
+    {
+        //setup
+        
+        $imageFile  = UploadedFile::fake()->image('daisy.jpg')->size(5000);
+
+        //given guest
+        $this->assertTrue(Auth::guest());
+
+        //when registering with details + image file
+        $newDetails = [
+            'name' => 'someone',
+            'email' => 'someone@somewhere.com',
+            'password' => 'someonePassword',
+            'password_confirmation' => 'someonePassword',
+            'file' => $imageFile,
+        ];
+
+        $response = $this->post('/register', $newDetails);
+        //then user is logged in, and has a profile with an image.
+        $this->assertAuthenticated();
+        $this->assertInstanceOf(Profile::class, Auth::user()->profile);
+        $this->assertInstanceOf(Image::class, Auth::user()->profile->image->first());
+        //and then redirected to a dashboard
+        $response->assertRedirect('/dashboard');
+
+    }
+    
     
 }
 
+// force salary range per category of employee wanted on on job making to encourgae 
+// select range of salary and number of year of experience
+
+//front
+//lift search bar up and make stand out
+//quick links underneath
+//3 per page (events)
+
+//job page show salary and experience sought
+
+//event is good
+
+//work on ads and profile

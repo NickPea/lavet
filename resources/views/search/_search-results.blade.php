@@ -28,7 +28,7 @@
     @break
     @case('App\Event')
 
-    <div class="col-3">
+    <div class="col-4">
         @include('components/event-card')
     </div>
 

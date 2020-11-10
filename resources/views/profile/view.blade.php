@@ -61,8 +61,8 @@
                                         <!-- overlay wrapper -->
                                         <div class="position-relative">
                                             <!-- image -->
-                                            <img class="w-100 rounded" src={{asset($profile->image->first()->path)}}
-                                                alt="profile image">
+                                            <a href={{asset($profile->image->first()->path)}}><img class="w-100 rounded" src={{asset($profile->image->first()->path)}}
+                                            alt="profile image"></a>
 
                                             <!-- image overlay -->
                                             <div class="position-absolute" style="top:-5%; left:-5%">

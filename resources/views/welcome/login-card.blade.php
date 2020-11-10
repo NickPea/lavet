@@ -137,7 +137,8 @@
         <div class="row">
             <div class="col d-flex justify-content-center align-items-center"
                 style="border-top: 1px solid lightgrey; padding-top:20px">
-                <button class="btn btn-success btn-lg font-weight-bold" data-toggle="modal" data-target="#registerModal"">Sign Up Today</button>
+                <a href="/register" class="btn btn-success btn-lg font-weight-bold">Sign Up Today</a>
+                {{-- <button class="btn btn-success btn-lg font-weight-bold" data-toggle="modal" data-target="#registerModal"">Sign Up Today</button> --}}
             </div>
         </div>
 
