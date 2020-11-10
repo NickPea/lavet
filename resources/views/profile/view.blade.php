@@ -26,6 +26,7 @@
                     <div class="col-8">
 
                         <!-- location -->
+                        @if ($profile->location->first())
                         <div>
                             <h6>
                                 @include('components.SVG-location')
@@ -37,6 +38,7 @@
                                 </span>
                             </h6>
                         </div>
+                        @endif
 
                     </div> <!-- end col 1 -->
                 </div> <!-- end row location -->

@@ -104,31 +104,30 @@ class CoreTest extends TestCase
     }
 
     /** @test */
-    public function on_registration_a_profile_is_create_with_a_uploaded_or_default_image()
+    public function on_registration_a_profile_is_create_with_an_uploaded_profile_imag()
     {
         //setup
         
-        $imageFile  = UploadedFile::fake()->image('daisy.jpg')->size(5000);
-
         //given guest
         $this->assertTrue(Auth::guest());
 
         //when registering with details + image file
-        $newDetails = [
+        $newUserDetails = [
+            'file' => UploadedFile::fake()->image('daisy.jpg'),
             'name' => 'someone',
             'email' => 'someone@somewhere.com',
             'password' => 'someonePassword',
             'password_confirmation' => 'someonePassword',
-            'file' => $imageFile,
         ];
 
-        $response = $this->post('/register', $newDetails);
+        $response = $this->post('/register', $newUserDetails);
         //then user is logged in, and has a profile with an image.
         $this->assertAuthenticated();
         $this->assertInstanceOf(Profile::class, Auth::user()->profile);
         $this->assertInstanceOf(Image::class, Auth::user()->profile->image->first());
+        Auth::user()->profile->image->first();//contineu herer
         //and then redirected to a dashboard
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/');
 
     }
     

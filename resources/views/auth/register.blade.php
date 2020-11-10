@@ -41,7 +41,7 @@
                 <div class="card-body">
 
                     <!-- form -->
-                    <form id="js-form-wizard" method="POST" action="{{ route('register') }}">
+                    <form id="js-form-wizard" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
 
 

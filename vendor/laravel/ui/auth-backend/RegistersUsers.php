@@ -67,34 +67,20 @@ trait RegistersUsers
     {
         $user->profile()->create([
             'work_status' => $request->work_status,
-            'about' => $request->about,
         ]);
 
-        $this->setNewUserProfileImage($request, $user);
+        $user->save();
 
-        $user->push();
+        $path = $request->file('file')->store($user->email);
+
+        $image = Image::create([
+            'path' => $path,
+        ]);
+
+        $user->profile->image()->sync($image->id);
+
+        $user->save();
     }
 
-    public function setNewUserProfileImage(Request $request, User $user)
-    {
-        if ($request->hasFile('file')) {
-
-            $file = $request->file;
-            $path = Storage::putFile($user->email, $file, 'public');
-            $originalName = $file->getClientOriginalName();
-            $extension = $file->getClientOriginalExtension();
-            $mimeType = $file->getClientMimeType();
-            $size = Storage::size($path);
-
-            $image = Image::create([
-                'path' => $path,
-                'original_name' => $originalName,
-                'extension' => $extension,
-                'mime_type' => $mimeType,
-                'size' => $size,
-            ]);
-
-            $user->profile->image()->sync($image);
-        } //endif
-    }//endsetNewUserProfileImage
+    
 }
