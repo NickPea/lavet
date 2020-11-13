@@ -150,7 +150,8 @@ Welcome
             for (const key_value of formData) {
                 url.searchParams.append(key_value[0], key_value[1]);
             }
-        fetch(url).then(data => data.text())
+        fetch(url)
+        .then(data => data.text())
         .then(data => document.querySelector('#js-search-results-partial').innerHTML = data)
         .catch(error => console.error(error));
     };

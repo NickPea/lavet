@@ -21,9 +21,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 /** View Main Objects */
 //profile
 Route::get('profile/{profile}', 'ProfileController@show');
 Route::get('listing/{listing}', 'ListingController@show');
 Route::get('event/{event}', 'EventController@show');
+
+Route::patch('profile/{profile}', 'ProfileController@update');
+
+Route::post('profile/{profile}/experience', 'ExperienceController@store');
+
+Route::delete('experience/{experience}', 'ExperienceController@destroy');

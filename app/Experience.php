@@ -9,6 +9,7 @@ class Experience extends Model
 {
     //
     /** properties */
+    protected $guarded = [];
     protected $dates = ['start_at', 'end_at'];
 
     /** methods */

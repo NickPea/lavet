@@ -130,8 +130,22 @@ class CoreTest extends TestCase
         $response->assertRedirect('/');
 
     }
-    
-    
+
+    /** @test */
+    public function user_updates_any_of_their_profile_data()
+    {
+        //given a user and some updated data
+        $this->actingAs($user = User::anyOf());
+        $data = [
+            'about' => 'some updated about text',
+            'work_status' => 'looking for love'
+        ];
+        //when requesting a patch
+        $response = $this->patch("profile/{$user->profile->id}", $data);
+        //then return the patched data only
+        $response->assertJson($data);
+    }
+        
 }
 
 // force salary range per category of employee wanted on on job making to encourgae 

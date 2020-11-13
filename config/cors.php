@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    'paths' => ['*'], //changed 12/11/2020 NP
 
     'allowed_methods' => ['*'],
 

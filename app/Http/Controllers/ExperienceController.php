@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Experience;
+use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ExperienceController extends Controller
 {
@@ -33,9 +35,23 @@ class ExperienceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Profile $profile)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'organisation' => ['required'],
+            'work_role' => ['required'],
+            'start_at' => [],
+            'end_at' => [],
+        ]);
+        
+        if ($validated->fails()) {
+            return response($validated->invalid() , 422);
+        } 
+
+        $newExperience = $profile->experience()->create($request->all());
+        
+        return response($newExperience, 201);
+    
     }
 
     /**
@@ -80,6 +96,11 @@ class ExperienceController extends Controller
      */
     public function destroy(Experience $experience)
     {
-        //
+        $message = [
+            'id' => $experience->id,
+            'is_deleted' => $experience->delete()
+        ];
+        
+        return response($message, 200);
     }
 }
