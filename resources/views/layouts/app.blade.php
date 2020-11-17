@@ -20,6 +20,8 @@
 
 <body>
 
+    @include('toast.template')
+
     <div id="app">
 
         @include('components.navbar')
@@ -32,13 +34,17 @@
 
 
     <footer>
-        <div class="row mt-5" style="height: 80vh"><div class="col"><hr></div></div>
+        <div class="row mt-5" style="height: 80vh">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
     </footer>
 
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    
+
     @stack('scripts')
 
 </body>

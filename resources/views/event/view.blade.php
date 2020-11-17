@@ -350,7 +350,8 @@
                         <div class="row no-gutters my-4">
                             @auth
                             <div class="col-2">
-                                <img src={{Auth::user()->profile->image->first()->path}} alt="User Image">
+                                <img class="w-75 rounded-lg" style="object-fit: cover"
+                                src={{asset(Auth::user()->profile->image->first()->path)}} alt="User Image">
                             </div>
                             @endauth
                             <div class="col d-flex flex-column">

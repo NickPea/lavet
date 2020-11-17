@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Profile;
 use App\Reference;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class ReferenceController extends Controller
 {
@@ -33,9 +36,16 @@ class ReferenceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Profile $profile)
     {
-        //
+        if (Auth::guest()) {
+            return response('Please login first', 403);
+        }
+
+        $newReference = $profile->reference()->create(
+            array_merge($request->input(), ['user_id' => $request->user()->id])
+        );
+        return response($newReference, 201);
     }
 
     /**

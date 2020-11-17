@@ -144,42 +144,8 @@
                         <!-- inner row 1 -->
                         <div class="row py-3">
                             <div class="col">
-                                <div class="content-wrapper">
-                                    <!-- Credentials -->
-                                    <div class="d-flex">
-                                        <h5 class="font-weight-light" style="color:grey">Credentials
-                                            ({{$profile->credential->count()}}) </h5>
-                                        <!-- options-dropdown -->
-                                        <div class="btn-group ml-auto">
-                                            <a href="#" class="options-button" data-toggle="dropdown">
-                                                @include('components.svg-more')
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item font-weight-bold">Action</a>
-                                            </div>
-                                            <a href="#" class="options-button">
-                                                @include('components.svg-add')
-                                            </a>
-                                        </div>
-                                    </div>
-                                    @forelse ($profile->credential->take(2) as $credential)
-                                    <div class="row">
-                                        <div class="col">
-
-                                            <div class="card p-3 rounded-lg text-center d-flex flex-column justify-content-around"
-                                                style="height:25vh;">
-                                                <small class="text-muted">{{$credential->institution}}</small>
-                                                <h5 class="card-title font-italic">{{$credential->name}}</h6>
-                                                    <h6 class="card-text">{{$credential->end_year}}</h6>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    @empty
-                                    No Credentials...
-                                    @endforelse
-                                </div>
-                                <!-- end crednentials -->
+                                
+                                @include('profile.credential')
 
                             </div> <!-- end col -->
                         </div> <!-- end inner row 1 -->
@@ -341,53 +307,8 @@
                             <!-- inner col -->
                             <div class="col">
 
-
                                 <!-- References -->
-                                <div class="content-wrapper">
-                                    <div class="d-flex">
-                                        <h5 class="font-weight-light" style="color:grey">References
-                                            ({{$profile->reference->count()}})</h5>
-                                        <!-- options-dropdown -->
-                                        <div class="btn-group ml-auto">
-                                            <a href="#" class="options-button" data-toggle="dropdown">
-                                                @include('components.svg-more')
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item font-weight-bold">Action</a>
-                                            </div>
-                                            <a href="#" class="options-button">
-                                                @include('components.svg-add')
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        @forelse ($profile->reference->take(3) as $reference)
-                                        <div class="rounded-lg mt-2 p-2"
-                                            style="background-color: rgba(193, 206, 223, 0.3)">
-                                            <q
-                                                class="text-center font-weight-light font-italic">{{$reference->body}}</q>
-                                            <div class="d-flex justify-content-end">
-                                                <a class="text-reset text-decoration-none"
-                                                    href={{secure_url($reference->user->profile->path())}}>
-                                                    <div class="card rounded-lg">
-                                                        <div class="d-flex align-items-center p-1">
-                                                            <img class="rounded m-1" style="width:2rem"
-                                                                src={{asset($reference->user->profile->image->first()->path)}}
-                                                                alt="reference image">
-                                                            <span
-                                                                class="m-1 font-weight-bold">{{$reference->user->name}}</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        @empty
-                                        <p>No references... <a href="">add one!</a></p>
-                                        @endforelse
-                                    </div> <!-- end references -->
-                                </div>
-
+                                @include('profile.reference')
 
                             </div> <!-- end col -->
                         </div> <!-- end innner row 2 -->
@@ -398,12 +319,6 @@
 
 
                 </div> <!-- end row 2-->
-
-
-
-
-
-
 
 
             </div> <!-- end container -->
