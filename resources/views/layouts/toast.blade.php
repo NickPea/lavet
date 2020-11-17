@@ -39,7 +39,7 @@
                     <div class="card">
                         <div class="card-header d-flex">
                             ${toast.title}
-                            <span onclick="removeToast(${randomId})" class="ml-auto toast-it-close">@include('components.svg-remove')</span>
+                            <span onclick="removeToast(${randomId})" class="ml-auto toast-it-close">@include('svg.remove')</span>
                         </div>
                         <div class="card-body">
                             ${toast.body}

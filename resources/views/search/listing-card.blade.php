@@ -36,21 +36,21 @@
 
                     <div class="row">
                         <div class="col-2">
-                            <i>@include('components.svg-pay')</i>
+                            <i>@include('svg.pay')</i>
                         </div>
                         <b>{{$model->pay_rate}}</b>
                     </div>
 
                     <div class="row">
                         <div class="col-2">
-                            <i>@include('components.svg-briefcase')</i>
+                            <i>@include('svg.briefcase')</i>
                         </div>
                         <b>{{$model->employ_type->implode('name', ', ')}}</b>
                     </div>
 
                     <div class="row">
                         <div class="col-2">
-                            <i>@include('components.svg-location')</i>
+                            <i>@include('svg.location')</i>
                         </div>
                         <b>{{$model->location->first()->area_code->name}}</b>
                     </div>

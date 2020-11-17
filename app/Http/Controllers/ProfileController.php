@@ -9,25 +9,26 @@ class ProfileController extends Controller
 {
     public function show(Request $request, Profile $profile)
     {
-        return view('profileJs.template');
-        // switch ($request->query('section')) {
-
-        //     case 'about':
-        //         return view('profile._about', ['profile' => $profile]);
-        //         break;
-        //     case 'experience':
-        //         return view('profile._experience', ['profile' => $profile]);
-        //         break;
-        //     case 'reference':
-        //         return view('profile._reference', ['profile' => $profile]);
-        //         break;
-        //     case 'credential':
-        //         return view('profile._credential', ['profile' => $profile]);
-        //         break;
-        //     default:
-        //         return view('profile.template', ['profile' => $profile]);
-        //         break;
-        // }
+        switch ($request->query('section')) {
+            case 'location':
+                return view('profile.partials._location', ['profile' => $profile]);
+                break;
+            case 'about':
+                return view('profile.partials._about', ['profile' => $profile]);
+                break;
+            case 'experience':
+                return view('profile.partials._experience', ['profile' => $profile]);
+                break;
+            case 'reference':
+                return view('profile.partials._reference', ['profile' => $profile]);
+                break;
+            case 'credential':
+                return view('profile.partials._credential', ['profile' => $profile]);
+                break;
+            default:
+                return view('profile.template', ['profile' => $profile]);
+                break;
+        }
     }
 
     public function update(Request $request, Profile $profile)

@@ -1,16 +1,12 @@
 @extends('layouts.app')
 
-@section('head')
+@push('head')
 <style>
 
 </style>
-@endsection
+@endpush
 
-@section('title')
-{{$event->title}}
-@endsection
-
-@section('main')
+@push('body')
 
 
 <!-- event header -->
@@ -117,9 +113,9 @@
                         <div class="col-1">
                             <i>
                                 @if ($event->access=='Public')
-                                @include('components.svg-public')
+                                @include('svg.public')
                                 @else
-                                @include('components.svg-private')
+                                @include('svg.private')
                                 @endif
                             </i>
                         </div>
@@ -129,7 +125,7 @@
                     </span>
                     <span class="row my-2">
                         <div class="col-1">
-                            <i>@include('components.svg-today')</i>
+                            <i>@include('svg.today')</i>
                         </div>
                         <div class="col-10">
                             <b>{{$event->start_at->format('l jS \\of F Y')}}</b>
@@ -137,7 +133,7 @@
                     </span>
                     <span class="row my-2">
                         <div class="col-1">
-                            <i>@include('components.svg-time')</i>
+                            <i>@include('svg.time')</i>
                         </div>
                         <div class="col-10">
                             <b>{{$event->start_at->format('g:i A')}} to {{$event->end_at->format('g:i A')}}</b>
@@ -145,7 +141,7 @@
                     </span>
                     <span class="row my-2">
                         <div class="col-1">
-                            <i>@include('components.svg-location')</i>
+                            <i>@include('svg.location')</i>
                         </div>
                         <div class="col-10">
                             <b>{{$event->location->first()->township->name}}</b>
@@ -371,4 +367,4 @@
 
 <br>
 
-@endsection
+@endpush

@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
-@section('head')
+
+@push('head')
 <style>
 
 </style>
-@endsection
+@endpush
 
-@section('title')
-{{$listing->title}}
-@endsection
 
-@section('main')
+@push('body')
 
 <div class="container">
     <div class="row">
@@ -46,7 +44,7 @@
                                 {{$listing->business->name}}
                             </h5>
                             <h6>
-                                @include('components.SVG-location')
+                                @include('svg.location')
                                 <span class="text-muted font-weight-light">
                                     {{$listing->location->first()->city->name}},
                                     {{$listing->location->first()->province->name}},
@@ -149,11 +147,11 @@
                             <div class="card my-2">
                                 <div class="card-body">
                                     <div class="d-flex flex-column">
-                                        <span class="py-1"><i class="mx-3">@include('components.svg-today')</i>
+                                        <span class="py-1"><i class="mx-3">@include('svg.today')</i>
                                             <b>{{$listing->created_at->diffForHumans()}}</b></span>
-                                        <span class="py-1"><i class="mx-3">@include('components.svg-briefcase')</i>
+                                        <span class="py-1"><i class="mx-3">@include('svg.briefcase')</i>
                                             <b>{{$listing->employ_type->implode('name', ', ')}}</b></span>
-                                        <span class="py-1"><i class="mx-3">@include('components.svg-pay')</i>
+                                        <span class="py-1"><i class="mx-3">@include('svg.pay')</i>
                                             <b>{{$listing->pay_rate}}</b></span>
                                     </div>
                                 </div>
@@ -170,4 +168,4 @@
 </div>
 </div>
 
-@endsection
+@endpush

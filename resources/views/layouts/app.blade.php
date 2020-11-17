@@ -14,24 +14,17 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    @yield('head')
+    @stack('head')
 
 </head>
 
 <body>
 
-    @include('toast.template')
+    @include('layouts.toast')
 
-    <div id="app">
+    @include('layouts.navbar')
 
-        @include('components.navbar')
-
-        <main>
-            @yield('main')
-        </main>
-
-    </div>
-
+    @stack('body')
 
     <footer>
         <div class="row mt-5" style="height: 80vh">
@@ -42,7 +35,7 @@
     </footer>
 
 
-    <!-- Scripts -->
+
     <script src="{{ asset('js/app.js') }}"></script>
 
     @stack('scripts')

@@ -40,7 +40,7 @@
 
             <!-- comment count -->
             <div>
-                @include('components.svg-comment')
+                @include('svg.comment')
                 <span>
                     ({{$model->comment->count()}}) Comments
                 </span>

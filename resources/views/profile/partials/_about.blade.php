@@ -13,7 +13,7 @@
         <!-- options-dropdown -->
         <div class="btn-group ml-auto">
             <a href="#" class="options-button" data-toggle="dropdown">
-                @include('components.svg-more')
+                @include('svg.more')
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a id="js-profile-about-edit-button" href="" class="dropdown-item font-weight-bold">Edit</a>

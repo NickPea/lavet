@@ -4,7 +4,45 @@
 {{$profile->user->name}}
 @endsection
 
-@section('main')
+{{-- HEAD --}}
+@push('head')
+
+<!-- Page Styles -->
+<style>
+    .content-wrapper {
+        /* box-shadow: 1px 1px 1rem darksalmon; */
+        background: rgb(230, 230, 230);
+        border-radius: 1rem;
+        padding: 1rem;
+        transition: 100ms;
+    }
+
+    .content-wrapper:hover {
+        background: rgb(240, 240, 240);
+        /* box-shadow: 1px 1px 10px grey; */
+    }
+
+    .options-button {
+        padding: 0.2rem;
+        border-radius: 50%;
+        transition: 250ms;
+    }
+
+    .options-button:hover {
+        background: white;
+
+    }
+</style>
+
+<!-- State Management -->
+@include('profile.scripts.state-store')
+@include('profile.scripts.state-reducers')
+
+@endpush 
+{{-- //HEAD --}}
+
+{{-- BODY --}}
+@push('body')
 
 <div class="container">
     <div class="row">
@@ -19,23 +57,7 @@
                     <!-- col 1 -->
                     <div class="col-8">
 
-                        <!-- location -->
-                        <div>
-                            <h6 class="d-inline">
-                                @include('components.SVG-location')
-                                @if ($profile->location->first())
-                                <span class="text-muted font-weight-light">
-                                    {{$profile->location->first()->city->name}},
-                                    {{$profile->location->first()->province->name}},
-                                    {{$profile->location->first()->country->name}},
-                                    {{$profile->location->first()->area_code->name}},
-                                </span>
-                                @else
-                                <span class="text-muted font-weight-light">
-                                    Unknown
-                                    @endif
-                            </h6>
-                        </div>
+                        @include('profile.components.location')
 
                     </div> <!-- end col 1 -->
                 </div> <!-- end row location -->
@@ -125,7 +147,7 @@
                     <div class="col-4">
 
                         <!-- About -->
-                        @include('profile.about')                        
+                        @include('profile.components.about')                        
 
                     </div>
 
@@ -145,7 +167,7 @@
                         <div class="row py-3">
                             <div class="col">
                                 
-                                @include('profile.credential')
+                                @include('profile.components.credential')
 
                             </div> <!-- end col -->
                         </div> <!-- end inner row 1 -->
@@ -164,7 +186,7 @@
                                         <!-- options-dropdown -->
                                         <div class="btn-group ml-auto">
                                             <a href="#" class="options-button" data-toggle="dropdown">
-                                                @include('components.svg-more')
+                                                @include('svg.more')
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="#" class="dropdown-item font-weight-bold">Action</a>
@@ -213,7 +235,7 @@
                                         <!-- options-dropdown -->
                                         <div class="btn-group ml-auto">
                                             <a href="#" class="options-button" data-toggle="dropdown">
-                                                @include('components.svg-more')
+                                                @include('svg.more')
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="#" class="dropdown-item font-weight-bold">Action</a>
@@ -260,7 +282,7 @@
                                         <!-- options-dropdown -->
                                         <div class="btn-group ml-auto">
                                             <a href="#" class="options-button" data-toggle="dropdown">
-                                                @include('components.svg-more')
+                                                @include('svg.more')
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a href="#" class="dropdown-item font-weight-bold">Action</a>
@@ -294,7 +316,7 @@
                             <div class="col">
 
                                 <!-- Experience -->
-                                @include('profile.experience')
+                                @include('profile.components.experience')
                                 <!-- end experiences -->
 
                             </div> <!-- end col -->
@@ -308,7 +330,7 @@
                             <div class="col">
 
                                 <!-- References -->
-                                @include('profile.reference')
+                                @include('profile.components.reference')
 
                             </div> <!-- end col -->
                         </div> <!-- end innner row 2 -->
@@ -329,32 +351,5 @@
     </div>
 </div>
 
-@endsection
-
-@section('head')
-<style>
-    .content-wrapper {
-        /* box-shadow: 1px 1px 1rem darksalmon; */
-        background: rgb(230, 230, 230);
-        border-radius: 1rem;
-        padding: 1rem;
-        transition: 100ms;
-    }
-
-    .content-wrapper:hover {
-        background: rgb(240, 240, 240);
-        /* box-shadow: 1px 1px 10px grey; */
-    }
-
-    .options-button {
-        padding: 0.2rem;
-        border-radius: 50%;
-        transition: 250ms;
-    }
-
-    .options-button:hover {
-        background: white;
-
-    }
-</style>
-@endsection
+@endpush
+{{-- //BODY --}}

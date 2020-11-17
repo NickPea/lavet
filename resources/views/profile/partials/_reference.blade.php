@@ -21,14 +21,14 @@
         <!-- options -->
         <div class="btn-group ml-auto">
             <a href="#" class="options-button" data-toggle="dropdown">
-                @include('components.svg-more')
+                @include('svg.more')
             </a>
             <!-- dropdown -->
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="#" class="dropdown-item font-weight-bold">Action</a>
             </div>
             <a id="js-pr-add-button" href="#" class="options-button">
-                @include('components.svg-add')
+                @include('svg.add')
             </a>
         </div><!-- options -->
 
@@ -36,7 +36,7 @@
 
     <!-- provide a reference form -->
     <div class="mt-2">
-        @include('profile.add-reference')
+        @include('profile.components.add-reference')
     </div>
 
     <!-- list -->

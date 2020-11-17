@@ -68,7 +68,7 @@ class CoreTest extends TestCase
         //when a profile is requested
         $response = $this->get("profile/{$profile->id}");
         //then check
-        $response->assertViewIs('profile.view')->assertViewHasAll(['profile' => $profile]);
+        $response->assertViewIs('profile.template')->assertViewHasAll(['profile' => $profile]);
     }
     /** @test */
     public function view_a_listing()
@@ -78,7 +78,7 @@ class CoreTest extends TestCase
         //when a listing is requested
         $response = $this->get("listing/{$listing->id}");
         //then check
-        $response->assertViewIs('listing.view')->assertViewHasAll(['listing' => $listing]);
+        $response->assertViewIs('listing.template')->assertViewHasAll(['listing' => $listing]);
     }
     /** @test */
     public function view_an_event()

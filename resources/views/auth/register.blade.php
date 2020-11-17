@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 
-@section('main')
-
-
+@push('body')
 
 <div class="container" style="height: 100vh">
     <div class="row">
@@ -208,12 +206,12 @@
     </div><!-- //row -->
 </div><!-- //container -->
 
-@endsection
+@endpush
 
 
 
 
-@section('head')
+@push('head')
 
 <style>
     /* form wizard */
@@ -268,7 +266,7 @@
     }
 </style>
 
-@endsection
+@endpush
 
 
 

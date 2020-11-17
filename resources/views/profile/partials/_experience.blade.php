@@ -8,28 +8,28 @@
         <!-- options-dropdown -->
         <div class="btn-group ml-auto">
             <a href="#" class="options-button" data-toggle="dropdown">
-                @include('components.svg-more')
+                @include('svg.more')
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a id="js-profile-experience-add-button" href="#" class="dropdown-item font-weight-bold">Add</a>
                 <a href="#" class="dropdown-item font-weight-bold">Action</a>
             </div>
             <a id="js-pe-add-button" class="options-button">
-                @include('components.svg-add')
+                @include('svg.add')
             </a>
         </div>
     </div>
 
     <!-- experiences -->
     <div id="js-pe-add-entry" style="display: none">
-        @include('profile.add-experience')
+        @include('profile.components.add-experience')
     </div>
 
     <div id="js-pe-list">
 
         @forelse ($profile->experience->sortDesc()->take(3) as $experience)
 
-        @include('profile.experience-list-item')
+        @include('profile.components.experience-list-item')
 
         @empty
 

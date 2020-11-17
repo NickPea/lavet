@@ -9,7 +9,7 @@
 Welcome
 @endsection
 
-@section('head')
+@push('head')
 <style>
     .hover:hover {
         background-color: rgba(211, 211, 211, 0.1);
@@ -25,9 +25,9 @@ Welcome
         transition: 50ms ease-in;
     }
 </style>
-@endsection
+@endpush
 
-@section('main')
+@push('body')
 
 <!-- header -->
 <div class="container">
@@ -69,7 +69,7 @@ Welcome
                                 <input class="form-control form-control-lg pl-5" type="text" name="what" id="what"
                                     placeholder="search..." autofocus autocomplete="off">
                                 <span class="position-absolute"
-                                    style="top:25%; left:1.5rem;">@include('components.svg-search')</span>
+                                    style="top:25%; left:1.5rem;">@include('svg.search')</span>
                             </div>
                             <div class="position-relative form-group m-0 col">
                                 <label class="sr-only" for="where">where</label>
@@ -77,7 +77,7 @@ Welcome
                                 <input class="form-control form-control-lg pl-5" type="text" name="where" id="where"
                                     placeholder="location..." autocomplete="off">
                                 <span class="position-absolute"
-                                    style="top:25%; left:1.5rem;">@include('components.svg-searchlocation')</span>
+                                    style="top:25%; left:1.5rem;">@include('svg.searchlocation')</span>
                             </div>
                         </div>
                         <!-- //row1 -->
@@ -128,7 +128,6 @@ Welcome
 </div><!-- //searchbar -->
 
 
-
 <!-- search results partial -->
 <div class="container my-4">
     <div class="row">
@@ -138,8 +137,11 @@ Welcome
     </div>
 </div>
 
+@endpush
+
 
 @push('scripts')
+
 <script>
     searchBarForm = document.querySelector('#js-search-bar-form');
 
@@ -164,8 +166,5 @@ Welcome
     // searchBarForm.addEventListener('change', (e) => fetchSearchResultsPartial(e));
     searchBarForm.addEventListener('input', (e) => fetchSearchResultsPartial(e));
 </script>
+
 @endpush
-
-
-
-@endsection

@@ -6,7 +6,7 @@
 
             <!-- col 1 -->
             <div class="col-1">
-                @include('components.svg-experience')
+                @include('svg.experience')
             </div>
 
             <!-- col 2 -->
@@ -25,7 +25,7 @@
 
                                 <div class="btn-group ml-auto">
                                     <a href="" class="options-button" data-toggle="dropdown">
-                                        @include('components.svg-remove')
+                                        @include('svg.remove')
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item font-weight-bold"

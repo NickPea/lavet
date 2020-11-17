@@ -9,13 +9,13 @@
         <!-- options-dropdown -->
         <div class="btn-group ml-auto">
             <a href="#" class="options-button" data-toggle="dropdown">
-                @include('components.svg-more')
+                @include('svg.more')
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item font-weight-bold">Action</a>
             </div>
             <a id="js-pc-add-button" class="options-button">
-                @include('components.svg-add')
+                @include('svg.add')
             </a>
         </div>
     </div>

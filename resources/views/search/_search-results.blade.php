@@ -15,21 +15,21 @@
     @case('App\Profile')
 
     <div class="col-3">
-        @include('components/profile-card')
+        @include('search.profile-card')
     </div>
 
     @break
     @case('App\Listing')
 
     <div class="col-3">
-        @include('components/listing-card')
+        @include('search.listing-card')
     </div>
 
     @break
     @case('App\Event')
 
     <div class="col-4">
-        @include('components/event-card')
+        @include('search.event-card')
     </div>
 
 
