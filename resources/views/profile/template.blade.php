@@ -1,44 +1,21 @@
 @extends('layouts.app')
 
-@section('title')
-{{$profile->user->name}}
-@endsection
 
 {{-- HEAD --}}
 @push('head')
 
+<title>
+    {{$profile->user->name.' - '.config('', 'ERROR')}}
+</title>
+
 <!-- Page Styles -->
-<style>
-    .content-wrapper {
-        /* box-shadow: 1px 1px 1rem darksalmon; */
-        background: rgb(230, 230, 230);
-        border-radius: 1rem;
-        padding: 1rem;
-        transition: 100ms;
-    }
-
-    .content-wrapper:hover {
-        background: rgb(240, 240, 240);
-        /* box-shadow: 1px 1px 10px grey; */
-    }
-
-    .options-button {
-        padding: 0.2rem;
-        border-radius: 50%;
-        transition: 250ms;
-    }
-
-    .options-button:hover {
-        background: white;
-
-    }
-</style>
+@include('profile.styles.page')
 
 <!-- State Management -->
 @include('profile.scripts.state-store')
 @include('profile.scripts.state-reducers')
 
-@endpush 
+@endpush
 {{-- //HEAD --}}
 
 {{-- BODY --}}
@@ -51,107 +28,27 @@
 
             <div class="container py-5">
 
-
-                <!-- row location -->
-                <div class="row mt-4">
-                    <!-- col 1 -->
-                    <div class="col-8">
-
-                        @include('profile.components.location')
-
-                    </div> <!-- end col 1 -->
-                </div> <!-- end row location -->
-
-
                 <!-- row 1 -->
                 <div class="row mt-2">
-                    <!-- left panel -->
+
                     <div class="col-8">
 
-                        <!-- Card -->
-                        <div class="card p-2 rounded-lg shadow-lg">
+                        <!-- Header-Card -->
+                        @include('profile.components.header-card')
 
-                            <!-- Card Body-->
-                            <div class="card-body">
-
-                                <!-- inner row -->
-                                <div class="row">
-                                    <!-- inner col 1-->
-                                    <div class="col-5">
-
-                                        <!-- overlay wrapper -->
-                                        <div class="position-relative">
-                                            <!-- image -->
-                                            <a href={{asset($profile->image->first()->path)}}><img class="w-100 rounded"
-                                                    src={{asset($profile->image->first()->path)}}
-                                                    alt="profile image"></a>
-
-                                            <!-- image overlay -->
-                                            <div class="position-absolute" style="top:-5%; left:-5%">
-
-                                                <!-- is_free -->
-                                                <h5>
-                                                    @if ($profile->is_free===1)
-                                                    <span class="badge badge-success border py-2">
-                                                        Online
-                                                    </span>
-                                                    @else
-                                                    <span class="badge badge-secondary border py-2">
-                                                        Offline
-                                                    </span>
-                                                    @endif
-                                                </h5>
-
-                                            </div>
-                                            <!-- end image overlay -->
-                                        </div>
-                                        <!-- end overlay wrapper -->
-
-                                    </div>
-                                    <!-- end inner col 1 -->
-
-                                    <!-- inner col 2 -->
-                                    <div class="col">
-
-                                        <!-- name, field & position -->
-                                        <div class="h-100 d-flex flex-column">
-                                            <h3 class="font-weight-bold">
-                                                {{$profile->user->name}}
-                                            </h3>
-                                            <div class="mt-auto">
-                                                <h6 class="text-muted font-weight-lighter">
-                                                    {{$profile->field->implode('name', ', ')}}
-                                                </h6>
-                                                <h5 class="text-secondary">
-                                                    {{$profile->position->implode('name', ', ')}}
-                                                </h5>
-                                            </div>
-                                        </div>
-
-                                    </div><!-- end inner col 2 -->
-                                </div> <!-- inner row -->
-
-                                <div class="row mt-4">
-                                    <div class="col">
-                                        <h5 class="m-0"><i>"{{$profile->work_status}}"</i></h5>
-                                    </div>
-                                </div>
-
-                            </div> <!-- end card body -->
-
-                        </div> <!-- end card -->
-
-                    </div> <!-- end col 1 -->
-
-                    <!-- col-->
-                    <div class="col-4">
-
-                        <!-- About -->
-                        @include('profile.components.about')                        
+                        <!-- Location -->
+                        @include('profile.components.location')
 
                     </div>
 
-                </div> <!-- end row-->
+                    <div class="col-4">
+
+                        <!-- About -->
+                        @include('profile.components.about')
+
+                    </div>
+
+                </div> 
 
                 <!-- row 2 -->
                 <div class="row mt-4">
@@ -166,7 +63,7 @@
                         <!-- inner row 1 -->
                         <div class="row py-3">
                             <div class="col">
-                                
+
                                 @include('profile.components.credential')
 
                             </div> <!-- end col -->

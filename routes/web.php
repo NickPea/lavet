@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +29,7 @@ Route::get('event/{event}', 'EventController@show');
 
 Route::patch('profile/{profile}', 'ProfileController@update');
 
+Route::post('profile/{profile}/location', 'LocationController@store');
 Route::post('profile/{profile}/experience', 'ExperienceController@store');
 Route::post('profile/{profile}/reference', 'ReferenceController@store');
 

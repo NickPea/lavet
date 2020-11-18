@@ -11,7 +11,12 @@ class ProfileController extends Controller
     {
         switch ($request->query('section')) {
             case 'location':
-                return view('profile.partials._location', ['profile' => $profile]);
+                return response([
+                    'city' => $profile->location->first()->city->name,
+                    'province' => $profile->location->first()->province->name,
+                    'country' => $profile->location->first()->country->name,
+                    'area_code' => $profile->location->first()->area_code->name,
+                ], 200);
                 break;
             case 'about':
                 return view('profile.partials._about', ['profile' => $profile]);
