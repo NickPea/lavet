@@ -10,6 +10,13 @@ class ProfileController extends Controller
     public function show(Request $request, Profile $profile)
     {
         switch ($request->query('section')) {
+            case 'header':
+                return response([
+                    'name' => $profile->user->name,
+                    'field' => $profile->field->first()->name,
+                    'position' => $profile->position->first()->name,
+                ], 200);
+                break;
             case 'location':
                 return response([
                     'city' => $profile->location->first()->city->name,

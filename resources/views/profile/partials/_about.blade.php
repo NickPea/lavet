@@ -8,7 +8,7 @@
     <!-- title & options -->
     <div class="d-flex">
         <!-- title -->
-        <h5 class="font-weight-light" style="color:grey">Blurb</h5>
+        <h5 class="font-weight-light" style="color:grey">Bio</h5>
 
         <!-- options-dropdown -->
         <div class="btn-group ml-auto">
@@ -36,8 +36,10 @@
         <div class="d-flex flex-column">
             <div class="form-group">
                 <label class="sr-only" for="about">Edit profile about</label>
-                <textarea id="js-profile-about-textarea" name="about" id="about" class="form-control form-control-lg"
-                    style="resize:none;">{{$profile->about}}</textarea>
+                <textarea id="js-profile-about-textarea" name="about" id="about" rows="4"
+                class="form-control form-control-lg">
+                    {{$profile->about}}
+                </textarea>
             </div>
             <span class="align-self-end">
                 <button class="btn btn-primary">Save</button>

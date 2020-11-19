@@ -18,10 +18,10 @@
             }
             this.publish = (action) => {
                 //action
-                console.log(`Action: ${JSON.stringify(action)}`)
+                console.log(`Action Created: ${JSON.stringify(action)}`)
                 //old state
                 let oldState = JSON.parse(JSON.stringify(this.state));
-                console.log(`Old State: ${JSON.stringify(oldState)}`)
+                // console.log(`Old State: ${JSON.stringify(oldState)}`)
                 //update
                 if (this.reducers.length>0) {
                     this.reducers.forEach((reducer) => {

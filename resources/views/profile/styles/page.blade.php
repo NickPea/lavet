@@ -18,15 +18,20 @@
     .options-button {
         padding: 0.2rem;
         border-radius: 50%;
-        transition: 250ms;
+
     }
     .options-button:hover {
-        box-shadow: 0 0 0 1px white;
+        background: white;
+        box-shadow: 0 0 2px 1px rgb(136, 136, 136)
     }
+
     .options-button:active {
-        border: 1px solid black
+        transform: scale(0.9);
+
     }
+
     .options-button-selected {
         background: white;
+        box-shadow: 0 0 2px 1px rgb(136, 136, 136)
     }
 </style>

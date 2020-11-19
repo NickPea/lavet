@@ -1,19 +1,12 @@
 {{--  --}}
 
 
-
 <style>
-    .location-wrapper {
-        padding: 1rem;
-        background: rgb(230, 230, 230);
-        border-radius: 0 0 1rem 1rem;
-        transition: 100ms
-    }
 
-    .location-wrapper:hover {
-        background: rgb(240, 240, 240);
-    }
 </style>
+
+
+{{-- ------------------------------------------------------------------------------------------ --}}
 
 
 <div class="location-wrapper">
@@ -31,15 +24,8 @@
                 </span>
             </h6>
         </div>
-        <!-- options-dropdown -->
+        <!-- btn group -->
         <div class="btn-group ml-auto">
-            <a class="options-button" data-toggle="dropdown">
-                @include('svg.more')
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item font-weight-bold">Edit Address</a>
-                <a class="dropdown-item font-weight-bold">Action</a>
-            </div>
             <a class="options-button" data-js="edit-location-button">
                 @include('svg.edit')
             </a>
@@ -81,8 +67,10 @@
             </div>
         </div>
     </div> <!-- //hidden-form -->
-</div> <!-- //location-wrapper -->
+</div><!-- //location-wrapper -->
 
+
+{{-- ------------------------------------------------------------------------------------------ --}}
 
 
 <script>
@@ -124,21 +112,23 @@
 
         //define render and subscribe for on store state changes
         function render (oldState, newState) {
-            //todo: add conditional render logic
-            console.log('location rendering');
-            if (Object.values(newState.location).every(place => place === null)) {
-                city.innerHTML = newState.location.city;
-                province.innerHTML = newState.location.province;
-                country.innerHTML = newState.location.country;
-                areaCode.innerHTML = newState.location.area_code;
-                locationUnknown.innerHTML = 'unknown'
-            } else {
-                city.innerHTML = newState.location.city;
-                province.innerHTML = newState.location.province;
-                country.innerHTML = newState.location.country;
-                areaCode.innerHTML = newState.location.area_code;
-                locationUnknown.innerHTML = null
-            }
+            //render if location changed
+            if (!_.isEqual(oldState.location, newState.location)) {
+                console.log('location rendering');
+                if (Object.values(newState.location).every(place => place === null)) {
+                    city.innerHTML = newState.location.city;
+                    province.innerHTML = newState.location.province;
+                    country.innerHTML = newState.location.country;
+                    areaCode.innerHTML = newState.location.area_code;
+                    locationUnknown.innerHTML = 'unknown'
+                } else {
+                    city.innerHTML = newState.location.city;
+                    province.innerHTML = newState.location.province;
+                    country.innerHTML = newState.location.country;
+                    areaCode.innerHTML = newState.location.area_code;
+                    locationUnknown.innerHTML = null
+                }
+            }//end outter if
         } 
         store.subscribe(render)
 
