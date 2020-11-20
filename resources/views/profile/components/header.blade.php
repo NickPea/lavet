@@ -75,7 +75,7 @@
                     <div class="position-absolute" style="bottom:-0.5rem; right:-0.5rem">
                         <h5 class="m-0">
                             <span class="image-edit-button">
-                                @include('svg.edit-white')
+                                @include('svg.edit')
                             </span>
                         </h5>
                     </div>
@@ -204,12 +204,9 @@
                 headerEditButton.classList.remove('options-button-selected')
                 headerDetails.style.display = 'block';
                 headerHidden.style.display = 'none';
-        })
+        });
 
-        // ------- //// ------- //// ------- //// ------- //// ------- //// ------- //
-        // FINISH SUBMIT AND CLEAN UP LOCATION.BLADE.PHP TO LOOK LIKE THIS
-        // TRIM DOWN LODASH LIBRARY IN BUNDLE
-        // ------- //// ------- //// ------- //// ------- //// ------- //// ------- //
+       
         headerForm.addEventListener('submit', () => {
             event.preventDefault();
             let formData =  new FormData(headerForm);
@@ -231,7 +228,7 @@
                         break;
                 }//switch
             })//then
-        })//addEventListener
+        })//submit
 
 
         //event handlers

@@ -75,7 +75,8 @@
 
 <script>
     'use strict'
-    async function Location() {
+    function Location() {
+        
         //dom
         let city = document.querySelector('[data-js="location-city"]')
         let province = document.querySelector('[data-js="location-province"]')
@@ -93,7 +94,7 @@
         let locationForm = document.querySelector('[data-js="location-form"]')
         let locationFormCancelButton = document.querySelector('[data-js="location-form-cancel-button"]')
 
-        //check variables
+        //dom-check
         !city && console.error('no city entry');
         !province && console.error('no province entry');
         !country && console.error('no country entry');
@@ -110,39 +111,6 @@
         !locationForm && console.error('no address form');
         !locationFormCancelButton && console.error('no address form');
 
-        //define render and subscribe for on store state changes
-        function render (oldState, newState) {
-            //render if location changed
-            if (!_.isEqual(oldState.location, newState.location)) {
-                console.log('location rendering');
-                if (Object.values(newState.location).every(place => place === null)) {
-                    city.innerHTML = newState.location.city;
-                    province.innerHTML = newState.location.province;
-                    country.innerHTML = newState.location.country;
-                    areaCode.innerHTML = newState.location.area_code;
-                    locationUnknown.innerHTML = 'unknown'
-                } else {
-                    city.innerHTML = newState.location.city;
-                    province.innerHTML = newState.location.province;
-                    country.innerHTML = newState.location.country;
-                    areaCode.innerHTML = newState.location.area_code;
-                    locationUnknown.innerHTML = null
-                }
-            }//end outter if
-        } 
-        store.subscribe(render)
-
-        //fetch data and update store
-        function fetchAndStore () {
-            let url = new URL(`${window.location.href}?section=location`);
-            fetch(url)
-            .then(res => res.json())
-            .then(obj => {
-                store.publish({type: 'location/update-data', payload: obj})
-            });
-        }
-        fetchAndStore();
-        //NB: will re-render.
 
        //events
        editLocationButton.addEventListener('click', () => {
@@ -196,16 +164,44 @@
                         break;
                 }//switch
             });//then
-        })//addEventListener
+        })//submit
 
 
         //event handlers
 
 
+        //fetch and update store
+        function fetchAndStore () {
+            let url = new URL(`${window.location.href}?section=location`);
+            fetch(url)
+            .then(res => res.json())
+            .then(obj => {
+                store.publish({type: 'location/update-data', payload: obj})
+            });
+        }
+        fetchAndStore();
 
-        
+        //subcribed render
+        function render (oldState, newState) {
+            if (!_.isEqual(oldState.location, newState.location)) {
+                console.log('location rendering');
+                if (Object.values(newState.location).every(place => place === null)) {
+                    locationUnknown.innerHTML = 'unknown'
+                    [city, province, country, areaCode].forEach(dom => {
+                        dom.innerHTML = null;
+                    });
+                } else {
+                    locationUnknown.innerHTML = null
+                    city.innerHTML = newState.location.city;
+                    province.innerHTML = newState.location.province;
+                    country.innerHTML = newState.location.country;
+                    areaCode.innerHTML = newState.location.area_code;
+                }
+            }//endif
+        } //render
+        store.subscribe(render)
+
     }//Location
-
     Location()
 
 </script>
