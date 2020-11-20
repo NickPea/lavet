@@ -1,6 +1,26 @@
 <style>
+    .image-hover:hover {
+        filter: brightness(90%);
+    }
 
+    .image-edit-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background: lightgrey;
+        padding: 0.3rem;
+        cursor: pointer;
+    }
+    .image-edit-button:hover {
+        background: rgb(231, 230, 230);
+        box-shadow: 0 0 2px 1px rgb(136, 136, 136)
 
+    }
+    .image-edit-button:active {
+        transform: scale(0.9);
+
+    }
 </style>
 
 <div class="row pb-1">
@@ -32,8 +52,9 @@
                 <!-- overlay-wrapper -->
                 <div class="position-relative">
                     <!-- image -->
-                    <a href={{asset($profile->image->first()->path)}}><img class="w-100 rounded"
-                            src={{asset($profile->image->first()->path)}} alt="profile image">
+                    <a href={{asset($profile->image->first()->path)}}>
+                        <img class="w-100 rounded image-hover" src={{asset($profile->image->first()->path)}}
+                            alt="profile image">
                     </a>
                     <!-- overlay -->
                     <div class="position-absolute" style="top:-5%; left:-5%">
@@ -48,6 +69,14 @@
                                 Offline
                             </span>
                             @endif
+                        </h5>
+                    </div>
+                    <!-- edit image -->
+                    <div class="position-absolute" style="bottom:-0.5rem; right:-0.5rem">
+                        <h5 class="m-0">
+                            <span class="image-edit-button">
+                                @include('svg.edit-white')
+                            </span>
                         </h5>
                     </div>
                 </div><!-- //overlay-wrapper -->
@@ -86,6 +115,8 @@
                 <div data-js="header-hidden" style="display: none">
 
                     <form data-js="header-form">
+                        @csrf
+                        @method('PUT')
 
                         <div class="form-group">
                             <label for="name" class="sr-only">Name</label>
@@ -104,7 +135,7 @@
                         </div>
                         <hr>
                         <div class="d-flex justify-content-end">
-                            <button data-js="header-form-cancel-button"
+                            <button data-js="header-form-cancel-button" tabindex="-1"
                                 class="btn btn-outline-secondary btn-lg">cancel</button>
                             <button data-js="header-form-submit-button" type="submit"
                                 class="btn btn-primary btn-lg ml-2">save</button>
@@ -175,15 +206,35 @@
                 headerHidden.style.display = 'none';
         })
 
+        // ------- //// ------- //// ------- //// ------- //// ------- //// ------- //
+        // FINISH SUBMIT AND CLEAN UP LOCATION.BLADE.PHP TO LOOK LIKE THIS
+        // TRIM DOWN LODASH LIBRARY IN BUNDLE
+        // ------- //// ------- //// ------- //// ------- //// ------- //// ------- //
         headerForm.addEventListener('submit', () => {
             event.preventDefault();
-            // ------- //// ------- //// ------- //// ------- //// ------- //// ------- //
-            // FINISH SUBMIT AND CLEAN UP LOCATION.BLADE.PHP TO LOOK LIKE THIS
-            // TRIM DOWN LODASH LIBRARY IN BUNDLE
-            // ------- //// ------- //// ------- //// ------- //// ------- //// ------- //
-        })
+            let formData =  new FormData(headerForm);
+            let url = new URL(`${window.location.href}/header`)
+            fetch(url, {
+                method: "POST",
+                body: formData,
+            })
+            .then(res => {
+                switch (res.status) {
+                    case 204 :
+                        fetchAndStore();
+                        headerEditButton.classList.remove('options-button-selected')
+                        headerDetails.style.display = 'block';
+                        headerHidden.style.display = 'none';
+                        break;
+                    default:
+                        console.error(`header error: failed to update. Status: ${res.status}`)
+                        break;
+                }//switch
+            })//then
+        })//addEventListener
 
-        //handlers
+
+        //event handlers
 
 
         //fetch and store data
@@ -194,6 +245,7 @@
             .then(obj => store.publish({type:'header/update-data', payload: obj}))
         }
         fetchAndStore();
+
 
         //subscribe render
         function renderHeader(oldState, newState) {

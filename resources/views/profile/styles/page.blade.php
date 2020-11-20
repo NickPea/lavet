@@ -18,6 +18,7 @@
     .options-button {
         padding: 0.2rem;
         border-radius: 50%;
+        cursor: pointer;
 
     }
     .options-button:hover {

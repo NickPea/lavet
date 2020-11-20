@@ -27,10 +27,16 @@ Route::get('profile/{profile}', 'ProfileController@show');
 Route::get('listing/{listing}', 'ListingController@show');
 Route::get('event/{event}', 'EventController@show');
 
-Route::patch('profile/{profile}', 'ProfileController@update');
 
 Route::post('profile/{profile}/location', 'LocationController@store');
 Route::post('profile/{profile}/experience', 'ExperienceController@store');
 Route::post('profile/{profile}/reference', 'ReferenceController@store');
+
+
+Route::put('profile/{profile}/header', 'ProfileController@updateHeader');
+
+
+Route::patch('profile/{profile}', 'ProfileController@update');
+
 
 Route::delete('experience/{experience}', 'ExperienceController@destroy');

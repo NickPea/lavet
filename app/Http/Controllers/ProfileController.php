@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Field;
+use App\Position;
 use App\Profile;
 use Illuminate\Http\Request;
 
@@ -45,8 +47,27 @@ class ProfileController extends Controller
 
     public function update(Request $request, Profile $profile)
     {
-
         $profile->update($request->input());
         return response($profile->getChanges());
     }
+
+    public function updateHeader(Request $request, Profile $profile)
+    {
+        //name
+        $profile->user->name = $request->name;
+        //field
+        $profile->field()->sync(Field::firstOrCreate(['name' => $request->field])->id);
+        //position
+        $profile->position()->sync(Position::firstOrCreate(['name' => $request->position])->id);
+
+        $profile->push();
+
+        return response([
+            'name' => $profile->user->name,
+            'field' => $profile->field->first()->name,
+            'position' => $profile->position->first()->name,
+        ], 204);
+    }
+
+
 }
