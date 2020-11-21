@@ -73,6 +73,7 @@ class SchemaTest extends TestCase
         $this->assertInstanceOf(Collection::class, User::anyOf()->reference); //has many reference
         $this->assertInstanceOf(Collection::class, User::anyOf()->message); //has many message
         $this->assertInstanceOf(Collection::class, User::anyOf()->message_activity); //has many message_user
+        $this->assertInstanceOf(Collection::class, User::anyOf()->image); //has many image
 
         //role_user (laravel pivot table)
         $this->assertTrue(Schema::hasColumns('role_user', [
@@ -232,12 +233,15 @@ class SchemaTest extends TestCase
 
         //image 
         $this->assertTrue(Schema::hasColumns('images', [
-            'path', 'original_name', 'extension', 'mime_type', 'size', 'created_at', 'updated_at',
+            'path', 'created_at', 'updated_at', 'user_id'
         ]));
         $this->assertInstanceOf(Collection::class, Image::anyOf()->profile); //has morphed by many profile
         $this->assertInstanceOf(Collection::class, Image::anyOf()->business); //has morphed by many business
         $this->assertInstanceOf(Collection::class, Image::anyOf()->listing); //has morphed by many listing
         $this->assertInstanceOf(Collection::class, Image::anyOf()->event); //has morphed by many event
+        $this->assertInstanceOf(User::class, Image::anyOf()->use); //has (is owned) by one user
+
+        
 
         //imageable (laravel many-to-many polymorph table)
         $this->assertTrue(Schema::hasColumns('imageables', [

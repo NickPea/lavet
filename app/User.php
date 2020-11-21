@@ -24,6 +24,10 @@ class User extends Authenticatable
     ];
 
     /** methods */
+    public function image()
+    {
+        return $this->hasMany('App\Image');
+    }
     public function profile()
     {
         return $this->hasOne('App\Profile');

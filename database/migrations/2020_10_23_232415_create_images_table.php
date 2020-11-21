@@ -17,6 +17,8 @@ class CreateImagesTable extends Migration
             $table->id();
             $table->string('path');
             $table->timestamps();
+            //FK
+            $table->foreignId('user_id')->constrained('users', 'id');
         });
     }
 

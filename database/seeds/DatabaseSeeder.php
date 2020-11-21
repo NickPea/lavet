@@ -126,7 +126,10 @@ class DatabaseSeeder extends Seeder
             ]));
         });
         //image
-        factory(Image::class, 10)->create();
+        User::all()->each(function ($user)
+        {
+            $user->image()->saveMany(factory(Image::class, rand(2,5))->make());
+        });
         
             Profile::all()->each(function ($profile)
             {

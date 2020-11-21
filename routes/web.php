@@ -21,9 +21,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-/** View Main Objects */
-//profile
-Route::get('profile/{profile}', 'ProfileController@show');
+
+Route::get('profile/{profile}', 'ProfileController@show'); //?section = "..."
+
+
 Route::get('listing/{listing}', 'ListingController@show');
 Route::get('event/{event}', 'EventController@show');
 
@@ -34,6 +35,7 @@ Route::post('profile/{profile}/reference', 'ReferenceController@store');
 
 
 Route::put('profile/{profile}/header', 'ProfileController@updateHeader');
+Route::put('profile/{profile}/profile-image', 'ProfileController@updateProfileImage');
 
 
 Route::patch('profile/{profile}', 'ProfileController@update');

@@ -12,11 +12,12 @@
         padding: 0.3rem;
         cursor: pointer;
     }
+
     .image-edit-button:hover {
         background: rgb(231, 230, 230);
         box-shadow: 0 0 2px 1px rgb(136, 136, 136)
-
     }
+
     .image-edit-button:active {
         transform: scale(0.9);
 
@@ -52,10 +53,9 @@
                 <!-- overlay-wrapper -->
                 <div class="position-relative">
                     <!-- image -->
-                    <a href={{asset($profile->image->first()->path)}}>
-                        <img class="w-100 rounded image-hover" src={{asset($profile->image->first()->path)}}
-                            alt="profile image">
-                    </a>
+                    <span data-js="header-profile-image">
+                        {{-- profile imager render here --}}
+                    </span>
                     <!-- overlay -->
                     <div class="position-absolute" style="top:-5%; left:-5%">
                         <!-- online badge -->
@@ -72,7 +72,8 @@
                         </h5>
                     </div>
                     <!-- edit image -->
-                    <div class="position-absolute" style="bottom:-0.5rem; right:-0.5rem">
+                    <div data-js="profile-image-edit-button" class="position-absolute"
+                        style="bottom:-0.5rem; right:-0.5rem">
                         <h5 class="m-0">
                             <span class="image-edit-button">
                                 @include('svg.edit')
@@ -170,6 +171,8 @@
         let headerName = document.querySelector('[data-js="header-name"]');
         let headerField = document.querySelector('[data-js="header-field"]');
         let headerPosition = document.querySelector('[data-js="header-position"]');
+        let profileImageEditButton = document.querySelector('[data-js="profile-image-edit-button"]');
+        let profileImage = document.querySelector('[data-js="header-profile-image"]');
 
         // dom-check
         !headerEditButton && console.error('edit button not found');
@@ -180,6 +183,8 @@
         !headerName && console.error('name not found');
         !headerField && console.error('field  not found');
         !headerPosition && console.error('position not found');
+        !profileImageEditButton && console.error('profile image edit button not found');
+        !profileImage && console.error('profile image not found');
 
         //events
         headerEditButton.addEventListener('click', () => {
@@ -230,18 +235,21 @@
             })//then
         })//submit
 
+        profileImageEditButton.addEventListener('click', () => {
+            store.publish({type:'profile-image-modal/toggle'})
+        })
 
         //event handlers
 
 
-        //fetch and store data
-        function fetchAndStore () {
+        //fetch and store header data
+        function fetchAndStoreHeader () {
             let url = new URL(`${window.location.href}?section=header`);
             fetch(url)
             .then(res => res.json())
             .then(obj => store.publish({type:'header/update-data', payload: obj}))
         }
-        fetchAndStore();
+        fetchAndStoreHeader();
 
 
         //subscribe render
@@ -256,7 +264,39 @@
         store.subscribe(renderHeader);
 
 
+        //fetch and store profile image
+        function fetchAndStoreProfileImage () {
+            let url = new URL(`${window.location.href}?section=profile-image`);
+            fetch(url)
+            .then(res => {
+                switch (res.status) {
+                    case 200 :
+                        res.json().then(obj => store.publish({type:'profile-image/update-data', payload: obj}));
+                        break;
+                    default:
+                        throw res;
+                        break;
+                }//switch
+            })//then
+            .catch(res => console.error(`fetch and store profile image errr: response - ${res.status}`));
+        }//fetchAndStoreProfileImage
+        fetchAndStoreProfileImage();
+
+
+        //subscribe render
+        function renderProfileImage(oldState, newState) {
+            if(!_.isEqual(oldState.profileImage, newState.profileImage)) {
+                console.log('profile image rendering')
+                profileImage.innerHTML = (`
+                    <img class="w-100 rounded image-hover" src="${newState.profileImage.path}" alt="profile image">
+                `);
+            }
+        }//render
+        store.subscribe(renderProfileImage);
+
+
     }//Header()
     Header();
 
 </script>
+

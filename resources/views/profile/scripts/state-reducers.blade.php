@@ -63,6 +63,42 @@
             }
         }
     );
+    store.addReducer(
+        function profileImage(state = {}, action) {
+            switch (action.type) {
+                case 'profile-image/update-data':
+                    return action.payload;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showProfileImageModal(state = false, action) {
+            switch (action.type) {
+                case 'profile-image-modal/toggle':
+                    return !state;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function profileModalImages(state = [], action) {
+            switch (action.type) {
+                case 'profile-image-modal/update-data':
+                    return action.payload;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
 
 
 </script>

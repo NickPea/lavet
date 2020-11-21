@@ -27,6 +27,12 @@ class ProfileController extends Controller
                     'area_code' => $profile->location->first()->area_code->name,
                 ], 200);
                 break;
+            case 'profile-image':
+                return response($profile->image->first(), 200);
+                break;
+            case 'user-images':
+                return response($profile->user->image, 200);
+                break;
             case 'about':
                 return view('profile.partials._about', ['profile' => $profile]);
                 break;
@@ -67,6 +73,12 @@ class ProfileController extends Controller
             'field' => $profile->field->first()->name,
             'position' => $profile->position->first()->name,
         ], 204);
+    }//updateHeader()
+
+    public function updateProfileImage(Request $request, Profile $profile)  
+    {
+        $profile->image()->sync($request->selected_image);
+        return response($profile->image->first() , 200);
     }
 
 

@@ -75,6 +75,7 @@ trait RegistersUsers
 
         $image = Image::create([
             'path' => $path,
+            'user_id' => $user->id,
         ]);
 
         $user->profile->image()->sync($image->id);

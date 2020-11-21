@@ -12,6 +12,10 @@ class Image extends Model
 
     /** method */
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
     public function profile()
     {
         return $this->morphedByMany('App\Profile', 'imageable')
