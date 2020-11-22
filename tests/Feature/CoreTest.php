@@ -161,3 +161,7 @@ class CoreTest extends TestCase
 //event is good
 
 //work on ads and profile
+
+//make profile image modal photos in chronological order when updating profile image
+
+//move location into header on profile page and include with header editing

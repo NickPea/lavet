@@ -151,6 +151,7 @@
                 switch (res.status) {
                     case 201:
                         fetchAndStore();
+                        store.publish({type: 'location/toggle-form'})
                         hiddenSection.style.display = 'none';
                         editLocationButton.classList.remove('options-button-selected');
                         break;

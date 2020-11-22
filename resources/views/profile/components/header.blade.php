@@ -223,7 +223,8 @@
             .then(res => {
                 switch (res.status) {
                     case 204 :
-                        fetchAndStore();
+                        fetchAndStoreHeader();
+                        store.publish({type:'header/toggle-form'})
                         headerEditButton.classList.remove('options-button-selected')
                         headerDetails.style.display = 'block';
                         headerHidden.style.display = 'none';

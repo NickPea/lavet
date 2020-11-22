@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Image;
+use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ImageController extends Controller
 {
@@ -35,7 +37,24 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeUserProfileImage(Request $request, Profile $profile)
+    {
+        $path = $request->file('new_image')->store(Hash::make($profile->user->email));
+
+        $newImage = Image::create([
+                'path' => url('storage/'.$path),
+                'user_id' => $profile->user->id
+            ]);
+
+        return response($newImage, 201);
     }
 
     /**

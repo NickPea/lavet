@@ -31,7 +31,7 @@ class ProfileController extends Controller
                 return response($profile->image->first(), 200);
                 break;
             case 'user-images':
-                return response($profile->user->image, 200);
+                return response($profile->user->image->sortByDesc->updated_at->values()->all(), 200);
                 break;
             case 'about':
                 return view('profile.partials._about', ['profile' => $profile]);

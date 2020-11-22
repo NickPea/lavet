@@ -46,54 +46,110 @@
 
 {{-- ------------------------------------------------------------------------------------- --}}
 
-<div>
 
-    <!-- Trigger/Open The Modal -->
-    {{-- <button id="myBtn">Open Modal</button> --}}
+<!-- The Modal -->
+<div data-js="profile-image-modal" class="profile-image-modal">
+    <!-- Modal content -->
+    <div class="profile-image-modal-content rounded-lg">
 
-    <!-- The Modal -->
-    <div data-js="profile-image-modal" class="profile-image-modal">
 
-        <!-- Modal content -->
-        <div class="profile-image-modal-content rounded-lg">
 
-            {{-- corner close button--}}
-            <span data-js="profile-image-modal-close-button" class="options-button"
-                style="position: absolute; right:3rem; top:3rem; transform:scale(1.5,1.5);">
-                @include('svg.close')
-            </span>
 
-            {{-- header --}}
-            <div class="d-flex justify-content-center">
-                <h4 class="m-0 d-inline">Update Profile Photo</h4>
-            </div>
+        {{-- START MODAL --}}
 
-            <hr><!-- break -->
 
-            <div data-js="profile-image-entry" class="row no-gutters" style="max-height:50vh; overflow:auto;">
-                {{-- user images --}}
-            </div>
 
-            <hr><!-- break -->
 
-            <form data-js="profile-image-modal-form">
-                @csrf
-                @method('PUT')
-                <!-- hidden input -->
-                <input data-js="profile-image-modal-hidden-input" type="text" name="selected_image" class="hidden-input" required>
+        <!-- ------------------------------------CLOSE BUTTON-------------------------------------------- -->
 
-                <div class="d-flex justify-content-end">
-                    <button data-js="profile-image-modal-cancel"
-                        class="btn btn-outline-secondary btn-lg">cancel</button>
-                    <button class="ml-2 btn btn-primary btn-lg" type="submit">save</button>
-                </div>
-            </form>
+        <span data-js="profile-image-modal-close-button" class="options-button"
+            style="position: absolute; right:3rem; top:3rem; transform:scale(1.5,1.5);">
+            @include('svg.close')
+        </span>
 
+
+        <!-- ------------------------------------HEADER-------------------------------------------- -->
+
+        <div class="d-flex justify-content-center">
+            <h4 class="m-0 d-inline">Update Profile Photo</h4>
         </div>
 
-    </div>
+        <hr><!-- break -->
 
-</div>
+
+        <!-- ------------------------------------TOP BUTTONS-------------------------------------------- -->
+
+        <div class="d-flex justify-content-end pb-3 btn-group">
+
+            <!-- Add Image Button -->
+            <form data-js="profile-image-modal-add-image-form">
+                @csrf
+                <label for="new_image">
+                    <span class="btn btn-outline-primary btn-lg">
+                        Add Image &#43;
+                    </span>
+                </label>
+                <!-- hidden file input -->
+                <input data-js="profile-image-modal-add-image-input" type="file" name="new_image" id="new_image"
+                    class="hidden-input" accept="image/*">
+            </form>
+
+
+            {{-- <!-- Use Camera Button -->
+            <form data-js="profile-image-modal-use-camera-form" class="ml-2">
+                @csrf
+                <!-- Use Camera Button (Label) -->
+                <label for="camera_image">
+                    <span class="btn btn-outline-primary btn-lg">
+                        Use Camera &#43;
+                    </span>
+                </label>
+                <!-- hidden file input -->
+                <input data-js="profile-image-modal-use-camera-input" type="file" capture="camera" name="camera_image"
+                    id="camera_image" class="hidden-input">
+            </form> --}}
+
+        </div><!-- buttons flex -->
+
+
+        <!-- -----------------------------------------MAIN CONTENT AREA---------------------------------------- -->
+
+        <h5><b>All Images</b></h5>
+
+        <div data-js="profile-image-entry" class="row no-gutters" style="max-height:40vh; overflow:auto;">
+            {{-- USER IMAGES --}}
+        </div>
+
+        <hr><!-- break -->
+
+
+        <!-- -----------------------------------------BOTTOM BUTTONS---------------------------------------- -->
+
+        <form data-js="profile-image-modal-form">
+            @csrf
+            @method('PUT')
+
+            <!-- hidden image-id input -->
+            <input data-js="profile-image-modal-hidden-input" type="text" name="selected_image" class="hidden-input"
+                required>
+
+            <div class="d-flex justify-content-end">
+                <button data-js="profile-image-modal-cancel" class="btn btn-outline-secondary btn-lg">cancel</button>
+                <button class="ml-2 btn btn-primary btn-lg" type="submit">select</button>
+            </div>
+        </form>
+
+
+
+
+        {{-- END MODAL --}}
+
+
+
+
+    </div><!-- //Modal-Content -->
+</div><!-- //Modal -->
+
 
 {{-- ------------------------------------------------------------------------------------- --}}
 
@@ -109,14 +165,18 @@
         let profileImageModalForm = document.querySelector('[data-js="profile-image-modal-form"]');
         let profileImageModalCancel = document.querySelector('[data-js="profile-image-modal-cancel"]');
         let profileImageModalHiddenInput = document.querySelector('[data-js="profile-image-modal-hidden-input"]');
+        let profileImageModalAddImageInput = document.querySelector('[data-js="profile-image-modal-add-image-input"]');
+        let profileImageModalAddImageForm = document.querySelector('[data-js="profile-image-modal-add-image-form"]');
         
         //dom-check
         !modal && console.error('modal not found');
         !closeButton && console.error('close not found');
-        !profileImageEntry && console.error('profile image select not found')
-        !profileImageModalForm && console.error('profile image modal form not found')
-        !profileImageModalCancel && console.error('profile image modal cancel not found')
-        !profileImageModalHiddenInput && console.error('profile image modal hidden input not found')
+        !profileImageEntry && console.error('profile image select not found');
+        !profileImageModalForm && console.error('profile image modal form not found');
+        !profileImageModalCancel && console.error('profile image modal cancel not found');
+        !profileImageModalHiddenInput && console.error('profile image modal hidden input not found');
+        !profileImageModalAddImageInput && console.error('profile image modal add image button not found');
+        !profileImageModalAddImageForm && console.error('profile image modal add image form not found');
 
         //events
         closeButton.onclick = function() {
@@ -138,7 +198,7 @@
                 });
             }
         };
-
+        //close on cancel
         profileImageModalCancel.addEventListener('click', () => {
             event.preventDefault();
             store.publish({type:'profile-image-modal/toggle'})
@@ -148,6 +208,28 @@
                 profileImageModalHiddenInput.value = null;
                 });
         });
+
+        //add image to user images
+        profileImageModalAddImageInput.addEventListener('change', () => {
+            let formData = new FormData(profileImageModalAddImageForm);
+            let url = new URL(`${window.location.href}/image`);
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(res => {
+                switch (res.status) {
+                    case 201 :
+                        res.json()
+                        .then(obj => console.log(`Image added: ${obj}`))
+                        .then(() => fetchAndStoreModalImages());
+                        break;
+                    default:
+                        throw res;
+                        break;
+                }
+            }).catch(res => console.error(`Add image fetch post error: response - ${res.status}`));
+        })
 
         //subscribe modal render and fetch images
         function renderModal(oldState, newState) {
@@ -189,9 +271,9 @@
                 //1. append the the entry div
                 profileImageEntry.innerHTML = newState.profileModalImages.map((imgObj) => {
                     return(`
-                        <span class="col-3 p-1">
+                        <span class="col-2 p-1">
                             <img src="${imgObj.path}" data-id="${imgObj.id}" 
-                            class="profile-modal-images img-thumbnail p-0">
+                            class="img-thumbnail p-0 w-100" style="object-fit:cover; height:100%; width: 100%;">
                         </span>
                     `)
                 }).join('');//endMap
@@ -258,9 +340,18 @@
                 }//switch
             }).catch(res => console.error(`Modal fetch error: status - ${res.status}`));
         });//modal submit
-        
+
+
+
+
+
 
         //ADD NEW IMAGE UPLOAD FUNCATIONALITY THNE CALL FETCH AND STORE IMAGES
+
+
+
+
+
 
 
     }//ProfileImageModal
