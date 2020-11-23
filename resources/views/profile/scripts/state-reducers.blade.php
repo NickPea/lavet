@@ -99,6 +99,18 @@
             }
         }
     );
+    store.addReducer(
+        function showProfileImageModalCamera(state = false, action) {
+            switch (action.type) {
+                case 'profile-image-modal-main-content/toggle-camera':
+                    return !state;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
 
 
 </script>

@@ -33,6 +33,7 @@ Route::post('profile/{profile}/location', 'LocationController@store');
 Route::post('profile/{profile}/experience', 'ExperienceController@store');
 Route::post('profile/{profile}/reference', 'ReferenceController@store');
 Route::post('profile/{profile}/image', 'ImageController@storeUserProfileImage');
+Route::post('profile/{profile}/camera-image', 'ImageController@storeUserProfileCameraImage');
 
 
 

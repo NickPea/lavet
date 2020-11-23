@@ -165,3 +165,5 @@ class CoreTest extends TestCase
 //make profile image modal photos in chronological order when updating profile image
 
 //move location into header on profile page and include with header editing
+
+//add the WebRTC/Canvas/AdapterJs USE CAMERA functionality for profile uploads when convenient

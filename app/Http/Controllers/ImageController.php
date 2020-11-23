@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use App\Image;
 use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ImageController extends Controller
 {
@@ -51,6 +55,22 @@ class ImageController extends Controller
 
         $newImage = Image::create([
                 'path' => url('storage/'.$path),
+                'user_id' => $profile->user->id
+            ]);
+
+        return response($newImage, 201);
+    }
+
+    
+    //recieves an "image/png" dataURL
+    public function storeUserProfileCameraImage(Request $request, Profile $profile)
+    {
+        ///cleanse, base64 decode, store and return path
+        $path = Hash::make($profile->user->email).'/'.Str::random(30).'.png';
+        Storage::put($path, file_get_contents($request->camera_image));
+        
+        $newImage = Image::create([
+                'path' => url($path),
                 'user_id' => $profile->user->id
             ]);
 
