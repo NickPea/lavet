@@ -8,6 +8,7 @@
         refreshProfileField();
         refreshProfilePosition();
         refreshProfileLocation();
+        refreshProfileAbout();
     })()
 
 </script>

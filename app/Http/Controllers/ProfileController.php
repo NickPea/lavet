@@ -75,6 +75,10 @@ class ProfileController extends Controller
             ];
         })], 200);
     }
+    public function retrieveProfileAbout(Request $request, Profile $profile)
+    {
+        return response(['about' => $profile->about], 200);
+    }
     
 
     // UPDATE
@@ -122,6 +126,13 @@ class ProfileController extends Controller
         $profile->location()->sync($location->id);
 
         return response('profile field updated' , 204);
+    }
+    public function updateProfileAbout(Request $request, Profile $profile)  
+    {
+        $profile->about = $request->about;
+        $profile->save();
+
+        return response('' , 204);
     }
 
 

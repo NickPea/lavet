@@ -32,6 +32,7 @@ Route::get('profile/{profile}/field', 'ProfileController@retrieveProfileField');
 Route::get('profile/{profile}/position', 'ProfileController@retrieveProfilePosition'); 
 Route::get('profile/{profile}/location', 'ProfileController@retrieveProfileLocation'); 
 Route::get('profile/{profile}/user-images', 'ProfileController@retrieveProfileUserImages'); 
+Route::get('profile/{profile}/about', 'ProfileController@retrieveProfileAbout'); 
 
 
 Route::put('profile/{profile}/name', 'ProfileController@updateProfileName'); 
@@ -39,6 +40,7 @@ Route::put('profile/{profile}/image', 'ProfileController@updateProfileImage');
 Route::put('profile/{profile}/field', 'ProfileController@updateProfileField'); 
 Route::put('profile/{profile}/position', 'ProfileController@updateProfilePosition'); 
 Route::put('profile/{profile}/location', 'ProfileController@updateProfileLocation'); 
+Route::put('profile/{profile}/about', 'ProfileController@updateProfileAbout'); 
 
 
 Route::post('profile/{profile}/location', 'LocationController@store');

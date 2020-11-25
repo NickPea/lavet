@@ -88,6 +88,19 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
+    // --about
+    store.addReducer(
+        function about(state = '', action) {
+            switch (action.type) {
+                case 'about/refresh':
+                    return action.payload.about;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
     
 </script>
 
@@ -172,6 +185,21 @@ i.e counter(state = 2, action) = {couter: 2}
                     return !state;
                     break;
                 case 'profile-edit-modal-whereabouts/off':
+                    return false;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showAboutForm(state = false, action) {
+            switch (action.type) {
+                case 'profile-about-form/toggle':
+                    return !state;
+                    break;
+                case 'profile-about-form/off':
                     return false;
                     break;
                 default:

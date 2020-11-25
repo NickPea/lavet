@@ -98,6 +98,23 @@ function refreshProfileUserImages() {
     }).catch(res => console.error(`fetch errer: response ${res.status}`));
 }//fetchAndStoreModalImages
 
+function refreshProfileAbout() {
+    let url = new URL(`${window.location.href}/about`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                res.json().then(obj => {
+                    store.publish({type: 'about/refresh', payload: obj });
+                });
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error(`fetch errer: response ${res.status}`));
+}//fetchAndStoreModalImages
+
 
 
 // --PUT
@@ -187,6 +204,24 @@ function refreshProfileUserImages() {
                 switch (res.status) {
                     case 204 :
                         console.log('profile location updated');
+                        break;
+                    default:
+                        throw res;
+                        break;
+                }
+            }).catch(res => console.error(`fetch error: response: ${res.status}`))
+        }
+        // -- about
+        function updateProfileAbout(form) {
+            let data = new FormData(form);
+            let url = new URL(`${window.location.href}/about`);
+            return fetch(url, {
+                method: 'POST', 
+                body: data,
+            }).then(res => {
+                switch (res.status) {
+                    case 204 :
+                        console.log('profile about updated');
                         break;
                     default:
                         throw res;
