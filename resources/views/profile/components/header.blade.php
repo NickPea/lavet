@@ -1,9 +1,13 @@
+{{--  --}}
+
+
+
 <style>
     .image-hover:hover {
         filter: brightness(90%);
     }
 
-    .image-edit-button {
+    .edit-button {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -13,35 +17,22 @@
         cursor: pointer;
     }
 
-    .image-edit-button:hover {
+    .edit-button:hover {
         background: rgb(231, 230, 230);
         box-shadow: 0 0 2px 1px rgb(136, 136, 136)
     }
 
-    .image-edit-button:active {
+    .edit-button:active {
         transform: scale(0.9);
 
     }
 </style>
 
-<div class="row pb-1">
-    <div class="col">
 
-        <div class="d-flex justify-content-end">
-            <!-- btn group -->
-            <div class="btn-group">
-                <a class="options-button" data-js="header-edit-button">
-                    @include('svg.edit')
-                </a>
-            </div>
-        </div>
-
-    </div>
-</div>
+{{-- ---------------------------------------------------------------------------------------------------- --}}
 
 <!-- card -->
 <div class="card p-2 rounded-lg shadow-lg">
-    <!-- card-body -->
     <div class="card-body">
 
         <!-- row -->
@@ -73,10 +64,10 @@
                     </div>
                     <!-- edit image -->
                     <div data-js="profile-image-edit-button" class="position-absolute"
-                        style="bottom:-0.5rem; right:-0.5rem">
+                        style="top:-0.5rem; right:-0.5rem">
                         <h5 class="m-0">
-                            <span class="image-edit-button">
-                                @include('svg.edit')
+                            <span class="edit-button">
+                                @include('svg.camera')
                             </span>
                         </h5>
                     </div>
@@ -86,70 +77,67 @@
             </div><!-- //col1 -->
 
             <!-- col2 -->
-            <div class="col">
+            <div class="col d-flex flex-column">
 
                 {{-- Details --}}
                 <div data-js="header-details">
 
-                    <div class="h-100 d-flex flex-column justify-content-ed">
-
-                        <!-- Name -->
-                        <h3 class="font-weight-bold">
-                            <span data-js="header-name"></span>
-                        </h3>
-                        <!-- Field -->
-                        <h6 class="text-muted font-weight-lighter">
-                            <span data-js="header-field"></span>
-                        </h6>
-                        <!-- Position -->
-                        <h5 class="text-secondary">
-                            <span data-js="header-position"></span>
-                        </h5>
-
-                    </div><!-- //flex -->
-
+                    <!-- Name -->
+                    <h3 class="font-weight-bold">
+                        <span data-js="header-name"></span>
+                    </h3>
+                    <!-- Field -->
+                    <h6 class="text-muted font-weight-lighter">
+                        <span data-js="header-field"></span>
+                    </h6>
+                    <!-- Position -->
+                    <h5 class="text-secondary">
+                        <span data-js="header-position"></span>
+                    </h5>
                 </div>
                 {{-- //Details --}}
 
 
-                {{-- Hidden-Form --}}
-                <div data-js="header-hidden" style="display: none">
+                {{-- Location --}}
+                <div class="location-wrapper mt-auto">
 
-                    <form data-js="header-form">
-                        @csrf
-                        @method('PUT')
+                    <!-- .flex -->
+                    <div class="d-flex align-items-center">
 
-                        <div class="form-group">
-                            <label for="name" class="sr-only">Name</label>
-                            <input type="text" name="name" id="name" placeholder="Name"
-                                class="form-control form-control-lg">
-                        </div>
-                        <div class="form-group">
-                            <label for="field" class="sr-only">Name</label>
-                            <input type="text" name="field" id="field" placeholder="Field"
-                                class="form-control form-control-lg">
-                        </div>
-                        <div class="form-group">
-                            <label for="position" class="sr-only">Name</label>
-                            <input type="text" name="position" id="position" placeholder="Position"
-                                class="form-control form-control-lg">
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-end">
-                            <button data-js="header-form-cancel-button" tabindex="-1"
-                                class="btn btn-outline-secondary btn-lg">cancel</button>
-                            <button data-js="header-form-submit-button" type="submit"
-                                class="btn btn-primary btn-lg ml-2">save</button>
+                        <!-- data-display -->
+                        <div data-js="location-entry">
+                            <h6 class="d-inline">
+                                @include('svg.location')
+                                <span class="text-muted font-weight-light">
+                                    <span data-js="location-city"></span>
+                                    <span data-js="location-province"></span>
+                                    <span data-js="location-country"></span>
+                                    <span data-js="location-area-code"></span>
+                                    <span data-js="location-uknonwn"></span>
+                                </span>
+                            </h6>
                         </div>
 
-                    </form>
+                    </div><!-- //.flex -->
 
-                </div>
-                {{-- //Hidden-Form --}}
+                </div><!-- //location-wrapper -->
+                {{-- //Location --}}
 
 
             </div>
             <!--//col2 -->
+
+            <!-- col3 -->
+            <div class="col-1">
+
+                <div class="d-flex justify-content-end">
+                    <a data-js="header-edit-button" class="edit-button" >
+                        @include('svg.edit')
+                    </a>
+                </div>
+
+            </div>
+            <!-- //col3 -->
 
 
         </div>
@@ -159,145 +147,103 @@
 </div> <!-- //card -->
 
 
+{{-- ---------------------------------------------------------------------------------------------------- --}}
+
+
+
 <script>
+    'use strict'
     function Header() {
 
-        // dom
-        let headerEditButton = document.querySelector('[data-js="header-edit-button"]');
+        // DOM
+
+        let editButton = document.querySelector('[data-js="header-edit-button"]');
         let headerDetails = document.querySelector('[data-js="header-details"]');
-        let headerHidden = document.querySelector('[data-js="header-hidden"]');
-        let headerForm = document.querySelector('[data-js="header-form"]');
-        let headerFormCancelButton = document.querySelector('[data-js="header-form-cancel-button"]');
         let headerName = document.querySelector('[data-js="header-name"]');
         let headerField = document.querySelector('[data-js="header-field"]');
         let headerPosition = document.querySelector('[data-js="header-position"]');
-        let profileImageEditButton = document.querySelector('[data-js="profile-image-edit-button"]');
+        let editImageButton = document.querySelector('[data-js="profile-image-edit-button"]');
         let profileImage = document.querySelector('[data-js="header-profile-image"]');
-
-        // dom-check
-        !headerEditButton && console.error('edit button not found');
+        !editButton && console.error('edit button not found');
         !headerDetails && console.error('details not found');
-        !headerHidden && console.error('hidden not found');
-        !headerForm && console.error('form not found');
-        !headerFormCancelButton && console.error('form cancel button not found');
         !headerName && console.error('name not found');
         !headerField && console.error('field  not found');
         !headerPosition && console.error('position not found');
-        !profileImageEditButton && console.error('profile image edit button not found');
+        !editImageButton && console.error('profile image edit button not found');
         !profileImage && console.error('profile image not found');
 
-        //events
-        headerEditButton.addEventListener('click', () => {
-            store.publish({type: 'header/toggle-form'});
-            if (store.getState().showHeaderForm === true) {
-                headerEditButton.classList.add('options-button-selected')
-                headerDetails.style.display = 'none';
-                headerHidden.style.display = 'block';
-                headerForm.elements['name'].value = headerName.innerHTML;
-                headerForm.elements['field'].value = headerField.innerHTML;
-                headerForm.elements['position'].value = headerPosition.innerHTML;
-            } else {
-                headerEditButton.classList.remove('options-button-selected')
-                headerDetails.style.display = 'block';
-                headerHidden.style.display = 'none';
-            }
-        });
-        
-        headerFormCancelButton.addEventListener('click', () => {
-                event.preventDefault();
-                store.publish({type: 'header/toggle-form'});
-                headerEditButton.classList.remove('options-button-selected')
-                headerDetails.style.display = 'block';
-                headerHidden.style.display = 'none';
+        //EVENTS
+
+        editButton.addEventListener('click', () => {
+            store.publish({type: 'profile-edit-modal/toggle'});
         });
 
-       
-        headerForm.addEventListener('submit', () => {
-            event.preventDefault();
-            let formData =  new FormData(headerForm);
-            let url = new URL(`${window.location.href}/header`)
-            fetch(url, {
-                method: "POST",
-                body: formData,
-            })
-            .then(res => {
-                switch (res.status) {
-                    case 204 :
-                        fetchAndStoreHeader();
-                        store.publish({type:'header/toggle-form'})
-                        headerEditButton.classList.remove('options-button-selected')
-                        headerDetails.style.display = 'block';
-                        headerHidden.style.display = 'none';
-                        break;
-                    default:
-                        console.error(`header error: failed to update. Status: ${res.status}`)
-                        break;
-                }//switch
-            })//then
-        })//submit
-
-        profileImageEditButton.addEventListener('click', () => {
+        editImageButton.addEventListener('click', () => {
             store.publish({type:'profile-image-modal/toggle'})
         })
 
-        //event handlers
+        //RENDER
 
-
-        //fetch and store header data
-        function fetchAndStoreHeader () {
-            let url = new URL(`${window.location.href}?section=header`);
-            fetch(url)
-            .then(res => res.json())
-            .then(obj => store.publish({type:'header/update-data', payload: obj}))
-        }
-        fetchAndStoreHeader();
-
-
-        //subscribe render
-        function renderHeader(oldState, newState) {
-            if(!_.isEqual(oldState.header, newState.header)) {
-                console.log('header rendering')
-                headerName.innerHTML = newState.header.name;
-                headerField.innerHTML = newState.header.field;
-                headerPosition.innerHTML = newState.header.position;
+        function renderProfileHeader(oldState, newState) {
+            if(!_.isEqual(oldState.name, newState.name)) {
+                headerName.innerHTML = newState.name;
             }
-        }//render
-        store.subscribe(renderHeader);
-
-
-        //fetch and store profile image
-        function fetchAndStoreProfileImage () {
-            let url = new URL(`${window.location.href}?section=profile-image`);
-            fetch(url)
-            .then(res => {
-                switch (res.status) {
-                    case 200 :
-                        res.json().then(obj => store.publish({type:'profile-image/update-data', payload: obj}));
-                        break;
-                    default:
-                        throw res;
-                        break;
-                }//switch
-            })//then
-            .catch(res => console.error(`fetch and store profile image errr: response - ${res.status}`));
-        }//fetchAndStoreProfileImage
-        fetchAndStoreProfileImage();
-
-
-        //subscribe render
-        function renderProfileImage(oldState, newState) {
-            if(!_.isEqual(oldState.profileImage, newState.profileImage)) {
-                console.log('profile image rendering')
+            if(!_.isEqual(oldState.field, newState.field)) {
+                headerField.innerHTML = newState.field;
+            }
+            if(!_.isEqual(oldState.position, newState.position)) {
+                headerPosition.innerHTML = newState.position;
+            }
+            if(!_.isEqual(oldState.image, newState.image)) {
                 profileImage.innerHTML = (`
-                    <img class="w-100 rounded image-hover" src="${newState.profileImage.path}" alt="profile image">
+                    <img class="w-100 rounded image-hover" src="${newState.image.path}" alt="profile image">
                 `);
             }
-        }//render
-        store.subscribe(renderProfileImage);
-
+        }
+        store.subscribe(renderProfileHeader);
 
     }//Header()
     Header();
 
 </script>
 
+<script>
+    'use strict'
+    function Location() {
+        
+        //DOM
+        let city = document.querySelector('[data-js="location-city"]')
+        let province = document.querySelector('[data-js="location-province"]')
+        let country = document.querySelector('[data-js="location-country"]')
+        let areaCode = document.querySelector('[data-js="location-area-code"]')
+        let locationUnknown = document.querySelector('[data-js="location-uknonwn"]')
+        !city && console.error('no city entry');
+        !province && console.error('no province entry');
+        !country && console.error('no country entry');
+        !areaCode && console.error('no area-code entry');
+        !locationUnknown && console.error('no location-unknown entry');
+
+        //RENDER
+
+        function renderProfileLocation (oldState, newState) {
+            if (!_.isEqual(oldState.location, newState.location)) {
+                if (Object.values(newState.location).every(place => place === null)) {
+                    locationUnknown.innerHTML = 'unknown'
+                    [city, province, country, areaCode].forEach(dom => {
+                        dom.innerHTML = null;
+                    });
+                } else {
+                    locationUnknown.innerHTML = null
+                    city.innerHTML = newState.location.city;
+                    province.innerHTML = newState.location.province;
+                    country.innerHTML = newState.location.country;
+                    areaCode.innerHTML = newState.location.area_code;
+                }
+            }//endif
+        }
+        store.subscribe(renderProfileLocation)
+
+    }//Location
+    Location()
+
+</script>

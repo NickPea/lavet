@@ -12,45 +12,32 @@
 @include('profile.styles.page')
 
 <!-- State Management -->
-@include('profile.scripts.state-store')
-@include('profile.scripts.state-reducers')
+@include('profile.scripts.store')
+@include('profile.scripts.reducers')
+
 
 @endpush
-{{-- //HEAD --}}
+
+
+
+
 
 {{-- BODY --}}
 @push('body')
 
 <!-- Profile-Image-Modal -->
 @include('profile.components.profile-image-modal')
+@include('profile.components.edit-profile-modal')
 
 
 <div class="container py-5">
 
     <!-- row 1 -->
     <div class="row no-gutters py-4" style="border-bottom: 1px solid lightgrey">
-        <div class="col">
+        <div class="col-8">
 
-            <!-- innner row -->
-            <div class="row pb-3">
-                <div class="col-8">
-
-                    <!-- Header -->
-                    @include('profile.components.header')
-
-                </div>
-            </div>
-
-            <!-- innner row -->
-            <div class="row">
-                <div class="col-8">
-
-                    <!-- Location -->
-                    @include('profile.components.location')
-
-                </div>
-            </div>
-
+            <!-- Header -->
+            @include('profile.components.header')
 
         </div><!-- //col -->
     </div><!-- //row 1 -->
@@ -148,7 +135,8 @@
 </div> <!-- end container -->
 
 
-
+<!-- Endpoints -->
+@include('profile.scripts.endpoints')
+@include('profile.scripts.hydrate')
 
 @endpush
-{{-- //BODY --}}

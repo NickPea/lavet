@@ -5,22 +5,25 @@
         display: none;
         position: fixed;
         z-index: 1;
-        padding-top: 100px;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
-        /* overflow: auto; */
+        overflow: auto; /*prevent background scrolling*/
         background-color: rgba(0, 0, 0, 0.4);
     }
 
     .profile-image-modal-content {
+        position: relative;
         background-color: #fefefe;
         margin-left: auto;
         margin-right: 10rem;
+        margin-top: 10vh; 
+        margin-bottom: 50vh; /*prevent background scrolling*/
         width: 50%;
-        padding: 1rem;
-        object-fit: cover
+        padding: 3rem;
+        object-fit: cover;
+        border-radius: 1rem;
     }
 
     .profile-modal-images:hover {
@@ -42,7 +45,8 @@
         padding: 0;
         border: 0;
     }
-    video {
+
+    .mirror-flip-video {
         transform: rotateY(180deg);
     }
 </style>
@@ -53,7 +57,7 @@
 <!-- The Modal -->
 <div data-js="profile-image-modal" class="profile-image-modal">
     <!-- Modal content -->
-    <div class="profile-image-modal-content rounded-lg">
+    <div class="profile-image-modal-content">
 
 
 
@@ -66,8 +70,8 @@
         <!-- ------------------------------------CLOSE BUTTON-------------------------------------------- -->
 
         <span data-js="profile-image-modal-close-button" class="options-button"
-            style="position: absolute; right:3rem; top:3rem; transform:scale(1.5,1.5);">
-            @include('svg.close')
+        style="position: absolute; right:3rem; top:2rem; transform:scale(1.5,1.5);">
+        @include('svg.close')
         </span>
 
 
@@ -133,7 +137,7 @@
             <div class="row py-3">
                 <div class="col-8 offset-2">
                     <div class="position-relative">
-                        <video class="w-100 rounded-lg">
+                        <video class="w-100 rounded-lg mirror-flip-video">
                             {{-- WEB CAM --}}
                         </video>
                         <button data-js="profile-image-modal-take-shot-button"
@@ -162,10 +166,9 @@
         </div><!-- //main-content-camera -->
 
 
-        <hr><!-- break -->
-
-
         <!-- -----------------------------------------BOTTOM BUTTONS---------------------------------------- -->
+
+        <hr><!-- break -->
 
         <form data-js="profile-image-modal-form">
             @csrf
@@ -200,7 +203,8 @@
 
     function ProfileImageModal() {
        
-        //dom
+        //DOM
+
         let modal = document.querySelector('[data-js="profile-image-modal"]');
         let closeButton = document.querySelector('[data-js="profile-image-modal-close-button"]');
         let profileModalMainSelect = document.querySelector('[data-js="profile-modal-main-content-select"]');
@@ -210,8 +214,6 @@
         let profileModalMainCameraCanvas = profileModalMainCamera.querySelector('canvas');
         let profileModalMainCameraForm = profileModalMainCamera.querySelector('form');
         let profileModalCameraImageProcessors = document.querySelector('[data-js="profile-modal-image-processors"]');
-
-
         let profileImageEntry = document.querySelector('[data-js="profile-image-entry"]');
         let profileImageModalForm = document.querySelector('[data-js="profile-image-modal-form"]');
         let profileImageModalCancel = document.querySelector('[data-js="profile-image-modal-cancel"]');
@@ -219,8 +221,6 @@
         let profileImageModalAddImageInput = document.querySelector('[data-js="profile-image-modal-add-image-input"]');
         let profileImageModalAddImageForm = document.querySelector('[data-js="profile-image-modal-add-image-form"]');
         let profileImageModalUseCameraInput = document.querySelector('[data-js="profile-image-modal-use-camera-input"]');
-        
-        //dom-check
         !modal && console.error('modal not found');
         !closeButton && console.error('close not found');
         !profileModalMainSelect && console.error('profile image select not found');
@@ -228,7 +228,6 @@
         !profileModalMainCameraVideo && console.error('profile image video not found');
         !profileModalMainCameraCanvas && console.error('profile image canvas not found');
         !profileModalMainCameraForm && console.error('profile image canvas not found');
-
         !profileModalTakeShotButton && console.error('profile image take shot not found');
         !profileImageEntry && console.error('profile image select not found');
         !profileImageModalForm && console.error('profile image modal form not found');
@@ -238,7 +237,9 @@
         !profileImageModalAddImageForm && console.error('profile image modal add image form not found');
         !profileImageModalUseCameraInput && console.error('profile image modal add image form not found');
 
-        //events
+        //EVENTS
+
+        //close on close
         closeButton.onclick = function() {
             store.publish({type: 'profile-image-modal/toggle'})
             document.querySelectorAll('[data-js="profile-image-entry"] img')
@@ -247,8 +248,9 @@
                 profileImageModalHiddenInput.value = null;
                 });
                     };
+
         //close on outside click
-        window.onclick = function(event) {
+        window.addEventListener('click', () => {
             if (event.target == modal) {
                 store.publish({type: 'profile-image-modal/toggle'});
                 document.querySelectorAll('[data-js="profile-image-entry"] img')
@@ -257,7 +259,8 @@
                 profileImageModalHiddenInput.value = null;
                 });
             }
-        };
+        });
+
         //close on cancel
         profileImageModalCancel.addEventListener('click', () => {
             event.preventDefault();
@@ -269,76 +272,62 @@
                 });
         });
 
-        //add image to user images
-        profileImageModalAddImageInput.addEventListener('change', () => {
-            let formData = new FormData(profileImageModalAddImageForm);
-            let url = new URL(`${window.location.href}/image`);
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(res => {
-                switch (res.status) {
-                    case 201 :
-                        res.json()
-                        .then(obj => console.log(`Image added: ${obj}`))
-                        .then(() => fetchAndStoreModalImages());
-                        break;
-                    default:
-                        throw res;
-                        break;
-                }
-            }).catch(res => console.error(`Add image fetch post error: response - ${res.status}`));
+        //add image from file
+        profileImageModalAddImageInput.addEventListener('change', async () => {
+            await storeProfileUserImages(profileImageModalAddImageForm);
+            refreshProfileUserImages();
         });
 
-        ///---////
+        //select profile image
+        profileImageModalForm.addEventListener('submit', async () => {
+            event.preventDefault();
+            await updateProfileImage(profileImageModalForm)
+            refreshProfileImage();            
+            store.publish({type:'profile-image-modal/toggle'});
+            //close and reset modal
+            document.querySelectorAll('[data-js="profile-image-entry"] img')
+            .forEach( img => {
+                img.classList.remove('profile-modal-image-selected');
+                profileImageModalHiddenInput.value = null;
+            }); 
+        });
 
-        //subscribe modal render and fetch images
+        //toggle modal content to camera
+        profileImageModalUseCameraInput.addEventListener('click', () => {
+            event.preventDefault();
+            store.publish({type: 'profile-image-modal-main-content/toggle-camera'});
+
+        });
+
+
+        //RENDER
+
         function renderModal(oldState, newState) {
             if(!_.isEqual(oldState.showProfileImageModal, newState.showProfileImageModal)) {
                 console.log('profile image modal rendering')
                 if(newState.showProfileImageModal) {
                     modal.style.display = "block"
-                    fetchAndStoreModalImages();
+                    refreshProfileUserImages();
                 } else {
                     modal.style.display = "none"
                 }
             }//endif
-        }//renderModal
+        }
         store.subscribe(renderModal);
 
-        //fetch modal images and update store
-        function fetchAndStoreModalImages(params) {
-            let url = new URL(`${window.location.href}?section=user-images`);
-            fetch(url)
-            .then(res => {
-                switch (res.status) {
-                    case 200 :
-                        res.json().then(arrayOfImageObjects => {
-                            store.publish({type: 'profile-image-modal/update-data', payload: arrayOfImageObjects })
-                        });
-                        break;
-                    default:
-                        console.error(`Profile-Image-Select - Fetch Error: ${res.status}`);
-                        break;
-                }//switch
-            })//then
-        }//fetchAndStoreModalImages
-
-
-        //subscribe modal-image render
         function renderModalImages(oldState, newState) {
-            if(!_.isEqual(oldState.profileModalImages, newState.profileModalImages)) {
+            if(!_.isEqual(oldState.user_images, newState.user_images)) {
                 console.log('user images rendering')
                 //1. append the the entry div
-                profileImageEntry.innerHTML = newState.profileModalImages.map((imgObj) => {
+                profileImageEntry.innerHTML = newState.user_images.map((img) => {
                     return(`
                         <span class="col-2 p-1">
-                            <img src="${imgObj.path}" data-id="${imgObj.id}" 
+                            <img src="${img.path}" data-id="${img.id}" 
                             class="img-thumbnail p-0 w-100" style="object-fit:cover; height:100%; width: 100%;">
                         </span>
                     `)
                 }).join('');//endMap
+
                 //2. add event listeners to all the images
                 let modalImages = document.querySelectorAll('[data-js="profile-image-entry"] img')
                 modalImages.forEach(img => {
@@ -349,132 +338,65 @@
                     });
                 })
             }//endIf
-        }//renderModalImages
+        }
         store.subscribe(renderModalImages);
 
-
-        function fetchAndStoreProfileImage() {
-            let url = new URL(`${window.location.href}?section=profile-image`)
-            fetch(url)
-            .then(res => {
-                switch (res.status) {
-                    case 200 :
-                        res.json().then(profileImageObj => {
-                            store.publish({type: 'profile-image/update-data', payload: profileImageObj })
-                        });
-                        break;
-                    default:
-                        console.error(`Profile-Image-Update - Fetch Error: ${res.status}`);
-                        break;
-                }//switch
-            })//then            
-        }//fetchAndStoreProfileImage
-
-
-        profileImageModalForm.addEventListener('submit', () => {
-            event.preventDefault();
-            //todo: custom form validation
-            let formData = new FormData(profileImageModalForm)
-            let url = new URL(`${window.location.href}/profile-image`);
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(res => {
-                switch (res.status) {
-                    case 200 :
-                        res.json().then( obj => {
-                            console.log(`profile image updated: ${JSON.stringify(obj)}`);
-                            //update store
-                            store.publish({type:'profile-image-modal/toggle'});
-                            //close and reset modal
-                            document.querySelectorAll('[data-js="profile-image-entry"] img')
-                                .forEach( img => {
-                                img.classList.remove('profile-modal-image-selected');
-                                profileImageModalHiddenInput.value = null;
-                                });
-                        })
-                        .then(() => fetchAndStoreProfileImage());
-                        break;
-                    default:
-                        throw res;
-                        break;
-                }//switch
-            }).catch(res => console.error(`Modal fetch error: status - ${res.status}`));
-        });//modal submit
-
-
-
-        //ADD NEW IMAGE UPLOAD FUNCATIONALITY THNE CALL FETCH AND STORE IMAGES
-
-
-        profileImageModalUseCameraInput.addEventListener('click', () => {
-            event.preventDefault();
-            store.publish({type: 'profile-image-modal-main-content/toggle-camera'});
-
-        });
-        
         function renderModalMainContent(oldState, newState) {
             if (!_.isEqual(oldState.showProfileImageModalCamera, newState.showProfileImageModalCamera)) {
                 if (newState.showProfileImageModalCamera) {
                     profileModalMainSelect.style.display = 'none';
                     profileModalMainCamera.style.display = 'block';
-                    setupUserAgentCamera();
+                    startCameraDevice();
 
                 } else {
                     profileModalMainSelect.style.display = 'block';
                     profileModalMainCamera.style.display = 'none';
                 }
             }
-        }//renderModalMainContent
+        }
         store.subscribe(renderModalMainContent);
+        
 
-        function setupUserAgentCamera() {
+        //RENDER HELPERS
+        
+        //start camera
+        function startCameraDevice() {
             navigator.mediaDevices.getUserMedia({video: true})
             .then((cameraStream) => {
                 window.cameraStream = cameraStream;
                 profileModalMainCameraVideo.srcObject = cameraStream;
                 profileModalMainCameraVideo.play();
-            });
-        }//setupUserAgentcamera
+            })
+            .catch(() => {console.error('start camera')});
+        }
 
+        //take photo
         profileModalTakeShotButton.addEventListener('click', async() => {
-
+            //set up image processor
             let ctx = profileModalMainCameraCanvas.getContext('2d');
-
             //set hidden canvas height and width to size of video on click
             profileModalMainCameraCanvas.setAttribute('height', profileModalMainCameraVideo.videoHeight)
             profileModalMainCameraCanvas.setAttribute('width', profileModalMainCameraVideo.videoWidth)
-
             //flip(mirror) canvas render
             ctx.scale(-1,1);
             ctx.translate(-profileModalMainCameraVideo.videoWidth, 0);
-            //
+            //pass to image processor
             ctx.drawImage(profileModalMainCameraVideo, 0, 0);
-
             let ctxDataURL = profileModalMainCameraCanvas.toDataURL()
+            //pass to form
             profileModalMainCameraForm.elements['camera_image'].value = ctxDataURL;
-
-            let formData = new FormData(profileModalMainCameraForm);
-            let url = new URL(`${window.location.href}/camera-image`);
-
-            fetch(url, {
-                method: 'POST', 
-                body: formData,
-            })
-            .then(() => {
-                fetchAndStoreModalImages();
-                store.publish({type: 'profile-image-modal-main-content/toggle-camera'});
-                navigator.mediaDevices.getUserMedia
-                window.cameraStream.getTracks().forEach(track => {
-                    track.stop();
-                })
-            })
-        })
-
+            //store image on server
+            await storeProfileCameraImage(profileModalMainCameraForm);
+            refreshProfileUserImages();
+            //back to select image
+            store.publish({type: 'profile-image-modal-main-content/toggle-camera'});
+            //turn off any cameras/audio
+            navigator.mediaDevices.getUserMedia
+            window.cameraStream.getTracks().forEach(track => {
+                track.stop();
+            });
+        });
         
-
-
 
     }//ProfileImageModal
     ProfileImageModal();

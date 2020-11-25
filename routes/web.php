@@ -21,12 +21,24 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('profile/{profile}', 'ProfileController@show'); //?section = "..."
 
 
-Route::get('listing/{listing}', 'ListingController@show');
-Route::get('event/{event}', 'EventController@show');
+
+// profile
+Route::get('profile/{profile}/image', 'ProfileController@retrieveProfileImage'); 
+Route::get('profile/{profile}/name', 'ProfileController@retrieveProfileName'); 
+Route::get('profile/{profile}/field', 'ProfileController@retrieveProfileField'); 
+Route::get('profile/{profile}/position', 'ProfileController@retrieveProfilePosition'); 
+Route::get('profile/{profile}/location', 'ProfileController@retrieveProfileLocation'); 
+Route::get('profile/{profile}/user-images', 'ProfileController@retrieveProfileUserImages'); 
+
+
+Route::put('profile/{profile}/name', 'ProfileController@updateProfileName'); 
+Route::put('profile/{profile}/image', 'ProfileController@updateProfileImage'); 
+Route::put('profile/{profile}/field', 'ProfileController@updateProfileField'); 
+Route::put('profile/{profile}/position', 'ProfileController@updateProfilePosition'); 
+Route::put('profile/{profile}/location', 'ProfileController@updateProfileLocation'); 
 
 
 Route::post('profile/{profile}/location', 'LocationController@store');
@@ -37,11 +49,12 @@ Route::post('profile/{profile}/camera-image', 'ImageController@storeUserProfileC
 
 
 
-Route::put('profile/{profile}/header', 'ProfileController@updateHeader');
-Route::put('profile/{profile}/profile-image', 'ProfileController@updateProfileImage');
 
 
-Route::patch('profile/{profile}', 'ProfileController@update');
 
+// Route::patch('profile/{profile}', 'ProfileController@update');
+
+Route::get('listing/{listing}', 'ListingController@show');
+Route::get('event/{event}', 'EventController@show');
 
 Route::delete('experience/{experience}', 'ExperienceController@destroy');
