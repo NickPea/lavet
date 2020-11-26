@@ -12,8 +12,8 @@
 @include('profile.styles.page')
 
 <!-- State Management -->
-@include('profile.scripts.store')
-@include('profile.scripts.reducers')
+@include('profile.scripts.state.store')
+@include('profile.scripts.state.reducers')
 
 
 @endpush
@@ -137,6 +137,6 @@
 
 <!-- Endpoints -->
 @include('profile.scripts.endpoints')
-@include('profile.scripts.hydrate')
+@include('profile.scripts.state.hydrate')
 
 @endpush

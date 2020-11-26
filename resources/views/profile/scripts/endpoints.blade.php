@@ -5,7 +5,7 @@
     // --GET & REFRESH STORE
 // -------------------------------------------------------------------------------------------------
 
-// --image
+// -- profile image
 function refreshProfileImage() {
     let url = new URL(`${window.location.href}/image`)
     return fetch(url)
@@ -20,6 +20,7 @@ function refreshProfileImage() {
         }
     }).catch(res => console.error(`fetch error: response: ${res.status}`));
 }
+
 // --name
 function refreshProfileName() {
     let url = new URL(`${window.location.href}/name`)
@@ -35,6 +36,7 @@ function refreshProfileName() {
         }
     }).catch(res => console.error(`fetch error: response: ${res.status}`));
 }
+
 // --field
 function refreshProfileField() {
     let url = new URL(`${window.location.href}/field`)
@@ -50,6 +52,7 @@ function refreshProfileField() {
         }
     }).catch(res => console.error(`fetch error: response: ${res.status}`));
 }
+
 // --position
 function refreshProfilePosition() {
     let url = new URL(`${window.location.href}/position`)
@@ -65,6 +68,7 @@ function refreshProfilePosition() {
         }
     }).catch(res => console.error(`fetch error: response: ${res.status}`));
 }
+
 // --location
 function refreshProfileLocation() {
     let url = new URL(`${window.location.href}/location`)
@@ -81,6 +85,7 @@ function refreshProfileLocation() {
     }).catch(res => console.error(`fetch error: response: ${res.status}`));
 }
 
+// -- user images
 function refreshProfileUserImages() {
     let url = new URL(`${window.location.href}/user-images`);
     return fetch(url)
@@ -96,8 +101,9 @@ function refreshProfileUserImages() {
                 break;
         }//switch
     }).catch(res => console.error(`fetch errer: response ${res.status}`));
-}//fetchAndStoreModalImages
+}
 
+// -- about
 function refreshProfileAbout() {
     let url = new URL(`${window.location.href}/about`);
     return fetch(url)
@@ -106,6 +112,24 @@ function refreshProfileAbout() {
             case 200 :
                 res.json().then(obj => {
                     store.publish({type: 'about/refresh', payload: obj });
+                });
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error(`fetch errer: response ${res.status}`));
+}
+
+// -- credentials
+function refreshProfileCredential() {
+    let url = new URL(`${window.location.href}/credential`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                res.json().then(obj => {
+                    store.publish({type: 'credential/refresh', payload: obj });
                 });
                 break;
             default:
@@ -230,11 +254,6 @@ function refreshProfileAbout() {
             }).catch(res => console.error(`fetch error: response: ${res.status}`))
         }
 
-// --DELETE
-// -------------------------------------------------------------------------------------------------
-
-
-
 
 // --POST
 // -------------------------------------------------------------------------------------------------
@@ -275,5 +294,51 @@ function storeProfileCameraImage(form) {
         }//switch
     }).catch(res => console.error('store profile camera image'))
 }
+
+// -- credential
+function storeProfileCredential(form) {
+    let formData = new FormData(form);
+    let url = new URL(`${window.location.href}/credential`);
+    return fetch(url, {
+        method: 'POST', 
+        body: formData,
+    }).then(res => {
+        switch (res.status) {
+            case 201 :
+                console.log('credential created');
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error(''));
+}
+
+
+
+// -- DELETE
+// -------------------------------------------------------------------------------------------------
+
+
+// -- credential
+function destroyProfileCredential(form) {
+    let formData = new FormData(form);
+    let url = new URL(`${window.location.href}/credential`);
+    return fetch(url, {
+        method: 'POST', 
+        body: formData,
+    }).then(res => {
+        switch (res.status) {
+            case 204 :
+                console.log('credential deleted');
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error(''));
+}
+
+
 
 </script>

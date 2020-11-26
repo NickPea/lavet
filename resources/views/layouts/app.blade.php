@@ -12,7 +12,6 @@
     <!-- Bunndled Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-
     @stack('head')
 
 </head>

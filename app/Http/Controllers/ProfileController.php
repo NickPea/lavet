@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AreaCode;
 use App\City;
 use App\Country;
+use App\Credential;
 use App\Field;
 use App\Location;
 use App\Position;
@@ -34,7 +35,7 @@ class ProfileController extends Controller
                 break;
         }
     }
-    // RETRIEVE
+    // RETRIEVE ------------------------------------------------------------------------------------------
 
     public function retrieveProfileImage(Request $request, Profile $profile)
     {
@@ -79,9 +80,17 @@ class ProfileController extends Controller
     {
         return response(['about' => $profile->about], 200);
     }
+
+    public function retrieveProfileCredential(Request $request, Profile $profile)
+    {
+        return response([
+            'count' => $profile->credential->count(),
+            'items' => $profile->credential->sortByDesc('end_year')->take(3)->values(),
+        ], 200);
+    }
     
 
-    // UPDATE
+    // UPDATE ------------------------------------------------------------------------------------------
 
     public function updateProfileImage(Request $request, Profile $profile)  
     {
@@ -137,7 +146,26 @@ class ProfileController extends Controller
 
 
 
+    // STORE ------------------------------------------------------------------------------------------
 
+    public function storeProfileCredential(Request $request, Profile $profile)  
+    {
+        $credential = Credential::make($request->input());
+
+        $profile->credential()->save($credential);
+
+        return response('' , 204);
+    }
+
+
+    // DESTROY ------------------------------------------------------------------------------------------
+
+    public function destroyProfileCredential(Request $request, Profile $profile)  
+    {
+        $profile->credential->where('id', $request->credential_id)->first()->delete();
+
+        return response('' , 204);
+    }
 
 
 

@@ -18,7 +18,7 @@
     <div class="d-flex mb-2">
 
         <!-- title -->
-        <h5 class="font-weight-light" style="color:grey">Bio</h5>
+        <h5 class="font-weight-light" style="color:grey">Brief</h5>
 
         <!-- options-dropdown -->
         <div class="btn-group ml-auto">
@@ -46,23 +46,28 @@
 
     {{-- HIDDEN FORM --}}
     <form data-js="profile-about-form" style="display: none">
-        @csrf
-        @method('PUT')
+        <div class="card">
+            <div class="card-body">
+                @csrf
+                @method('PUT')
 
-        <div class="d-flex flex-column">
+                <div class="d-flex flex-column">
 
-            <!-- about -->
-            <div class="form-group">
-                <label class="sr-only" for="about">Edit profile about</label>
-                <textarea name="about" id="about" rows="4" class="form-control"></textarea>
+                    <!-- about -->
+                    <div class="form-group">
+                        <label class="sr-only" for="about">Edit profile about</label>
+                        <textarea name="about" id="about" rows="4" class="form-control"></textarea>
+                    </div>
+
+                    <!-- buttons -->
+                    <span class="d-flex justify-content-end">
+                        <button data-js="profile-about-form-cancel" class="btn btn-outline-secondary btn-lg"
+                            tabindex="-1">cancel</button>
+                        <button class="btn btn-primary btn-lg ml-2">save</button>
+                    </span>
+
+                </div>
             </div>
-
-            <!-- buttons -->
-            <span class="align-self-end">
-                <button data-js="profile-about-form-cancel" class="btn btn-outline-secondary btn-lg" tabindex="-1">cancel</button>
-                <button class="btn btn-primary btn-lg">save</button>
-            </span>
-
         </div>
     </form>
 

@@ -9,6 +9,7 @@
         refreshProfilePosition();
         refreshProfileLocation();
         refreshProfileAbout();
+        refreshProfileCredential();
     })()
 
 </script>

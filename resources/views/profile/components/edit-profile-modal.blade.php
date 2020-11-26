@@ -155,9 +155,9 @@
                     <div class="content-wrapper d-flex flex-column">
                         <!-- Field -->
                         <small class="mb-2">Field</small>
-                        <h6 class="font-weight-bold mb-2">
+                        <h5 class="font-weight-bold mb-2">
                             <span data-js="pem-field"></span>
-                        </h6>
+                        </h5>
                         <!-- Position -->
                         <small class="mb-2">Position</small>
                         <h5 class="font-weight-bold m-0">

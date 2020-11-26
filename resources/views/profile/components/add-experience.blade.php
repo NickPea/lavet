@@ -3,6 +3,7 @@
     <div class="card-body">
         <form id="js-pe-add-form">
             @csrf
+            
             <!-- current position -->
             <div class="mb-2 form-check">
                 <input id="js-pe-checkbox" class="form-check-input" type="checkbox" name="current_position">

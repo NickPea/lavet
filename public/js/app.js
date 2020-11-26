@@ -37272,10 +37272,10 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 var _require = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"),
     Axios = _require["default"];
-
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 /***/ }),
 

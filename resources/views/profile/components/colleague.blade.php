@@ -10,7 +10,8 @@
 <!-- Colleagues // People who you have given references too-->
 <div class="content-wrapper">
     <div class="d-flex">
-        <h5 class="font-weight-light" style="color:grey">Colleagues
+        <h5 class="font-weight-light" style="color:grey">
+            Colleagues Reviewed
             ({{$profile->user->reference->map->profile->count()}})</h5>
         <!-- options-dropdown -->
         <div class="btn-group ml-auto">

@@ -9,7 +9,7 @@ i.e counter(state = 2, action) = {couter: 2}
 <script>
     // DATA REDUCERS //
 
-    // --image
+    // -- profile image
     store.addReducer(
         function image(state = {}, action) {
             switch (action.type) {
@@ -22,7 +22,7 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
-    // --image
+    // -- name
     store.addReducer(
         function name(state = {}, action) {
             switch (action.type) {
@@ -36,7 +36,7 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
-    // --image
+    // --field
     store.addReducer(
         function field(state = {}, action) {
             switch (action.type) {
@@ -49,7 +49,7 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
-    // --image
+    // -- position
     store.addReducer(
         function position(state = {}, action) {
             switch (action.type) {
@@ -75,7 +75,7 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
-    // --user-images
+    // -- user-images
     store.addReducer(
         function user_images(state = [], action) {
             switch (action.type) {
@@ -88,12 +88,26 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
-    // --about
+    // -- about
     store.addReducer(
         function about(state = '', action) {
             switch (action.type) {
                 case 'about/refresh':
                     return action.payload.about;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+
+    // -- credential
+    store.addReducer(
+        function credential(state = {}, action) {
+            switch (action.type) {
+                case 'credential/refresh':
+                    return action.payload;
                     break;
                 default:
                     return state;
@@ -202,6 +216,21 @@ i.e counter(state = 2, action) = {couter: 2}
                 case 'profile-about-form/off':
                     return false;
                     break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showCredentialForm(state = false, action) {
+            switch (action.type) {
+                case 'profile-credential-form/toggle':
+                    return !state;
+                    break;
+                // case 'profile-credential-form/off':
+                //     return false;
+                //     break;
                 default:
                     return state;
                     break;
