@@ -274,7 +274,7 @@
 
         //add image from file
         profileImageModalAddImageInput.addEventListener('change', async () => {
-            await storeProfileUserImages(profileImageModalAddImageForm);
+            await storeProfileFileImage(profileImageModalAddImageForm);
             refreshProfileUserImages();
         });
 

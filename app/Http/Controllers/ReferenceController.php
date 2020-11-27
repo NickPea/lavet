@@ -36,16 +36,9 @@ class ReferenceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Profile $profile)
+    public function store(Request $request)
     {
-        if (Auth::guest()) {
-            return response('Please login first', 403);
-        }
 
-        $newReference = $profile->reference()->create(
-            array_merge($request->input(), ['user_id' => $request->user()->id])
-        );
-        return response($newReference, 201);
     }
 
     /**

@@ -7,11 +7,17 @@ use App\City;
 use App\Country;
 use App\Credential;
 use App\Field;
+use App\Image;
 use App\Location;
 use App\Position;
 use App\Profile;
 use App\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
@@ -157,6 +163,7 @@ class ProfileController extends Controller
 
     // STORE ------------------------------------------------------------------------------------------
 
+    //credential
     public function storeProfileCredential(Request $request, Profile $profile)  
     {
         $credential = Credential::make($request->input());
@@ -165,6 +172,96 @@ class ProfileController extends Controller
 
         return response('' , 201);
     }
+
+    //file image
+    public function storeProfileFileImage(Request $request, Profile $profile)
+    {
+        $path = $request->file('new_image')->store(Hash::make($profile->user->email));
+
+        $newImage = Image::create([
+                'path' => url('storage/'.$path),
+                'user_id' => $profile->user->id
+            ]);
+
+        return response($newImage, 201);
+    }
+
+    
+    // cammera image (recieves an "image/png" dataURL)
+    public function storeProfileCameraImage(Request $request, Profile $profile)
+    {
+        ///cleanse, base64 decode, store and return path
+        $path = Hash::make($profile->user->email).'/'.Str::random(30).'.png';
+        Storage::put($path, file_get_contents($request->camera_image));
+        
+        $newImage = Image::create([
+                'path' => url($path),
+                'user_id' => $profile->user->id
+            ]);
+
+        return response($newImage, 201);
+    }
+
+    //locatoin
+    public function storeProfileLocation(Request $request, Profile $profile)
+    {
+        //cleanse(capitalize)
+
+        //validate
+        $validation = Validator::make($request->all(), [
+            'country' => ['required'],
+        ]);
+        
+        if ($validation->fails()) {
+            return response($validation->invalid() , 422);
+        }
+
+        $location = Location::firstOrCreate([
+        'city_id' => City::firstOrCreate(['name' => $request->city])->id,
+        'province_id' => Province::firstOrCreate(['name' => $request->province])->id,
+        'country_id' => Country::firstOrCreate(['name' => $request->country])->id,
+        'area_code_id' => AreaCode::firstOrCreate(['name' => $request->area_code])->id,
+        ]);
+
+        $profile->location()->sync($location);
+        
+        return response($profile->location->first(), 201);
+    }
+
+    // reference
+    public function storeProfileReference(Request $request, Profile $profile)
+    {
+        if (Auth::guest()) {
+            return response('Please login first', 403);
+        }
+
+        $newReference = $profile->reference()->create(
+            array_merge($request->input(), ['user_id' => $request->user()->id])
+        );
+        return response($newReference, 201);
+    }
+
+    // experience
+    public function storeProfileExperience(Request $request, Profile $profile)
+    {
+        $validated = Validator::make($request->all(), [
+            'organisation' => ['required'],
+            'work_role' => ['required'],
+            'start_at' => [],
+            'end_at' => [],
+        ]);
+        
+        if ($validated->fails()) {
+            return response($validated->invalid() , 422);
+        } 
+
+        $newExperience = $profile->experience()->create($request->all());
+        
+        return response($newExperience, 201);
+    
+    }
+    
+
 
 
     // DESTROY ------------------------------------------------------------------------------------------

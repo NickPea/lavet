@@ -43,39 +43,6 @@ class ImageController extends Controller
     {
         
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storeUserProfileImage(Request $request, Profile $profile)
-    {
-        $path = $request->file('new_image')->store(Hash::make($profile->user->email));
-
-        $newImage = Image::create([
-                'path' => url('storage/'.$path),
-                'user_id' => $profile->user->id
-            ]);
-
-        return response($newImage, 201);
-    }
-
-    
-    //recieves an "image/png" dataURL
-    public function storeUserProfileCameraImage(Request $request, Profile $profile)
-    {
-        ///cleanse, base64 decode, store and return path
-        $path = Hash::make($profile->user->email).'/'.Str::random(30).'.png';
-        Storage::put($path, file_get_contents($request->camera_image));
-        
-        $newImage = Image::create([
-                'path' => url($path),
-                'user_id' => $profile->user->id
-            ]);
-
-        return response($newImage, 201);
-    }
 
     /**
      * Display the specified resource.

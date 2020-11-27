@@ -39,29 +39,9 @@ class LocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Profile $profile)
+    public function store(Request $request)
     {
-        //cleanse(capitalize)
 
-        //validate
-        $validation = Validator::make($request->all(), [
-            'country' => ['required'],
-        ]);
-        
-        if ($validation->fails()) {
-            return response($validation->invalid() , 422);
-        }
-
-        $location = Location::firstOrCreate([
-        'city_id' => City::firstOrCreate(['name' => $request->city])->id,
-        'province_id' => Province::firstOrCreate(['name' => $request->province])->id,
-        'country_id' => Country::firstOrCreate(['name' => $request->country])->id,
-        'area_code_id' => AreaCode::firstOrCreate(['name' => $request->area_code])->id,
-        ]);
-
-        $profile->location()->sync($location);
-        
-        return response($profile->location->first(), 201);
     }
 
     /**

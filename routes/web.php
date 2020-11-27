@@ -24,36 +24,39 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('profile/{profile}', 'ProfileController@show'); //?section = "..."
 
 
+// PROFILE
 
-// profile
+// --retrieve
 Route::get('profile/{profile}/image', 'ProfileController@retrieveProfileImage'); 
+Route::get('profile/{profile}/user-images', 'ProfileController@retrieveProfileUserImages'); 
 Route::get('profile/{profile}/name', 'ProfileController@retrieveProfileName'); 
 Route::get('profile/{profile}/field', 'ProfileController@retrieveProfileField'); 
 Route::get('profile/{profile}/position', 'ProfileController@retrieveProfilePosition'); 
 Route::get('profile/{profile}/location', 'ProfileController@retrieveProfileLocation'); 
-Route::get('profile/{profile}/user-images', 'ProfileController@retrieveProfileUserImages'); 
 Route::get('profile/{profile}/about', 'ProfileController@retrieveProfileAbout'); 
 Route::get('profile/{profile}/credential', 'ProfileController@retrieveProfileCredential'); 
 
-
-Route::put('profile/{profile}/name', 'ProfileController@updateProfileName'); 
+// -- update
 Route::put('profile/{profile}/image', 'ProfileController@updateProfileImage'); 
+Route::put('profile/{profile}/name', 'ProfileController@updateProfileName'); 
+Route::put('profile/{profile}/about', 'ProfileController@updateProfileAbout'); 
 Route::put('profile/{profile}/field', 'ProfileController@updateProfileField'); 
 Route::put('profile/{profile}/position', 'ProfileController@updateProfilePosition'); 
 Route::put('profile/{profile}/location', 'ProfileController@updateProfileLocation'); 
-Route::put('profile/{profile}/about', 'ProfileController@updateProfileAbout'); 
 Route::put('profile/{profile}/credential', 'ProfileController@updateProfileCredential'); 
 
-//fix this
-Route::post('profile/{profile}/location', 'LocationController@store');
-Route::post('profile/{profile}/experience', 'ExperienceController@store');
-Route::post('profile/{profile}/reference', 'ReferenceController@store');
-Route::post('profile/{profile}/image', 'ImageController@storeUserProfileImage');
-Route::post('profile/{profile}/camera-image', 'ImageController@storeUserProfileCameraImage');
+// -- store
+Route::post('profile/{profile}/file-image', 'ProfileController@storeProfileFileImage');
+Route::post('profile/{profile}/camera-image', 'ProfileController@storeProfileCameraImage');
+Route::post('profile/{profile}/location', 'ProfileController@storeProfileLocation');
 Route::post('profile/{profile}/credential', 'ProfileController@storeProfileCredential');
+Route::post('profile/{profile}/experience', 'ProfileController@storeProfileExperience');
+Route::post('profile/{profile}/reference', 'ProfileController@storeProfileReference');
 
-
+// --destroy
 Route::delete('profile/{profile}/credential', 'ProfileController@destroyProfileCredential');
+
+
 
 
 

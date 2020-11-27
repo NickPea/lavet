@@ -35,22 +35,8 @@ class ExperienceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Profile $profile)
+    public function store(Request $request)
     {
-        $validated = Validator::make($request->all(), [
-            'organisation' => ['required'],
-            'work_role' => ['required'],
-            'start_at' => [],
-            'end_at' => [],
-        ]);
-        
-        if ($validated->fails()) {
-            return response($validated->invalid() , 422);
-        } 
-
-        $newExperience = $profile->experience()->create($request->all());
-        
-        return response($newExperience, 201);
     
     }
 

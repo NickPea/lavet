@@ -276,9 +276,9 @@ function refreshProfileCredential() {
 // --POST
 // -------------------------------------------------------------------------------------------------
 
-function storeProfileUserImages(form) {
-    let data = new FormData(form)
-    let url = new URL(`${window.location.href}/image`);
+function storeProfileFileImage(form) {
+    let formData = new FormData(form)
+    let url = new URL(`${window.location.href}/file-image`);
     return fetch(url, {
         method: 'POST',
         body: formData,
