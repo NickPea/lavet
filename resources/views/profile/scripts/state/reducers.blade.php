@@ -223,9 +223,24 @@ i.e counter(state = 2, action) = {couter: 2}
         }
     );
     store.addReducer(
-        function showCredentialForm(state = false, action) {
+        function showCredentialAddForm(state = false, action) {
             switch (action.type) {
-                case 'profile-credential-form/toggle':
+                case 'profile-credential-add-form/toggle':
+                    return !state;
+                    break;
+                // case 'profile-credential-form/off':
+                //     return false;
+                //     break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showCredentialEditForm(state = false, action) {
+            switch (action.type) {
+                case 'profile-credential-edit-form/toggle':
                     return !state;
                     break;
                 // case 'profile-credential-form/off':

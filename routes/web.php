@@ -42,6 +42,7 @@ Route::put('profile/{profile}/field', 'ProfileController@updateProfileField');
 Route::put('profile/{profile}/position', 'ProfileController@updateProfilePosition'); 
 Route::put('profile/{profile}/location', 'ProfileController@updateProfileLocation'); 
 Route::put('profile/{profile}/about', 'ProfileController@updateProfileAbout'); 
+Route::put('profile/{profile}/credential', 'ProfileController@updateProfileCredential'); 
 
 //fix this
 Route::post('profile/{profile}/location', 'LocationController@store');

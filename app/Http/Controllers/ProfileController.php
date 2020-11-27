@@ -143,7 +143,16 @@ class ProfileController extends Controller
 
         return response('' , 204);
     }
+    public function updateProfileCredential(Request $request, Profile $profile)  
+    {
+        $profile->credential->where('id', $request->id)->first()->update([
+            'name' => $request->name,
+            'institution' => $request->institution,
+            'end_year' => $request->end_year,
+        ]);
 
+        return response('' , 204);
+    }
 
 
     // STORE ------------------------------------------------------------------------------------------
@@ -154,7 +163,7 @@ class ProfileController extends Controller
 
         $profile->credential()->save($credential);
 
-        return response('' , 204);
+        return response('' , 201);
     }
 
 
@@ -162,7 +171,7 @@ class ProfileController extends Controller
 
     public function destroyProfileCredential(Request $request, Profile $profile)  
     {
-        $profile->credential->where('id', $request->credential_id)->first()->delete();
+        $profile->credential->where('id', $request->id)->first()->delete();
 
         return response('' , 204);
     }

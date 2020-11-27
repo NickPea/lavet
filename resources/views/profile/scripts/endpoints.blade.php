@@ -18,7 +18,7 @@ function refreshProfileImage() {
                 throw res
                 break;
         }
-    }).catch(res => console.error(`fetch error: response: ${res.status}`));
+    }).catch(res => console.error(`refreshProfileImage()`));
 }
 
 // --name
@@ -34,7 +34,7 @@ function refreshProfileName() {
                 throw res
                 break;
         }
-    }).catch(res => console.error(`fetch error: response: ${res.status}`));
+    }).catch(res => console.error(`refreshProfileName()`));
 }
 
 // --field
@@ -50,7 +50,7 @@ function refreshProfileField() {
                 throw res;
                 break;
         }
-    }).catch(res => console.error(`fetch error: response: ${res.status}`));
+    }).catch(res => console.error(`refreshProfileField()`));
 }
 
 // --position
@@ -66,7 +66,7 @@ function refreshProfilePosition() {
                 throw res;
                 break;
         }
-    }).catch(res => console.error(`fetch error: response: ${res.status}`));
+    }).catch(res => console.error(`refreshProfilePosition()`));
 }
 
 // --location
@@ -82,7 +82,7 @@ function refreshProfileLocation() {
                 throw res;
                 break;
         }
-    }).catch(res => console.error(`fetch error: response: ${res.status}`));
+    }).catch(res => console.error(`refreshProfileLocation()`));
 }
 
 // -- user images
@@ -100,7 +100,7 @@ function refreshProfileUserImages() {
                 throw res;
                 break;
         }//switch
-    }).catch(res => console.error(`fetch errer: response ${res.status}`));
+    }).catch(res => console.error(`refreshProfileUserImages()`));
 }
 
 // -- about
@@ -118,7 +118,7 @@ function refreshProfileAbout() {
                 throw res;
                 break;
         }//switch
-    }).catch(res => console.error(`fetch errer: response ${res.status}`));
+    }).catch(res => console.error(`refreshProfileAbout()`));
 }
 
 // -- credentials
@@ -136,7 +136,7 @@ function refreshProfileCredential() {
                 throw res;
                 break;
         }//switch
-    }).catch(res => console.error(`fetch errer: response ${res.status}`));
+    }).catch(res => console.error(`refreshProfileCredential()`));
 }//fetchAndStoreModalImages
 
 
@@ -162,7 +162,7 @@ function refreshProfileCredential() {
                         throw res;
                         break;
                 }//switch
-            }).catch(res => console.error('update profile image'));
+            }).catch(res => console.error('updateProfileImage()'));
         }
 
         // -- name
@@ -180,7 +180,7 @@ function refreshProfileCredential() {
                         throw res;
                         break;
                 }
-            }).catch(res => console.error(`fetch error: response: ${res.status}`))
+            }).catch(res => console.error(`updateProfileName()`))
         }
         // -- career-status
         // field
@@ -198,7 +198,7 @@ function refreshProfileCredential() {
                         throw res;
                         break;
                 }
-            }).catch(res => console.error(`fetch error: response: ${res.status}`))
+            }).catch(res => console.error(`upddateProfileField`))
         }
         // position
         function updateProfilePosition(form) {
@@ -215,7 +215,7 @@ function refreshProfileCredential() {
                         throw res;
                         break;
                 }
-            }).catch(res => console.error(`fetch error: response: ${res.status}`))
+            }).catch(res => console.error(`updateProfilePosition()`))
         }
         // -- location
         function updateProfileLocation(form) {
@@ -233,7 +233,7 @@ function refreshProfileCredential() {
                         throw res;
                         break;
                 }
-            }).catch(res => console.error(`fetch error: response: ${res.status}`))
+            }).catch(res => console.error(`updateProfileLocation()`))
         }
         // -- about
         function updateProfileAbout(form) {
@@ -251,7 +251,25 @@ function refreshProfileCredential() {
                         throw res;
                         break;
                 }
-            }).catch(res => console.error(`fetch error: response: ${res.status}`))
+            }).catch(res => console.error(`updateProfileAbout()`))
+        }
+        // -- credential
+        function updateProfileCredential(form) {
+            let data = new FormData(form);
+            let url = new URL(`${window.location.href}/credential`);
+            return fetch(url, {
+                method: 'POST', 
+                body: data,
+            }).then(res => {
+                switch (res.status) {
+                    case 204 :
+                        console.log('profile about updated');
+                        break;
+                    default:
+                        throw res;
+                        break;
+                }
+            }).catch(res => console.error(`updateProfileCredential()`))
         }
 
 
@@ -274,7 +292,7 @@ function storeProfileUserImages(form) {
                 throw res;
                 break;
         }
-    }).catch(res => console.error('store user image'));
+    }).catch(res => console.error('storeProfileUserImage()'));
 }
 
 function storeProfileCameraImage(form) {
@@ -292,7 +310,7 @@ function storeProfileCameraImage(form) {
                 throw res;
                 break;
         }//switch
-    }).catch(res => console.error('store profile camera image'))
+    }).catch(res => console.error('storeProfileCameraImage()'))
 }
 
 // -- credential
@@ -311,7 +329,7 @@ function storeProfileCredential(form) {
                 throw res;
                 break;
         }//switch
-    }).catch(res => console.error(''));
+    }).catch(res => console.error('storeProfileCredential()'));
 }
 
 
@@ -336,7 +354,7 @@ function destroyProfileCredential(form) {
                 throw res;
                 break;
         }//switch
-    }).catch(res => console.error(''));
+    }).catch(res => console.error('destroyProfileCredential()'));
 }
 
 

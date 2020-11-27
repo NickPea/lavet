@@ -40,6 +40,10 @@
             @include('profile.components.header')
 
         </div><!-- //col -->
+        <div class="col-4">
+            <!-- button-bar -->
+            @include('profile.components.button-bar')
+        </div>
     </div><!-- //row 1 -->
 
 
