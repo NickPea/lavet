@@ -9,19 +9,14 @@
         top: 0;
         width: 100%;
         height: 100%;
-        overflow: auto;
-        /*prevent background scrolling*/
+        overflow: auto; /*prevent background scrolling*/
         background-color: rgba(0, 0, 0, 0.4);
     }
 
     .edit-profile-modal-content {
         position: relative;
         background-color: #fefefe;
-        margin-left: auto;
-        margin-right: 10rem;
-        margin-top: 10vh;
-        margin-bottom: 50vh;
-        /*prevent background scrolling*/
+        margin: 10vh auto; /*prevent background scrolling*/
         width: 50%;
         padding: 3rem;
         object-fit: cover;

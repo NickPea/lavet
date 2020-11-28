@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
 class ProfileController extends Controller
 {
     public function show(Request $request, Profile $profile)
@@ -43,24 +42,33 @@ class ProfileController extends Controller
     }
     // RETRIEVE ------------------------------------------------------------------------------------------
 
+    //image
     public function retrieveProfileImage(Request $request, Profile $profile)
     {
         return response([
             'path' => $profile->image->first()->path
         ], 200);
     }
+
+    // name
     public function retrieveProfileName(Request $request, Profile $profile)
     {
         return response(['name' => $profile->user->name], 200);
     }
+
+    // field
     public function retrieveProfileField(Request $request, Profile $profile)
     {
         return response(['field' => $profile->field->first()->name], 200);
     }
+
+    // position
     public function retrieveProfilePosition(Request $request, Profile $profile)
     {
         return response(['position' => $profile->position->first()->name], 200);
     }
+
+    // location
     public function retrieveProfileLocation(Request $request, Profile $profile)
     {
         $location = $profile->location->first();
@@ -72,6 +80,8 @@ class ProfileController extends Controller
             'area_code' => $location->area_code->name,
         ], 200);
     }
+
+    // user images
     public function retrieveProfileUserImages(Request $request, Profile $profile)
     {
         return response(['user_images' => $profile->user->image->sortByDesc('updated_at')->values()->map(function ($img)
@@ -82,16 +92,37 @@ class ProfileController extends Controller
             ];
         })], 200);
     }
+
+    // about
     public function retrieveProfileAbout(Request $request, Profile $profile)
     {
         return response(['about' => $profile->about], 200);
     }
 
+    //credential
     public function retrieveProfileCredential(Request $request, Profile $profile)
     {
         return response([
             'count' => $profile->credential->count(),
             'items' => $profile->credential->sortByDesc('end_year')->take(3)->values(),
+        ], 200);
+    }
+    
+    // experience
+    public function retrieveProfileExperience(Request $request, Profile $profile)
+    {
+        return response([
+            'count' => $profile->experience()->count(),
+            'items' => $profile->experience->take(3)->map(function ($exp)
+            {
+                return [
+                    'id' => $exp->id,
+                    'work_role' => $exp->work_role,
+                    'organisation' => $exp->organisation,
+                    'start_at' => $exp->start_at->format('M-Y'),
+                    'end_at' => $exp->end_at? $exp->end_at->format('M-Y') : 'Current',
+                ];
+            }),
         ], 200);
     }
     
@@ -159,6 +190,17 @@ class ProfileController extends Controller
 
         return response('' , 204);
     }
+    public function updateProfileExperience(Request $request, Profile $profile)  
+    {
+        $profile->experience->where('id', $request->id)->first()->update([
+            'work_role' => $request->work_role,
+            'organisation' => $request->organisation,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
+        ]);
+
+        return response('' , 204);
+    }
 
 
     // STORE ------------------------------------------------------------------------------------------
@@ -202,7 +244,7 @@ class ProfileController extends Controller
         return response($newImage, 201);
     }
 
-    //locatoin
+    //location
     public function storeProfileLocation(Request $request, Profile $profile)
     {
         //cleanse(capitalize)
@@ -272,6 +314,17 @@ class ProfileController extends Controller
 
         return response('' , 204);
     }
+
+    public function destroyProfileExperience(Request $request, Profile $profile)  
+    {
+        $profile->experience()->where('id', $request->id)->first()->delete();
+
+        return response('' , 204);
+    }
+
+
+
+
 
 
 

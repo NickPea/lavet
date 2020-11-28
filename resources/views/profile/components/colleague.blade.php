@@ -26,8 +26,8 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                @forelse ($profile->user->reference->map->profile->take(4) as $profile)
-                <div class="col-6">
+                @forelse ($profile->user->reference->map->profile->take(8) as $profile)
+                <div class="col-3">
 
                     <div>
                         <a href={{secure_url($profile->path())}}>

@@ -307,7 +307,7 @@
                                     <div style="position: relative; height:100%">
     
                                         <!-- dropdown -->
-                                        <div class="btn-group" style="position: absolute; right: 0.5rem; top: 0.5rem;">
+                                        <div class="btn-group d-flex justify-content-end pr-2 pt-2">
                                             <a class="options-button" data-toggle="dropdown">
                                                 @include('svg.more')
                                             </a>
@@ -328,7 +328,7 @@
                                         </div>
     
                                         <!-- cred-body -->
-                                        <div class="card-body d-flex flex-column justify-content-around align-items-center text-center h-100">
+                                        <div class="card-body d-flex flex-column justify-content-between align-items-center text-center h-100">
                                             <h5 class="m-0">${cred.name}</h5>
                                             <small class="">${cred.institution}</small>
                                             <h6 class="m-0">${cred.end_year}</h6>
@@ -359,7 +359,7 @@
                 !credentialDisplayItems && console.error('dom query not found');
                 credentialDisplayItems.forEach((credItem) => {
 
-                    //DOM 
+                   //DOM 
                    let credItemHiddenDataForm = credItem.querySelector('[data-js="profile-credential-item-hidden-data-form"]');
                    let credItemHiddenDeleteForm = credItem.querySelector('[data-js="profile-credential-item-hidden-delete-form"]');
                    let credItemEditButton = credItem.querySelector('[data-js="profile-credential-dropdown-edit"]');

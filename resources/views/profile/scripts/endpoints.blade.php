@@ -137,7 +137,25 @@ function refreshProfileCredential() {
                 break;
         }//switch
     }).catch(res => console.error(`refreshProfileCredential()`));
-}//fetchAndStoreModalImages
+}
+
+// -- experiences
+function refreshProfileExperience() {
+    let url = new URL(`${window.location.href}/experience`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                res.json().then(obj => {
+                    store.publish({type: 'experience/refresh', payload: obj });
+                });
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error(`refreshProfileExperience()`));
+}
 
 
 
@@ -245,7 +263,7 @@ function refreshProfileCredential() {
             }).then(res => {
                 switch (res.status) {
                     case 204 :
-                        console.log('profile about updated');
+                        console.log('about updated');
                         break;
                     default:
                         throw res;
@@ -263,13 +281,31 @@ function refreshProfileCredential() {
             }).then(res => {
                 switch (res.status) {
                     case 204 :
-                        console.log('profile about updated');
+                        console.log('credential updated');
                         break;
                     default:
                         throw res;
                         break;
                 }
             }).catch(res => console.error(`updateProfileCredential()`))
+        }
+        // -- experience
+        function updateProfileExperience(form) {
+            let data = new FormData(form);
+            let url = new URL(`${window.location.href}/experience`);
+            return fetch(url, {
+                method: 'POST', 
+                body: data,
+            }).then(res => {
+                switch (res.status) {
+                    case 204 :
+                        console.log('experience updated');
+                        break;
+                    default:
+                        throw res;
+                        break;
+                }
+            }).catch(res => console.error(`updateProfileExperience()`))
         }
 
 
@@ -332,6 +368,24 @@ function storeProfileCredential(form) {
     }).catch(res => console.error('storeProfileCredential()'));
 }
 
+// -- experience
+function storeProfileExperience(form) {
+    let formData = new FormData(form);
+    let url = new URL(`${window.location.href}/experience`);
+    return fetch(url, {
+        method: 'POST', 
+        body: formData,
+    }).then(res => {
+        switch (res.status) {
+            case 201 :
+                console.log('experience created');
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error('storeProfileExperience()'));
+}
 
 
 // -- DELETE
@@ -355,6 +409,25 @@ function destroyProfileCredential(form) {
                 break;
         }//switch
     }).catch(res => console.error('destroyProfileCredential()'));
+}
+
+// -- credential
+function destroyProfileExperience(form) {
+    let formData = new FormData(form);
+    let url = new URL(`${window.location.href}/experience`);
+    return fetch(url, {
+        method: 'POST', 
+        body: formData,
+    }).then(res => {
+        switch (res.status) {
+            case 204 :
+                console.log('experience deleted');
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error('destroyProfileExperience()'));
 }
 
 

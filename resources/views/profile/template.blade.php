@@ -19,78 +19,45 @@
 @endpush
 
 
-
-
-
 {{-- BODY --}}
 @push('body')
 
-<!-- Profile-Image-Modal -->
+<!-- Modals -->
 @include('profile.components.profile-image-modal')
 @include('profile.components.edit-profile-modal')
 
 
 <div class="container py-5">
 
-    <!-- row 1 -->
-    <div class="row no-gutters py-4" style="border-bottom: 1px solid lightgrey">
-        <div class="col-8">
+
+
+    <div class="row mb-3">
+        <div class="col">
+
+            <!-- button-bar -->
+            @include('profile.components.button-bar')
+
+        </div>
+    </div>
+
+
+    <div class="row mb-5">
+        <div class="col">
 
             <!-- Header -->
             @include('profile.components.header')
 
         </div><!-- //col -->
-        <div class="col-4">
-            <!-- button-bar -->
-            @include('profile.components.button-bar')
-        </div>
-    </div><!-- //row 1 -->
+    </div>
 
 
-    <!-- row 2 -->
-    <div class="row py-4">
-        <!-- LEFT COL -->
-        <div class="col-4">
-
-            <!-- inner row -->
-            <div class="row pb-3">
-                <div class="col">
-
-                    @include('profile.components.colleague')
-
-                </div>
-            </div>
-
-            <!-- inner row -->
-            <div class="row pb-3">
-                <div class="col">
-
-                    @include('profile.components.event')
-
-                </div>
-            </div><!-- //inner row -->
-
-            <!-- inner row -->
-            <div class="row pb-3">
-                <div class="col">
-
-                    @include('profile.components.listing')
-
-                </div>
-            </div><!-- //inner row -->
-
-
-        </div>
-        <!-- //LEFT COL -->
-
-
-        <!-- col -->
-        <!-- RIGHT COL -->
-        <div class="col-8">
+    <!-- squeezers -->
+    <div class="row">
+        <div class="col-8 offset-2">
 
 
             <!-- inner row -->
-            <div class="row pb-3">
+            <div class="row mb-3">
                 <div class="col">
 
                     @include('profile.components.about')
@@ -100,17 +67,7 @@
 
 
             <!-- inner row -->
-            <div class="row pb-3">
-                <div class="col">
-
-                    @include('profile.components.credential')
-
-                </div>
-            </div> <!-- //inner row -->
-
-
-            <!-- inner row -->
-            <div class="row pb-3">
+            <div class="row mb-3">
                 <div class="col">
 
                     @include('profile.components.experience')
@@ -120,7 +77,7 @@
 
 
             <!-- inner row -->
-            <div class="row pb-3">
+            <div class="row mb-3">
                 <div class="col">
 
                     @include('profile.components.reference')
@@ -129,11 +86,28 @@
             </div> <!-- //inner row -->
 
 
-        </div> <!-- //col -->
-        <!-- //RIGHT COL -->
+            <!-- inner row -->
+            <div class="row mb-3">
+                <div class="col">
+
+                    @include('profile.components.colleague')
+
+                </div>
+            </div>
 
 
-    </div> <!-- //row 2-->
+            <!-- inner row -->
+            <div class="row mb-3">
+                <div class="col">
+
+                    @include('profile.components.credential')
+
+                </div>
+            </div> <!-- //inner row -->
+
+
+        </div>
+    </div>
 
 
 </div> <!-- end container -->

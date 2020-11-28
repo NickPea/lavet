@@ -11,19 +11,7 @@
 <!-- --------------------------------------------------------------------------------------------------------- -->
 
 
-<div class="d-flex justify-content-end align-items-start h-100">
-
-    <!-- share -->
-    <button class="btn btn-outline-secondary btn-lg ml-2 ">
-        <span>@include('svg.share')</span>
-        <span>Share</span>
-    </button>
-
-    <!-- message -->
-    <button class="btn btn-outline-secondary btn-lg ml-2">
-        <span>@include('svg.send')</span>
-        <span>Message</span>
-    </button>
+<div class="d-flex justify-content-end">
 
     <div class="btn-group">
         <!-- more -->
@@ -39,6 +27,19 @@
             {{-- <button class="dropdown-item" type="button">Block</button> --}}
         </div>
     </div>
+    
+    <!-- share -->
+    <button class="btn btn-outline-secondary btn-lg ml-2 ">
+        <span>@include('svg.share')</span>
+        {{-- <span>Share</span> --}}
+    </button>
+
+    <!-- message -->
+    <button class="btn btn-outline-success btn-lg ml-2">
+        {{-- <span>@include('svg.send')</span> --}}
+        <span>Hire Me</span>
+    </button>
+
 
 </div>
 

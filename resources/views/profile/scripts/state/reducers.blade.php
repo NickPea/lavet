@@ -115,6 +115,19 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
+    // -- experience
+    store.addReducer(
+        function experience(state = {}, action) {
+            switch (action.type) {
+                case 'experience/refresh':
+                    return action.payload;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
     
 </script>
 
@@ -228,9 +241,6 @@ i.e counter(state = 2, action) = {couter: 2}
                 case 'profile-credential-add-form/toggle':
                     return !state;
                     break;
-                // case 'profile-credential-form/off':
-                //     return false;
-                //     break;
                 default:
                     return state;
                     break;
@@ -243,9 +253,60 @@ i.e counter(state = 2, action) = {couter: 2}
                 case 'profile-credential-edit-form/toggle':
                     return !state;
                     break;
-                // case 'profile-credential-form/off':
-                //     return false;
-                //     break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showExperienceAddForm(state = false, action) {
+            switch (action.type) {
+                case 'profile-experience-add-form/toggle':
+                    return !state;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function experienceAddFormIsCurrent(state = false, action) {
+            switch (action.type) {
+                case 'profile-experience-add-form-is-current/toggle':
+                    return !state;
+                    break;
+                case 'profile-experience-add-form-is-current/off':
+                    return false;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showExperienceEditForm(state = false, action) {
+            switch (action.type) {
+                case 'profile-experience-edit-form/toggle':
+                    return !state;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function experienceEditFormIsCurrent(state = false, action) {
+            switch (action.type) {
+                case 'profile-experience-edit-form-is-current/toggle':
+                    return !state;
+                    break;
+                case 'profile-experience-edit-form-is-current/off':
+                    return false;
+                    break;
                 default:
                     return state;
                     break;

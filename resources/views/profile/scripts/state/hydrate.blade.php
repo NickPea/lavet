@@ -10,6 +10,7 @@
         refreshProfileLocation();
         refreshProfileAbout();
         refreshProfileCredential();
+        refreshProfileExperience();
     })()
 
 </script>

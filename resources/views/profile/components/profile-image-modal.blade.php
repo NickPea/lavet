@@ -16,10 +16,7 @@
     .profile-image-modal-content {
         position: relative;
         background-color: #fefefe;
-        margin-left: auto;
-        margin-right: 10rem;
-        margin-top: 10vh; 
-        margin-bottom: 50vh; /*prevent background scrolling*/
+        margin: 10vh auto; /*prevent background scrolling*/
         width: 50%;
         padding: 3rem;
         object-fit: cover;
