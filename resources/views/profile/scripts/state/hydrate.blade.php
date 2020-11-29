@@ -11,6 +11,7 @@
         refreshProfileAbout();
         refreshProfileCredential();
         refreshProfileExperience();
+        refreshProfileReference();
     })()
 
 </script>

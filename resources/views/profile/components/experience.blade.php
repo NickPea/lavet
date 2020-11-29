@@ -66,6 +66,10 @@
         <div class="card">
             <div class="card-body">
 
+                <div class="card-title">
+                    <h6>Add experience.</h6>
+                </div>
+
                 <!-- current position -->
                 <div class="mb-2 form-check">
                     <input data-js="profile-experience-add-form-current-check" class="form-check-input" type="checkbox"
@@ -147,6 +151,10 @@
 
         <div class="card">
             <div class="card-body">
+
+                <div class="card-title">
+                    <h6>Edit experience.</h6>
+                </div>
 
                 <!-- current position -->
                 <div class="mb-2 form-check">
@@ -280,6 +288,7 @@
         // show add form
         experienceAddButton.addEventListener('click', () => {
             store.publish({type: 'profile-experience-add-form/toggle'})
+            store.publish({type: 'profile-experience-edit-form/off'})
         });
         // cancel add form
         experienceAddFormCancel.addEventListener('click', () => {
@@ -345,11 +354,11 @@
         function renderExperienceAddForm(oldState, newState) {
             if (!_.isEqual(oldState.showExperienceAddForm, newState.showExperienceAddForm)) {
                 if (newState.showExperienceAddForm) {
-                    experienceAddFormWrapper.style.display = 'block';
                     experienceDisplayWrapper.style.display = 'none';
+                    experienceAddFormWrapper.style.display = 'block';
                 } else {
-                    experienceAddFormWrapper.style.display = 'none';
                     experienceDisplayWrapper.style.display = 'block';
+                    experienceAddFormWrapper.style.display = 'none';
                 }
             }
         }
@@ -399,7 +408,7 @@
                 //1. map data to create list
                 let mappedExperience = newState.experience.items.map(expItem => {
                     return (`
-                        <div data-js="profile-experience-display-item">
+                        <div data-js="profile-experience-display-item" class="mb-2">
                             <div class="card rounded-lg">
                                 <div class="card-body">
                                     <div class="row">
@@ -407,7 +416,7 @@
                                         <!-- col1 / icon -->
                                         <div class="col-1">
 
-                                            @include('svg.experience')
+                                            @include('svg.exp')
 
                                         </div>
 

@@ -35,9 +35,9 @@
     </button>
 
     <!-- message -->
-    <button class="btn btn-outline-success btn-lg ml-2">
-        {{-- <span>@include('svg.send')</span> --}}
-        <span>Hire Me</span>
+    <button class="btn btn-outline-success btn-lg btn-block ml-2">
+            <span>Contact</span>
+            {{-- <span class="ml-2">@include('svg.send')</span> --}}
     </button>
 
 

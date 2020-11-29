@@ -157,6 +157,24 @@ function refreshProfileExperience() {
     }).catch(res => console.error(`refreshProfileExperience()`));
 }
 
+// -- references
+function refreshProfileReference() {
+    let url = new URL(`${window.location.href}/reference`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                res.json().then(obj => {
+                    store.publish({type: 'reference/refresh', payload: obj });
+                });
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    }).catch(res => console.error(`refreshProfileReference()`));
+}
+
 
 
 // --PUT
@@ -306,6 +324,25 @@ function refreshProfileExperience() {
                         break;
                 }
             }).catch(res => console.error(`updateProfileExperience()`))
+        }
+
+        // -- reference
+        function updateOrCreateProfileReference(form) {
+            let data = new FormData(form);
+            let url = new URL(`${window.location.href}/reference`);
+            return fetch(url, {
+                method: 'POST', 
+                body: data,
+            }).then(res => {
+                switch (res.status) {
+                    case 204 :
+                        console.log('reference updated or created');
+                        break;
+                    default:
+                        throw res;
+                        break;
+                }
+            }).catch(res => console.error(`updateOrCreateProfileReference()`))
         }
 
 

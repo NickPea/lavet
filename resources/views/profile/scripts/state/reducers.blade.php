@@ -128,6 +128,19 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
+    // -- reference
+    store.addReducer(
+        function reference(state = {}, action) {
+            switch (action.type) {
+                case 'reference/refresh':
+                    return action.payload;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
     
 </script>
 
@@ -241,6 +254,9 @@ i.e counter(state = 2, action) = {couter: 2}
                 case 'profile-credential-add-form/toggle':
                     return !state;
                     break;
+                case 'profile-credential-add-form/off':
+                    return false;
+                    break;
                 default:
                     return state;
                     break;
@@ -253,6 +269,9 @@ i.e counter(state = 2, action) = {couter: 2}
                 case 'profile-credential-edit-form/toggle':
                     return !state;
                     break;
+                case 'profile-credential-edit-form/off':
+                    return false;
+                    break;
                 default:
                     return state;
                     break;
@@ -264,6 +283,9 @@ i.e counter(state = 2, action) = {couter: 2}
             switch (action.type) {
                 case 'profile-experience-add-form/toggle':
                     return !state;
+                    break;
+                case 'profile-experience-add-form/off':
+                    return false;
                     break;
                 default:
                     return state;
@@ -292,6 +314,9 @@ i.e counter(state = 2, action) = {couter: 2}
                 case 'profile-experience-edit-form/toggle':
                     return !state;
                     break;
+                case 'profile-experience-edit-form/off':
+                    return false;
+                    break;
                 default:
                     return state;
                     break;
@@ -305,6 +330,21 @@ i.e counter(state = 2, action) = {couter: 2}
                     return !state;
                     break;
                 case 'profile-experience-edit-form-is-current/off':
+                    return false;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+    store.addReducer(
+        function showReferenceAddForm(state = false, action) {
+            switch (action.type) {
+                case 'profile-reference-add-form/toggle':
+                    return !state;
+                    break;
+                case 'profile-reference-add-form/off':
                     return false;
                     break;
                 default:

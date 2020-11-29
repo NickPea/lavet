@@ -216,6 +216,7 @@
         //show add form on add button click
         credentialAddButton.addEventListener('click', () => {
             store.publish({type: 'profile-credential-add-form/toggle'})
+            store.publish({type: 'profile-credential-edit-form/off'})
         });
 
         //close add form on cancel 

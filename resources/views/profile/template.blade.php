@@ -30,17 +30,6 @@
 <div class="container py-5">
 
 
-
-    <div class="row mb-3">
-        <div class="col">
-
-            <!-- button-bar -->
-            @include('profile.components.button-bar')
-
-        </div>
-    </div>
-
-
     <div class="row mb-5">
         <div class="col">
 
@@ -53,7 +42,7 @@
 
     <!-- squeezers -->
     <div class="row">
-        <div class="col-8 offset-2">
+        <div class="col-8">
 
 
             <!-- inner row -->
@@ -106,8 +95,21 @@
             </div> <!-- //inner row -->
 
 
-        </div>
-    </div>
+        </div><!-- //col -->
+
+        <div class="col-4">
+
+            <!-- inner row -->
+            <div class="row mb-3">
+                <div class="col">
+
+                    {{-- @include('profile.components.button-bar') --}}
+
+                </div>
+            </div><!-- //inner row -->
+
+        </div><!-- //col -->
+    </div><!-- //row -->
 
 
 </div> <!-- end container -->

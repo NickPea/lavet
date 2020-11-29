@@ -9,6 +9,7 @@ class Reference extends Model
     //
     /** properties */
     protected $guarded = [];
+    
 
     /** methods */
 

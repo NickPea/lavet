@@ -36,6 +36,7 @@ Route::get('profile/{profile}/location', 'ProfileController@retrieveProfileLocat
 Route::get('profile/{profile}/about', 'ProfileController@retrieveProfileAbout'); 
 Route::get('profile/{profile}/credential', 'ProfileController@retrieveProfileCredential'); 
 Route::get('profile/{profile}/experience', 'ProfileController@retrieveProfileExperience'); 
+Route::get('profile/{profile}/reference', 'ProfileController@retrieveProfileReference'); 
 
 // -- update
 Route::put('profile/{profile}/image', 'ProfileController@updateProfileImage'); 
@@ -46,6 +47,7 @@ Route::put('profile/{profile}/position', 'ProfileController@updateProfilePositio
 Route::put('profile/{profile}/location', 'ProfileController@updateProfileLocation'); 
 Route::put('profile/{profile}/credential', 'ProfileController@updateProfileCredential'); 
 Route::put('profile/{profile}/experience', 'ProfileController@updateProfileExperience'); 
+Route::put('profile/{profile}/reference', 'ProfileController@updateOrCreateProfileReference');
 
 // -- store
 Route::post('profile/{profile}/file-image', 'ProfileController@storeProfileFileImage');
@@ -53,7 +55,6 @@ Route::post('profile/{profile}/camera-image', 'ProfileController@storeProfileCam
 Route::post('profile/{profile}/location', 'ProfileController@storeProfileLocation');
 Route::post('profile/{profile}/credential', 'ProfileController@storeProfileCredential');
 Route::post('profile/{profile}/experience', 'ProfileController@storeProfileExperience');
-Route::post('profile/{profile}/reference', 'ProfileController@storeProfileReference');
 
 // --destroy
 Route::delete('profile/{profile}/credential', 'ProfileController@destroyProfileCredential');
