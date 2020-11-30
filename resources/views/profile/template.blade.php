@@ -4,10 +4,6 @@
 {{-- HEAD --}}
 @push('head')
 
-<title>
-    {{$profile->user->name.' | '.config('app.name', 'ERROR')}}
-</title>
-
 <!-- Page Styles -->
 @include('profile.styles.page')
 
@@ -15,12 +11,17 @@
 @include('profile.scripts.state.store')
 @include('profile.scripts.state.reducers')
 
+<!-- title -->
+<title>
+    {{$profile->user->name.' | '.config('app.name', 'ERROR')}}
+</title>
 
 @endpush
 
 
 {{-- BODY --}}
 @push('body')
+
 
 <!-- Modals -->
 @include('profile.components.profile-image-modal')
@@ -117,6 +118,7 @@
 
 <!-- Endpoints -->
 @include('profile.scripts.endpoints')
-@include('profile.scripts.state.hydrate')
+<!-- Hydrate store on initial load -->
+@include('profile.scripts.hydrate')
 
 @endpush

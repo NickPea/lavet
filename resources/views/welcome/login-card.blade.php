@@ -1,10 +1,19 @@
-{{-- 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button> --}}
+{{--  --}}
 
 
-@guest
+
+<style>
+
+
+
+</style>
+
+
+
+{{-- ------------------------------------------------------------------------------------------ --}}
+
+
+
 <div class="card shadow-lg rounded-lg">
     <div class="card-body">
 
@@ -53,4 +62,14 @@
     </div><!-- //card-body -->
 </div><!-- //card -->
 
-@endguest
+
+
+{{-- ------------------------------------------------------------------------------------------ --}}
+
+
+
+<script>
+
+
+
+</script>

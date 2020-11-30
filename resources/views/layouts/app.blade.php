@@ -24,7 +24,7 @@
 
     @stack('body')
 
-
+    
 
     
     <!-- Footer -->

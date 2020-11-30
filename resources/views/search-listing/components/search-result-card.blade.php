@@ -1,11 +1,10 @@
+{{--  --}}
 
 
 
 
 
-<small>Job</small>
-
-<a class="text-reset text-decoration-none" href={{$model->path()}}>
+<a class="text-reset text-decoration-none" href={{url($model->path())}}>
     <div class="card rounded-lg hover">
         <div class="card-header">
             {{$model->position->implode('name', ', ')}}

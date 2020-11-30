@@ -1,9 +1,35 @@
+{{--  --}}
+
+
+<style>
+    .auth-avatar {
+        border-radius: 5rem;
+        width: 3rem;
+        height: 3rem;
+        object-fit: cover;
+        border-radius: 50%;
+        transition: 200ms;
+    }
+
+    .auth-avatar:hover {
+        box-shadow: 0 0 1px 0.3rem lightgrey;
+    }
+</style>
+
+
+<!-- ------------------------------------------------------------------------------------------ -->
+
+
 
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="height: 12vh">
     <div class="container">
-        <a class="navbar-brand" style="color:salmon;" href="{{ url('/') }}">
-            {{ config('app.name', 'Laravel') }}
-        </a>
+
+        <div class="d-flex flex-column">
+            <a class="navbar-brand m-0 p-0" style="color:salmon;" href="{{ url('/') }}">
+                {{ config('app.name', 'Laravel') }}
+            </a>
+        </div>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
@@ -20,18 +46,14 @@
                 <!-- Authentication Links -->
                 @guest
 
-                @if (url()->current() !== url('/'))
                 <!-- hide login dropdown -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                 </li>
-                @endif
 
-                @if (url()->current() !== url('/'))
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                 </li>
-                @endif
                 @else
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link" data-toggle="dropdown">
@@ -55,16 +77,15 @@
     </div>
 </nav>
 
-<style>
-    .auth-avatar {
-        border-radius: 5rem;
-        width: 3rem;
-        height: 3rem;
-        object-fit: cover;
-        border-radius: 50%;
-        transition: 200ms;
-    }
-    .auth-avatar:hover {
-        box-shadow: 0 0 1px 0.3rem lightgrey;
-    }
-</style>
+
+<!-- ------------------------------------------------------------------------------------------ -->
+
+
+
+<script>
+
+
+
+
+
+</script>

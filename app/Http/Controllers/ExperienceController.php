@@ -82,11 +82,6 @@ class ExperienceController extends Controller
      */
     public function destroy(Experience $experience)
     {
-        $message = [
-            'id' => $experience->id,
-            'is_deleted' => $experience->delete()
-        ];
-        
-        return response($message, 200);
+        //
     }
 }

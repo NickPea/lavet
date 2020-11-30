@@ -1,9 +1,7 @@
-
+{{--  --}}
 
     
-    <small>Profile</small>
-    
-    <a class="text-reset text-decoration-none" href={{$model->path()}}>
+    <a class="text-reset text-decoration-none" href={{url($model->path())}}>
         <div class="card rounded-lg hover">
             <div class="position-relative">
                 
