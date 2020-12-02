@@ -34,15 +34,31 @@
 @push('body')
 
 
-<!-- Components -->
-@include('search-event.components.search-bar')
+<div class="container">
 
-@include('search-event.components.search-results')
+    <!-- Components -->
+
+    @include('search-event.components.back-to-top-button')
+    
+    <div class="row my-5">
+        <div class="col">
+            @include('search-event.components.search-bar')
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col">
+            @include('search-event.components.search-results')
+        </div>
+        <div class="col-4">
+            @include('search-event.components.side-navigation')
+        </div>
+    </div>
+
+</div>
 
 
 @endpush
 
 
 {{-- -------------------------------------------------------------------------------- --}}
-
-

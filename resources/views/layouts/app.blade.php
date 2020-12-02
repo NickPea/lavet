@@ -12,6 +12,9 @@
     <!-- Bunndled Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    <!-- App Styles -->
+    @include('layouts.styles.page')
+
     @stack('head')
 
 </head>
