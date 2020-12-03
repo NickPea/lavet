@@ -14,25 +14,31 @@ class SearchController extends Controller
     // profile-results
     public function retrieveSearchProfile(Request $request)
     {
+        $request->flash();
+
         $results = $this->getProfileResults($request);
 
-        return view( 'search-profile.template', ['results' => $results]);
+        return view('search-profile.template', ['results' => $results]);
     }
 
     //listing-results
     public function retrieveSearchListing(Request $request)
     {
+        $request->flash();
+
         $results = $this->getListingResults($request);
 
-        return view( 'search-listing.template', ['results' => $results]);
+        return view('search-listing.template', ['results' => $results]);
     }
 
     //event-results
     public function retrieveSearchEvent(Request $request)
     {
+        $request->flash();
+
         $results = $this->getEventResults($request);
 
-        return view( 'search-event.template', ['results' => $results]);
+        return view('search-event.template', ['results' => $results]);
     }
 
 
@@ -49,7 +55,7 @@ class SearchController extends Controller
         $where = $request->where;
 
         return Listing::select('*')
-            /** $keyword */
+            /** $what */
             ->when(isset($what), function ($query) use ($what) {
                 $query
                     ->where('title', 'like', "%{$what}%")
@@ -76,7 +82,7 @@ class SearchController extends Controller
                         $query->where('name', 'like', "%{$what}%");
                     });
             })
-            /** location */
+            /** $where */
             ->when(isset($where), function ($query) use ($where) {
                 $query
                     ->whereHas('location', function ($query) use ($where) {
@@ -94,7 +100,7 @@ class SearchController extends Controller
                             });
                     });
             })
-            ->get();
+            ->paginate(10);
     } //getListingResults()
 
 
@@ -107,7 +113,7 @@ class SearchController extends Controller
         $where = $request->where;
 
         return Profile::select('*')
-            /** $keyword */
+            /** $what */
             ->when(isset($what), function ($query) use ($what) {
                 $query
                     ->where('work_status', 'like', "%{$what}%")
@@ -122,7 +128,7 @@ class SearchController extends Controller
                         $query->where('name', 'like', "%{$what}%");
                     });
             })
-            /** location */
+            /** $where */
             ->when(isset($where), function ($query) use ($where) {
                 $query
                     ->whereHas('location', function ($query) use ($where) {
@@ -140,7 +146,7 @@ class SearchController extends Controller
                             });
                     });
             })
-            ->get();
+            ->paginate(10);
     } //getProfileResults()
 
 
@@ -153,7 +159,7 @@ class SearchController extends Controller
         $where = $request->where;
 
         return Event::select('*')
-            /** $keyword */
+            /** $what */
             ->when(isset($what), function ($query) use ($what) {
                 $query
                     ->where('title', 'like', "%{$what}%")
@@ -176,7 +182,7 @@ class SearchController extends Controller
                             });
                     });
             })
-            /** location */
+            /** where */
             ->when(isset($where), function ($query) use ($where) {
                 $query
                     ->whereHas('location', function ($query) use ($where) {
@@ -194,8 +200,8 @@ class SearchController extends Controller
                             });
                     });
             })
-            ->get();
-    }//getEventResults()
+            ->paginate(10);
+    } //getEventResults()
 
 
 }//controller

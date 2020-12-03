@@ -4,9 +4,7 @@
 
 
 <style>
-
-
-.content-wrapper {
+    .content-wrapper {
         /* box-shadow: 1px 1px 1rem darksalmon; */
         background: rgb(230, 230, 230);
         border-radius: 1rem;
@@ -18,6 +16,4 @@
         background: rgb(240, 240, 240);
         /* box-shadow: 1px 1px 10px grey; */
     }
-
-    
 </style>

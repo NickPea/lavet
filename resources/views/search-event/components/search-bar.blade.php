@@ -64,7 +64,8 @@
                     <!-- what -->
                     <div class="position-relative form-group m-0 col-6">
                         <label class="sr-only" for="what">what</label>
-                        <input name="what" id="what" placeholder="search..." autofocus
+                        <input name="what" id="what" value="{{old('what')}}"
+                            placeholder="search..." autofocus
                             class="form-control form-control-lg pl-5">
                         <span class="position-absolute" style="top:0.7rem; left:1.5rem;">
                             @include('svg.search')
@@ -74,7 +75,8 @@
                     <!-- where -->
                     <div class="position-relative form-group m-0 col">
                         <label class="sr-only" for="where">where</label>
-                        <input name="where" id="where" placeholder="location..." class="form-control form-control-lg pl-5">
+                        <input name="where" id="where" value="{{old('where')}}"
+                            placeholder="location..." class="form-control form-control-lg pl-5">
                         <span class="position-absolute" style="top:0.7rem; left:1.5rem;">
                             @include('svg.searchlocation')
                         </span>

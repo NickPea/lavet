@@ -40,33 +40,35 @@
 
         @foreach ($results as $event)
 
-        <a href="#{{$event->id}}" class="text-decoration-none text-reset">
-
-            <div class="card my-2 hover">
-                <div class="card-body">
-
-                    <div class="row">
-                        <div class="col">
-
-
-                            <div class="d-flex p-1">
-                                <img src="{{$event->image->first()->path}}" alt="" class="event-index-image">
-                                <div class="d-flex flex-column align-items-start ml-2">
-                                    <h6 class="m-0">{{$event->title}}</h6>
-                                    <small
-                                        class="mt-auto text-muted">{{$event->start_at->format('D, M d, g:ma')}}</small>
+        <div id="{{'index-'.$event->id}}" data-intersection-observer="index-card">
+            <a href="#{{$event->id}}" class="text-decoration-none text-reset">
+    
+                <div class="card my-2 hover">
+                    <div class="card-body">
+    
+                        <div class="row">
+                            <div class="col">
+    
+    
+                                <div class="d-flex p-1">
+                                    <img src="{{$event->image->first()->path}}" alt="" class="event-index-image">
+                                    <div class="d-flex flex-column align-items-start ml-2">
+                                        <h6 class="m-0">{{$event->title}}</h6>
+                                        <small
+                                            class="mt-auto text-muted">{{$event->start_at->format('D, M d, g:ma')}}</small>
+                                    </div>
                                 </div>
-                            </div>
-
-
-
-                        </div><!-- //col -->
-                    </div><!-- //row -->
-
+    
+    
+    
+                            </div><!-- //col -->
+                        </div><!-- //row -->
+    
+                    </div>
                 </div>
-            </div>
-
-        </a>
+    
+            </a>
+        </div>
 
         @endforeach
 
@@ -88,8 +90,17 @@
 <script>
     function SideNavigation() {
 
-        // let blah = document.querySelector('[data-js="search-event-side-nav"]')
-        // !blah && console.error('dom query not found')
+        let indexWrapper = document.querySelector('[data-js="search-event-index-wrapper"]')
+
+        //automatically scroll index to top and bottom of when page scrolled to each end
+        window.addEventListener('scroll', () => {
+            if (window.scrollY == 0) {
+                indexWrapper.scrollTop = 0;
+            }
+            if (window.scrollY == document.documentElement.scrollHeight - window.innerHeight || window.scrollY == document.body.scrollHeight - window.innerHeight) {
+                indexWrapper.scrollTo(0, indexWrapper.scrollHeight);
+            }
+        });
 
     }
     SideNavigation();

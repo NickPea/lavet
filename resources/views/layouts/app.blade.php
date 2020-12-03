@@ -32,7 +32,7 @@
     
     <!-- Footer -->
     <footer>
-        <div class="row mt-5" style="height: 80vh">
+        <div class="row mt-5">
             <div class="col">
                 <hr>
             </div>

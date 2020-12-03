@@ -2,15 +2,15 @@
 
 
 
-    <section id="{{$model->id}}">
+    <section id="{{$model->id}}" data-intersection-observer="result-card">
         <a class="text-reset text-decoration-none" href={{url($model->path())}}>
     
             <!-- card -->
-            <div class="card rounded-lg hover">
+            <div class="card rounded-lg">
     
                 <!-- image top -->
                 <div class="position-relative">
-                    <img class="card-img-top" style="height: 25%" src={{asset($model->image->first()->path)}} alt="">
+                    <img loading="lazy" class="card-img-top" style="height: 25%" src={{asset($model->image->first()->path)}} alt="">
                     <div class="position-absolute d-flex flex-column" style="top:5px; left:5px;">
                         @forelse ($model->tag as $tag)
                         <small style="margin-bottom: 2px;">
@@ -48,7 +48,7 @@
                     <div>
                         <span style="margin-right:15px">
                             @forelse ($model->rsvp->map->user->take(3) as $user)
-                            <img style="object-fit:cover; margin-right:-15px; border-radius: 50%; width:35px; height:35px; border: 3px solid white;"
+                            <img loading="lazy" style="object-fit:cover; margin-right:-15px; border-radius: 50%; width:35px; height:35px; border: 3px solid white;"
                                 src={{$user->profile->image->first()->path}} alt="user image">
                             @empty
                             (0) Attending
