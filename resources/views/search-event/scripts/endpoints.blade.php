@@ -11,7 +11,7 @@
     function getEarlyResultCount(form) {
         let formData = new FormData(form)
 
-        let url = new URL(`${window.location.origin}/search/listing/count`);
+        let url = new URL(`${window.location.origin}/search/event/count`);
         url.searchParams.append('what', formData.get('what'));
         url.searchParams.append('where', formData.get('where'));
         

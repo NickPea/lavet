@@ -16,4 +16,14 @@
         transform: translateY(-2px);
         transition: 50ms ease-in;
     }
+
+    * {
+        scroll-behavior: smooth;
+    }
+
+    .sticky-nav {
+        position: sticky;
+        top: 7rem;
+        z-index: 9999999999999999;
+    }
 </style>

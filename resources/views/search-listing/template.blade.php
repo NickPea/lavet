@@ -19,10 +19,10 @@
 @include('search-listing.styles.page')
 
 <!-- Scripts -->
-@include('search-listing.scripts.store')
-@include('search-listing.scripts.reducers')
+@include('search-listing.scripts.intersection-observer')
 @include('search-listing.scripts.endpoints')
-@include('search-listing.scripts.hydrate')
+@include('search-listing.scripts.hash-clear-on-reload')
+
 
 
 @endpush
@@ -33,16 +33,29 @@
 
 @push('body')
 
-
-<!-- Components -->
 @include('search-listing.components.search-bar')
 
-@include('search-listing.components.search-results')
+<div class="container">
+    <!-- Components -->
+
+    @include('search-listing.components.top-bottom-buttons')
+    
+    
+      
+    
+    <div class="row my-5">
+        <div class="col">
+            @include('search-listing.components.results')
+        </div>
+        <div class="col-4">
+            @include('search-listing.components.index-navigation')
+        </div>
+    </div>
+    
+</div>
 
 
 @endpush
 
 
 {{-- -------------------------------------------------------------------------------- --}}
-
-

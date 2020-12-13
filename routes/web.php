@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 
+//HOME
+Route::get('/', 'HomeController@retrieveTemplate');
+
+
 // SEARCH
 
 // --retrieve
@@ -24,6 +28,8 @@ Route::get('search/listing', 'SearchController@retrieveSearchListing');
 Route::get('search/profile', 'SearchController@retrieveSearchProfile');
 Route::get('search/event', 'SearchController@retrieveSearchEvent');
 
+// --retrieve counts
+Route::get('search/event/count', 'SearchController@retrieveSearchEventCount');
 
 
 // PROFILE

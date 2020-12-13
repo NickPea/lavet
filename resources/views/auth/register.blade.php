@@ -1,7 +1,61 @@
+{{--  --}}
+
+
+
 @extends('layouts.app')
 
 
 @push('body')
+
+
+
+<style>
+    /* form wizard */
+
+    #js-header-one,
+    #js-header-two {
+        display: none;
+    }
+    #js-buttons-one,
+    #js-buttons-two {
+        display: none;
+    }
+    #js-steps {
+        position: relative;
+        overflow: hidden;
+        height: 300px;
+    }
+    #js-step-one,
+    #js-step-two {
+        position: absolute;
+        width: 100%;
+    }
+    /* image overlay */
+    #css-image-upload-overlay-wrapper #css-image-upload-overlay {
+        opacity: 0;
+    }
+    #css-image-upload-overlay-wrapper:hover #css-image-upload-overlay {
+        opacity: 1;
+    }
+    #css-image-upload-overlay-wrapper:hover {
+        transform: translate(-3px, -3px);
+    }
+    #css-image-upload-overlay-wrapper:active {
+        transform: translate(-1px, -1px);
+    }
+    /* mdn code for hiding input*/
+    .visually-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
+</style>
+
+
+{{-- ------------------------------------------------------------------------------------------- --}}
+
 
 <div class="container" style="height: 100vh">
     <div class="row">
@@ -206,72 +260,10 @@
     </div><!-- //row -->
 </div><!-- //container -->
 
-@endpush
 
 
+{{-- ------------------------------------------------------------------------------------------------ --}}
 
-
-@push('head')
-
-<style>
-    /* form wizard */
-
-    #js-header-one,
-    #js-header-two {
-        display: none;
-    }
-
-    #js-buttons-one,
-    #js-buttons-two {
-        display: none;
-    }
-
-    #js-steps {
-        position: relative;
-        overflow: hidden;
-        height: 300px;
-    }
-
-    #js-step-one,
-    #js-step-two {
-        position: absolute;
-        width: 100%;
-    }
-
-
-    /* image overlay */
-    #css-image-upload-overlay-wrapper #css-image-upload-overlay {
-        opacity: 0;
-    }
-
-    #css-image-upload-overlay-wrapper:hover #css-image-upload-overlay {
-        opacity: 1;
-    }
-
-    #css-image-upload-overlay-wrapper:hover {
-        transform: translate(-3px, -3px);
-    }
-
-    #css-image-upload-overlay-wrapper:active {
-        transform: translate(-1px, -1px);
-    }
-
-    /* mdn code for hiding input*/
-    .visually-hidden {
-        position: absolute !important;
-        height: 1px;
-        width: 1px;
-        overflow: hidden;
-        clip: rect(1px, 1px, 1px, 1px);
-    }
-</style>
-
-@endpush
-
-
-
-
-@push('scripts')
 
 <script>
     'use strict'
@@ -350,6 +342,7 @@
         document.querySelector('#js-file-input-image').src = URL.createObjectURL(e.target.files[0]);
         });
 </script>
+
 
 
 @endpush

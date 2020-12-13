@@ -40,6 +40,14 @@ class SearchController extends Controller
 
         return view('search-event.template', ['results' => $results]);
     }
+   
+    //event-result-count
+    public function retrieveSearchEventCount(Request $request)
+    {
+        $result = $this->getEventResults($request);
+
+        return response($result->total(), 200);
+    }
 
 
 
@@ -200,7 +208,7 @@ class SearchController extends Controller
                             });
                     });
             })
-            ->paginate(10);
+            ->paginate(5);
     } //getEventResults()
 
 

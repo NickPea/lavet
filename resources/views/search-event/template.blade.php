@@ -20,6 +20,8 @@
 
 <!-- Scripts -->
 @include('search-event.scripts.intersection-observer')
+@include('search-event.scripts.endpoints')
+@include('search-event.scripts.hash-clear-on-reload')
 
 
 
@@ -31,24 +33,22 @@
 
 @push('body')
 
+@include('search-event.components.search-bar')
 
 <div class="container">
     <!-- Components -->
 
-    @include('search-event.components.scroll-top-scroll-bottom-buttons')
+    @include('search-event.components.top-bottom-buttons')
+    
+    
+      
     
     <div class="row my-5">
         <div class="col">
-            @include('search-event.components.search-bar')
+            @include('search-event.components.results')
         </div>
-    </div>
-    
-    <div class="row my-5">
         <div class="col-4">
-            @include('search-event.components.side-navigation')
-        </div>
-        <div class="col">
-            @include('search-event.components.search-results')
+            @include('search-event.components.index-navigation')
         </div>
     </div>
     

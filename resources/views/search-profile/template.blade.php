@@ -19,10 +19,10 @@
 @include('search-profile.styles.page')
 
 <!-- Scripts -->
-@include('search-profile.scripts.store')
-@include('search-profile.scripts.reducers')
+@include('search-profile.scripts.intersection-observer')
 @include('search-profile.scripts.endpoints')
-@include('search-profile.scripts.hydrate')
+@include('search-profile.scripts.hash-clear-on-reload')
+
 
 
 @endpush
@@ -33,16 +33,29 @@
 
 @push('body')
 
-
-<!-- Components -->
 @include('search-profile.components.search-bar')
 
-@include('search-profile.components.search-results')
+<div class="container">
+    <!-- Components -->
+
+    @include('search-profile.components.top-bottom-buttons')
+    
+    
+      
+    
+    <div class="row my-5">
+        <div class="col">
+            @include('search-profile.components.results')
+        </div>
+        <div class="col-4">
+            @include('search-profile.components.index-navigation')
+        </div>
+    </div>
+    
+</div>
 
 
 @endpush
 
 
 {{-- -------------------------------------------------------------------------------- --}}
-
-
