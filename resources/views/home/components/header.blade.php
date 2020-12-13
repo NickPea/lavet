@@ -6,9 +6,6 @@
     .image-background {
         background: url('https://lavet.test/front-header.jpg') no-repeat;
         background-size: cover;
-        height: 80vh;
-        width: 100%;
-        position: relative;
     }
 
     .image-shade {
@@ -21,7 +18,7 @@
 <!-- ---------------------------------------------------------------------------------------- -->
 
 
-<div class="image-background">
+<div class="position-relative w-100 image-background" style="height: 80vh">
     <div class="image-shade"></div>
 
     <div class="position-absolute w-100 h-100" style="top:0; z-index:9999999;">
@@ -42,8 +39,8 @@
                     <a class="text-reset ml-5" href="search/listing">jobs</a>
                     <a class="text-reset ml-5" href="search/profile">people</a>
 
-                    <a href="/login" class="text-reset ml-auto">Login</a>
-                    <button href="/register" class="btn btn-outline-success text-white ml-5">Join In</button>
+                    <button href="/register" class="btn btn-outline-success text-white ml-auto">Join In</button>
+                    <a href="/login" class="text-reset ml-5">Login</a>
 
                 </div>
 
@@ -52,9 +49,9 @@
 
         <div class="row h-75">
             <div class="col h-100">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    <h1 class="text-white">Where the veterinary community takes a break.</h1>
-                </div>
+                    <div class="d-flex justify-content-center align-items-end h-100 p-5">
+                        <h1 class="text-white">Where the veterinary community comes together.</h1>
+                    </div>
             </div><!-- //col -->
         </div><!-- //row -->
 

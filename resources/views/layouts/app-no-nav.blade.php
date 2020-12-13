@@ -25,17 +25,6 @@
 
     @stack('body')
 
-    
-
-    
-    <!-- Footer -->
-    <footer>
-        <div class="row mt-5">
-            <div class="col">
-                <hr>
-            </div>
-        </div>
-    </footer>
 
 
     <!-- Bundled Script -->
