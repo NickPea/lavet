@@ -3,33 +3,31 @@
 
 
 <style>
-
-
-.banner-wrapper {
+    .banner-wrapper {
         /* background-image: linear-gradient(to bottom right, rgb(18, 136, 18), darkgreen); */
-        background-color: white;
-        padding: 5rem;
+        background-color: rgb(230, 230, 230);
         text-align: center;
     }
-.banner-wrapper > * {
-    margin: 0;
-}
-.banner-wrapper span {
-    color: green;
-    font-weight: 500;
 
-    /* fade in prep */
-    opacity: 0;
-    transition: 2s;
-}
-
+    .banner-wrapper span {
+        color: green;
+        /* fade in prep */
+        opacity: 0;
+        transition: 2s ease;
+    }
 </style>
 
 <!-- ---------------------------------------------------------------------------------------- -->
 
 
 <div class="banner-wrapper">
-    <h2>and yes, <span data-js="banner-span">it's all Free!</span></h2>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col">
+                <h2>and yes, of course <span data-js="banner-span">"it's all free!"</span></h2>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -38,7 +36,6 @@
 
 
 <script>
-
     function Banner() {
         let bannerSpan = document.querySelector('[data-js="banner-span"]');
         !bannerSpan && console.error('dom query not found');
