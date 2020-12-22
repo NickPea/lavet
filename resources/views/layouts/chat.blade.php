@@ -20,12 +20,12 @@
 <script>
     function ChatSocket() {
 
-
         /**
          * -------------------------------SOCKET-CLIENT--------------------------------------
          */
 
-         let userHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
+        let userEmailHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
+        //todo: store in database user table on registration
 
             // ----------------- Connect -------------------------
             const socket = io('http://localhost:5000');
@@ -33,18 +33,17 @@
             // ----------------- Events -------------------------
             
             socket.on('connect', () => {
-                console.error(`-- CONNECT -- \n socket: ${socket.id}`);
-                socket.emit('map-user', {userHash: userHash});
-                console.error(`-- MAP-USER -- \n userHash: ${userHash}`);
+                console.error(`-- CONNECT -- \n socket.id: ${socket.id}`);
+                socket.emit('map-socket-user', {userEmailHash: userEmailHash});
+                console.error(`-- MAP-SOCKET-USER -- \n userEmailHash: ${userEmailHash}`);
             });
 
             socket.on('disconnect', (reason) => {
-                console.error(`-- DISCONNECT -- ${reason} \n socket: ${socket.id}, userHash: ${userHash} `);
+                console.error(`-- DISCONNECT -- ${reason} \n socket: ${socket.id}, userEmailHash: ${socket.userEmailHash} `);
             });
 
 
         }//ChatSocket()
         document.addEventListener('DOMContentLoaded', ChatSocket);
-
 
 </script>

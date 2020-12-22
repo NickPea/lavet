@@ -1,20 +1,16 @@
-
-
 // J-Query/Popper/Bootstrap
 try {
-    window.Popper = require('popper.js').default;
+    window.Popper = require("popper.js").default;
     // window.$ = window.jQuery = require('jquery');
-    require('bootstrap');   
-} catch (error) { }
+    require("bootstrap");
+} catch (error) {}
 
 // Axios
-window.axios = require('axios');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios = require("axios");
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 // Lodash
-window._ = require('lodash');
+window._ = require("lodash");
 
 // Socket.io-client
-window.io = require('socket.io-client');
-
-
+window.io = require("socket.io-client");
