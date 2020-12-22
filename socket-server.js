@@ -15,7 +15,9 @@ const IO = require("socket.io");
 const redisSub = new Redis();
 const redisPub = new Redis();
 const redisCmd = new Redis();
+
 const httpServer = HTTP.createServer();
+
 const io = IO(httpServer, {
     //CORS
     serveClient: false,
@@ -24,16 +26,17 @@ const io = IO(httpServer, {
         methods: ["GET", "POST"]
     }
 });
+
 httpServer.listen(5000);
 
 // ----------------- Connection -------------------------
-io.on("connection", (socket) => {
-    console.log(`-- SOCKET:CONNECT -- \nsocket.id: ${socket.id}`);
+io.on("connection", (currentSocket) => {
+    console.log(`-- SOCKET:CONNECT -- \nsocket.id: ${currentSocket.id}`);
 
     // ----------------- Events -------------------------
 
-    socket.on("map-socket-user", async (data) => {
-        redisCmd.set(data.userEmailHash, socket.id);
+    currentSocket.on("map-socket-user", async (data) => {
+        redisCmd.set(data.userEmailHash, currentSocket.id);
         console.log(
             `-- REDIS:MAP-SOCKET-USER -- \nredis-user-socket-mapping: {${
                 data.userEmailHash
@@ -41,14 +44,14 @@ io.on("connection", (socket) => {
         );
     });
 
-    socket.on("disconnect", (reason) => {
+    currentSocket.on("disconnect", (reason) => {
         console.log(
-            `-- SOCKET:DISCONNECT -- ${reason} \nsocket.id:${socket.id} \nsocket.userHash:${socket.userEmailHash}`
+            `-- SOCKET:DISCONNECT -- ${reason} \nsocket.id:${currentSocket.id} \nsocket.userHash:${currentSocket.userEmailHash}`
         );
         //todo:remove redis user-socket-mapping
     });
 
-    redisSub.subscribe(["socket-out-user", "socket-out-all"], (err, count) => {
+    redisSub.subscribe(["socket-out"], (err, count) => {
         err
             ? console.log(`-- REDIS:SUBCRIBED -- \nerror:${err}`)
             : console.log(`-- REDIS:SUBCRIBED -- \ncount:${count}`);
@@ -59,39 +62,30 @@ io.on("connection", (socket) => {
         err
             ? console.log(`-- REDIS:PUBLISH -- \nerror:${err}`)
             : console.log(
-                  `-- REDIS:PUBLISH -- \nchannel:socket-out-user, sent:${
-                      res ? true : false
-                  }`
-              );
-    });
-    redisPub.publish("socket-out-all", "handshake", (err, res) => {
-        err
-            ? console.log(`-- REDIS:PUBLISH -- \nerror:${err}`)
-            : console.log(
-                  `-- REDIS:PUBLISH -- \nchannel:socket-out-all, sent:${
-                      res ? true : false
-                  }`
+                  `-- REDIS:PUBLISH -- \nchannel:socket-out-user, numberOfClientsRecieved:${res}`
               );
     });
 
-    redisSub.on("message", async (channel, message) => {
+    redisSub.on("message", async (redisChannel, redisMessage) => {
         console.log(
-            `-- REDIS:ON-MESSAGE -- \nchannel: ${channel}, message:${message}`
+            `-- REDIS:ON-MESSAGE -- \nchannel: ${redisChannel}, message:${redisMessage}`
         );
-
-        switch (channel) {
-            case "socket-out-user":
-                console.log(
-                    `-- REDIS:ON-MESSAGE -- \nchannel: ${channel}, message:${message}`
-                );
-                //get userEmailHash from  message
-                //get socket-id from redis using userEmailHash
-                //socket.emit message data to user using socket-id
-                break;
-            default:
-                break;
-        }
+        handleSocketOutMessage(currentSocket, redisChannel, redisMessage);
     });
 
     // socket.disconnect();
 }); //ioOnConnection
+
+
+// ----------------- Helper Functions -------------------------
+
+let handleSocketOutMessage = async function(currentSocket, redisChannel, redisMessage) {
+    if (redisChannel == "socket-out") {
+        // de-serialize
+        let data = JSON.parse(redisMessage);
+        // get socket.id from redis mapping
+        let socketId = await redisCmd.get(data.userEmailHash);
+        //send message data to socket.io room
+        currentSocket.to(socketId).emit("message", data.socketMessage);
+    }
+};

@@ -42,6 +42,10 @@
                 console.error(`-- DISCONNECT -- ${reason} \n socket: ${socket.id}, userEmailHash: ${socket.userEmailHash} `);
             });
 
+            socket.on('message', (socketMessage) => {
+                console.error(socketMessage);
+            });
+
 
         }//ChatSocket()
         document.addEventListener('DOMContentLoaded', ChatSocket);

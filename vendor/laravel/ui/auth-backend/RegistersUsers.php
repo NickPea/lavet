@@ -2,12 +2,10 @@
 
 namespace Illuminate\Foundation\Auth;
 
-use App\Image;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 trait RegistersUsers
 {
@@ -42,8 +40,8 @@ trait RegistersUsers
         }
 
         return $request->wantsJson()
-            ? new JsonResponse([], 201)
-            : redirect($this->redirectPath());
+                    ? new JsonResponse([], 201)
+                    : redirect($this->redirectPath());
     }
 
     /**
@@ -65,23 +63,6 @@ trait RegistersUsers
      */
     protected function registered(Request $request, $user)
     {
-        $user->profile()->create([
-            'work_status' => $request->work_status,
-        ]);
-
-        $user->save();
-
-        $path = $request->file('file')->store($user->email);
-
-        $image = Image::create([
-            'path' => $path,
-            'user_id' => $user->id,
-        ]);
-
-        $user->profile->image()->sync($image->id);
-
-        $user->save();
+        //
     }
-
-    
 }
