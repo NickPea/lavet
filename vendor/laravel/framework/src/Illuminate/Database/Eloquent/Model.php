@@ -2,6 +2,7 @@
 
 namespace Illuminate\Database\Eloquent;
 
+use App\Traits\ModelTestingHelper;
 use ArrayAccess;
 use Exception;
 use Illuminate\Contracts\Queue\QueueableCollection;
@@ -30,6 +31,7 @@ abstract class Model implements Arrayable, ArrayAccess, Jsonable, JsonSerializab
         Concerns\HidesAttributes,
         Concerns\GuardsAttributes,
         ForwardsCalls;
+    use ModelTestingHelper;
 
     /**
      * The connection name for the model.

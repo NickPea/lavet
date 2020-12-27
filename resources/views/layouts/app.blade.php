@@ -25,8 +25,6 @@
 
     @include('layouts.navbar')
 
-    @include('layouts.chat')
-
     @stack('body')
 
     

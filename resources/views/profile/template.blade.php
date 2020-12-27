@@ -101,10 +101,10 @@
         <div class="col-4">
 
             <!-- inner row -->
-            <div class="row mb-3">
+            <div class="row mb-3 h-100">
                 <div class="col">
 
-                    {{-- @include('profile.components.button-bar') --}}
+                    @include('profile.components.button-bar')
 
                 </div>
             </div><!-- //inner row -->
@@ -115,6 +115,7 @@
 
 </div> <!-- end container -->
 
+@include('profile.components.chat')
 
 <!-- Endpoints -->
 @include('profile.scripts.endpoints')

@@ -469,4 +469,34 @@ function destroyProfileExperience(form) {
 
 
 
+
+// -- CHAT
+// -------------------------------------------------------------------------------------------------
+
+// -- post & get
+function sendAndRefreshProfileChatMessages(form) {
+    let formData = new FormData(form);
+    let url = new URL(`${window.location.href}/chat`);
+
+    fetch(url, {
+        method: 'POST', 
+        body: formData,
+    })
+    .then(res => {
+        switch (res.status) {
+            case 201 : {
+                res.text().then(arrOfObj => {
+                    store.publish({type: 'chat/refresh', payload: arrOfObj });
+                });
+                break;
+                }
+            default: {
+                throw res;
+                break;
+                }
+        }//switch
+    })
+    .catch(res => console.error(res));
+}
+
 </script>

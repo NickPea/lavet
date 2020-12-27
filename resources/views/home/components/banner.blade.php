@@ -24,11 +24,12 @@
     <div class="container py-5">
         <div class="row">
             <div class="col">
-                <h2>and yes, of course <span data-js="banner-span">"it's all free!"</span></h2>
+                <h2>and yes, <span data-js="banner-span">it's all free,</span> of course.</h2>
             </div>
         </div>
     </div>
 </div>
+
 
 
 

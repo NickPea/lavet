@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     //
+
     /** properties */
     protected $dates = ['start_at', 'end_at'];
 

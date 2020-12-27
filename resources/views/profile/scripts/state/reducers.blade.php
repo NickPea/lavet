@@ -141,6 +141,20 @@ i.e counter(state = 2, action) = {couter: 2}
             }
         }
     );
+    // -- chat
+    store.addReducer(
+        function messages(state = [], action) {
+            switch (action.type) {
+                case 'chat/refresh':
+                    return action.payload;
+                    break;
+                default:
+                    return state;
+                    break;
+            }
+        }
+    );
+
     
 </script>
 

@@ -2,7 +2,7 @@
  * -------------------------------SOCKET-SERVER---------------------------------------------
  */
 
-console.log(`****** Socket.io Started *******`);
+console.log(`****** Socket.IO Server Started *******`);
 
 // ----------------- Imports -------------------------
 
@@ -13,7 +13,7 @@ const IO = require("socket.io");
 // ----------------- Setup -------------------------
 
 const redisSub = new Redis();
-const redisPub = new Redis();
+// const redisPub = new Redis();
 const redisCmd = new Redis();
 
 const httpServer = HTTP.createServer();
@@ -29,12 +29,28 @@ const io = IO(httpServer, {
 
 httpServer.listen(5000);
 
-// ----------------- Connection -------------------------
+// ----------------- Socket Connection & Events -------------------------
+
 io.on("connection", (currentSocket) => {
-    console.log(`-- SOCKET:CONNECT -- \nsocket.id: ${currentSocket.id}`);
+    console.log(`-- SOCKET:CONNECTED -- \nsocket.id: ${currentSocket.id}`);
 
-    // ----------------- Events -------------------------
+    //before disconnect
+    currentSocket.on("disconnecting", (reason) => {
+        console.log(
+            `-- SOCKET:DISCONNECTING -- ${reason} \nsocket.id:${currentSocket.id}`
+        );
+        //todo:remove redis user-socket-mapping
+    });
 
+    //on disconnect
+    currentSocket.on("disconnect", (reason) => {
+        console.log(
+            `-- SOCKET:DISCONNECT -- ${reason} \nsocket.id:${currentSocket.id}`
+        );
+        //todo:remove redis user-socket-mapping
+    });
+
+    //map a user to thier socket.io id to store in redis on connection (event initiated by browser client)
     currentSocket.on("map-socket-user", async (data) => {
         redisCmd.set(data.userEmailHash, currentSocket.id);
         console.log(
@@ -44,48 +60,33 @@ io.on("connection", (currentSocket) => {
         );
     });
 
-    currentSocket.on("disconnect", (reason) => {
-        console.log(
-            `-- SOCKET:DISCONNECT -- ${reason} \nsocket.id:${currentSocket.id} \nsocket.userHash:${currentSocket.userEmailHash}`
-        );
-        //todo:remove redis user-socket-mapping
-    });
+    // ----------------- Redis Connection & Events -------------------------
 
-    redisSub.subscribe(["socket-out"], (err, count) => {
+    //subcribe to a redis channel [WEBSOCKET]
+    redisSub.subscribe(["WEBSOCKET"], (err, channelCount) => {
         err
             ? console.log(`-- REDIS:SUBCRIBED -- \nerror:${err}`)
-            : console.log(`-- REDIS:SUBCRIBED -- \ncount:${count}`);
+            : console.log(`-- REDIS:SUBCRIBED -- \ncount:${channelCount}`);
     });
 
-    //check redis is subscribed
-    redisPub.publish("socket-out-user", "handshake", (err, res) => {
-        err
-            ? console.log(`-- REDIS:PUBLISH -- \nerror:${err}`)
-            : console.log(
-                  `-- REDIS:PUBLISH -- \nchannel:socket-out-user, numberOfClientsRecieved:${res}`
-              );
-    });
-
+    // on any channel message from redis
     redisSub.on("message", async (redisChannel, redisMessage) => {
         console.log(
             `-- REDIS:ON-MESSAGE -- \nchannel: ${redisChannel}, message:${redisMessage}`
         );
-        handleSocketOutMessage(currentSocket, redisChannel, redisMessage);
-    });
 
-    // socket.disconnect();
+        if (redisChannel == 'WEBSOCKET') {
+            // de-serialize {userEmailHash: string, socketMessage: string}
+            let data = JSON.parse(redisMessage);
+    
+            // get socket.id from redis mapping using hash
+            let socketId = await redisCmd.get(data.userEmailHash);
+    
+            //send message data to socket.io room
+            currentSocket.to(socketId).emit("WEBSOCKET-MESSAGE", data.socketMessage);
+        }
+
+    }); //redisOnMessage
+
 }); //ioOnConnection
 
-
-// ----------------- Helper Functions -------------------------
-
-let handleSocketOutMessage = async function(currentSocket, redisChannel, redisMessage) {
-    if (redisChannel == "socket-out") {
-        // de-serialize
-        let data = JSON.parse(redisMessage);
-        // get socket.id from redis mapping
-        let socketId = await redisCmd.get(data.userEmailHash);
-        //send message data to socket.io room
-        currentSocket.to(socketId).emit("message", data.socketMessage);
-    }
-};

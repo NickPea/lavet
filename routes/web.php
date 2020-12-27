@@ -92,4 +92,8 @@ Route::get('event/{event}', 'EventController@show');
 // --destroy
 
 
+//CHAT
+Route::post('profile/{profile}/chat', 'ChatController@send');
+
+
 
