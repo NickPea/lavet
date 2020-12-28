@@ -93,7 +93,7 @@ Route::get('event/{event}', 'EventController@show');
 
 
 //CHAT
-Route::post('profile/{profile}/chat', 'ChatController@send');
+Route::post('profile/{profile}/chat', 'ChatController@sendAndRefresh');
 
 
 

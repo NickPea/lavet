@@ -56,7 +56,7 @@
                 @else
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link" data-toggle="dropdown">
-                        <img class="auth-avatar" src={{asset(Auth::user()->profile->image->first()->path)}}>
+                        <img class="auth-avatar" src={{Auth::user()->profile->image->first()->path}}>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                         <a href={{url(Auth::user()->profile->path())}} class="dropdown-item">Profile</a>

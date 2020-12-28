@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 trait RegistersUsers
 {
@@ -63,6 +64,19 @@ trait RegistersUsers
      */
     protected function registered(Request $request, $user)
     {
-        //
+        //create a profile
+        $user->profile()->create([
+            'work_status' => $request->work_status,
+        ]);
+
+        //store physical image and retrieve path
+        $path = $request->file('file')->store(Hash::make($user->email));
+
+        //create database image and attach to user and profile
+        $user->profile->image()->create([
+            'path' => asset($path),
+            'user_id' => $user->id
+        ]);
+
     }
 }

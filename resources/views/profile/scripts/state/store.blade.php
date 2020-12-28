@@ -30,7 +30,7 @@
                 }
                 //new state
                 let newState  = JSON.parse(JSON.stringify(this.state));
-                console.log(`New State: ${JSON.stringify(newState)}`)
+                console.log(newState);
                 //notify
                 this.subscribers.forEach(subscriber => {
                     subscriber(oldState, newState);

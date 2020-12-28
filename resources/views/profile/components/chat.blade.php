@@ -112,7 +112,7 @@
         </div>
 
         <form data-js="chat-form">
-            <input class="chat-input" data-js="chat-input" placeholder="Aa..." autofocus>
+            <input class="chat-input" name="chatMessage" data-js="chat-input" placeholder="Aa..." autofocus autocomplete="off">
             @csrf
         </form>
 
@@ -147,7 +147,7 @@
         !chatForm && console.error('dom query not found');
    
         
-        //send and refresh chat messages in store 
+        //Send then refresh chat messages in store 
         chatForm.addEventListener('submit', () => {
             
             event.preventDefault();
@@ -160,29 +160,24 @@
                 chatInput.value = "";
                 chatMessages.scrollTo(0, chatMessages.scrollHeight);
 
-            }//if
-
+            }
         });
 
-        //Render chat messages in store
-        store.subscribe((newState, oldState) => {
-            if (!_.isEqual(newState.messages, oldState.messages)) {
-                newState.messages.map((chat) => {
+        //Render chat messages from store on change
+        store.subscribe((oldState, newState) => {
+            if (!_.isEqual(oldState.messages, newState.messages)) {
+                $messages = newState.messages.map((chat) => {
                     return `
                         <div>
                             ${chat.user}: ${chat.message}
                         </div>
                     `;
                 })
-                
-
+                chatMessages.innerHTML = $messages.join('');
             }//if
         })
 
-
-
-
-        //toggle open/close ui
+        //toggle chat open and close
         let chatBoxIsOpen = true;
         chatHeader.addEventListener('click', () => {
             if (chatBoxIsOpen) {
@@ -204,7 +199,7 @@
             chatBoxIsOpen = !chatBoxIsOpen; 
             
         });
-        // chatHeader.click(); //close chatbox on page load/refresh
+        chatHeader.click(); //close chatbox on page load/refresh
 
 
 
