@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Profile;
 use App\Listing;
 use App\Event;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
@@ -64,46 +64,46 @@ class SearchController extends Controller
 
         return Listing::select('*')
             /** $what */
-            ->when(isset($what), function ($query) use ($what) {
+            ->when(isset($what), function (Builder $query) use ($what) {
                 $query
                     ->where('title', 'like', "%{$what}%")
                     ->orWhere('about', 'like', "%{$what}%")
-                    ->orWhereHas('business', function ($query) use ($what) {
+                    ->orWhereHas('business', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%")
-                            ->orWhereHas('user', function ($query) use ($what) {
+                            ->orWhereHas('user', function (Builder $query) use ($what) {
                                 $query->where('name', 'like', "%{$what}%");
                             });
                     })
-                    ->orWhereHas('employ_type', function ($query) use ($what) {
+                    ->orWhereHas('employ_type', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('tag', function ($query) use ($what) {
+                    ->orWhereHas('tag', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('skill', function ($query) use ($what) {
+                    ->orWhereHas('skill', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('field', function ($query) use ($what) {
+                    ->orWhereHas('field', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('position', function ($query) use ($what) {
+                    ->orWhereHas('position', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     });
             })
             /** $where */
-            ->when(isset($where), function ($query) use ($where) {
+            ->when(isset($where), function (Builder $query) use ($where) {
                 $query
-                    ->whereHas('location', function ($query) use ($where) {
-                        $query->whereHas('city', function ($query) use ($where) {
+                    ->whereHas('location', function (Builder $query) use ($where) {
+                        $query->whereHas('city', function (Builder $query) use ($where) {
                             $query->where('name', 'like', "%{$where}%");
                         })
-                            ->orWhereHas('province', function ($query) use ($where) {
+                            ->orWhereHas('province', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             })
-                            ->orWhereHas('country', function ($query) use ($where) {
+                            ->orWhereHas('country', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             })
-                            ->orWhereHas('area_code', function ($query) use ($where) {
+                            ->orWhereHas('area_code', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             });
                     });
@@ -122,34 +122,34 @@ class SearchController extends Controller
 
         return Profile::select('*')
             /** $what */
-            ->when(isset($what), function ($query) use ($what) {
+            ->when(isset($what), function (Builder $query) use ($what) {
                 $query
                     ->where('work_status', 'like', "%{$what}%")
                     ->orWhere('about', 'like', "%{$what}%")
-                    ->orWhereHas('user', function ($query) use ($what) {
+                    ->orWhereHas('user', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('field', function ($query) use ($what) {
+                    ->orWhereHas('field', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('position', function ($query) use ($what) {
+                    ->orWhereHas('position', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     });
             })
             /** $where */
-            ->when(isset($where), function ($query) use ($where) {
+            ->when(isset($where), function (Builder $query) use ($where) {
                 $query
-                    ->whereHas('location', function ($query) use ($where) {
-                        $query->whereHas('city', function ($query) use ($where) {
+                    ->whereHas('location', function (Builder $query) use ($where) {
+                        $query->whereHas('city', function (Builder $query) use ($where) {
                             $query->where('name', 'like', "%{$where}%");
                         })
-                            ->orWhereHas('province', function ($query) use ($where) {
+                            ->orWhereHas('province', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             })
-                            ->orWhereHas('country', function ($query) use ($where) {
+                            ->orWhereHas('country', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             })
-                            ->orWhereHas('area_code', function ($query) use ($where) {
+                            ->orWhereHas('area_code', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             });
                     });
@@ -168,42 +168,42 @@ class SearchController extends Controller
 
         return Event::select('*')
             /** $what */
-            ->when(isset($what), function ($query) use ($what) {
+            ->when(isset($what), function (Builder $query) use ($what) {
                 $query
                     ->where('title', 'like', "%{$what}%")
                     ->orWhere('about', 'like', "%{$what}%")
-                    ->orWhereHas('user', function ($query) use ($what) {
+                    ->orWhereHas('user', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('tag', function ($query) use ($what) {
+                    ->orWhereHas('tag', function (Builder $query) use ($what) {
                         $query->where('name', 'like', "%{$what}%");
                     })
-                    ->orWhereHas('rsvp', function ($query) use ($what) {
-                        $query->whereHas('user', function ($query) use ($what) {
+                    ->orWhereHas('rsvp', function (Builder $query) use ($what) {
+                        $query->whereHas('user', function (Builder $query) use ($what) {
                             $query->where('name', 'like', "%{$what}%");
                         });
                     })
-                    ->orWhereHas('comment', function ($query) use ($what) {
+                    ->orWhereHas('comment', function (Builder $query) use ($what) {
                         $query->where('about', 'like', "%{$what}%")
-                            ->orWhereHas('user', function ($query) use ($what) {
+                            ->orWhereHas('user', function (Builder $query) use ($what) {
                                 $query->where('name', 'like', "%{$what}%");
                             });
                     });
             })
             /** where */
-            ->when(isset($where), function ($query) use ($where) {
+            ->when(isset($where), function (Builder $query) use ($where) {
                 $query
-                    ->whereHas('location', function ($query) use ($where) {
-                        $query->whereHas('city', function ($query) use ($where) {
+                    ->whereHas('location', function (Builder $query) use ($where) {
+                        $query->whereHas('city', function (Builder $query) use ($where) {
                             $query->where('name', 'like', "%{$where}%");
                         })
-                            ->orWhereHas('province', function ($query) use ($where) {
+                            ->orWhereHas('province', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             })
-                            ->orWhereHas('country', function ($query) use ($where) {
+                            ->orWhereHas('country', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             })
-                            ->orWhereHas('area_code', function ($query) use ($where) {
+                            ->orWhereHas('area_code', function (Builder $query) use ($where) {
                                 $query->where('name', 'like', "%{$where}%");
                             });
                     });
