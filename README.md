@@ -2,7 +2,7 @@
 
 ## Lavet: Veterinary Social Network
 
-Current in Development
+Currently in Development
 
 Features:
 - Profiles
