@@ -478,15 +478,36 @@ function sendAndRefreshProfileChatMessages(form) {
     let formData = new FormData(form);
     let url = new URL(`${window.location.href}/chat`);
 
-    fetch(url, {
+    return fetch(url, {
         method: 'POST', 
         body: formData,
     })
     .then(res => {
         switch (res.status) {
             case 201 : {
-                res.text().then(arrOfObj => {
-                    store.publish({type: 'chat/refresh', payload: arrOfObj });
+                res.json().then(arr => {
+                    store.publish({type: 'chat/refresh', payload: arr });
+                });
+                break;
+                }
+            default: {
+                throw res;
+                break;
+                }
+        }//switch
+    })
+    .catch(res => console.error(res));
+}
+
+function refreshProfileChatMessages() {
+    let url = new URL(`${window.location.href}/chat`);
+
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 : {
+                res.json().then(arr => {
+                    store.publish({type: 'chat/refresh', payload: arr });
                 });
                 break;
                 }

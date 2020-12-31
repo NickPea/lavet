@@ -18,7 +18,8 @@
             }
             this.publish = (action) => {
                 //action
-                console.log(`Action Created: ${JSON.stringify(action)}`)
+                console.log('Action Created: ')
+                console.log(action)
                 //old state
                 let oldState = JSON.parse(JSON.stringify(this.state));
                 // console.log(`Old State: ${JSON.stringify(oldState)}`)
@@ -30,6 +31,7 @@
                 }
                 //new state
                 let newState  = JSON.parse(JSON.stringify(this.state));
+                console.log('New State:');
                 console.log(newState);
                 //notify
                 this.subscribers.forEach(subscriber => {
@@ -38,7 +40,8 @@
             }
             this.addReducer = (reducer) => {
                 this.reducers.push(reducer);
-                console.log(`Reducer Added: ${reducer}`);
+                console.log('Reducer Added: ');
+                console.log(reducer);
                 this.publish({type:'Initializing default state'});
 
 

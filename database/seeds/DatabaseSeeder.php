@@ -87,9 +87,8 @@ class DatabaseSeeder extends Seeder
             ]));
         });
         //comment
-        Event::all()->each(function ($event)
-        {
-            for ($i=0; $i < 3; $i++) { 
+        Event::all()->each(function ($event) {
+            for ($i = 0; $i < 3; $i++) {
                 $event->comment()->create(factory(Comment::class)->raw([
                     'user_id' => User::anyOf(),
                 ]));
@@ -97,9 +96,8 @@ class DatabaseSeeder extends Seeder
         });
 
         //comment children
-        Comment::all()->each(function ($comment)
-        {
-            if (rand(0,1)) {
+        Comment::all()->each(function ($comment) {
+            if (rand(0, 1)) {
                 $comment->comment_child()->save(factory(Comment::class)->make([
                     'user_id' => User::anyOf(),
                     'event_id' => $comment->event_id,
@@ -107,49 +105,49 @@ class DatabaseSeeder extends Seeder
             }
         });
 
-        //message
-        User::all()->each(function ($user) {
-            $user->message()->save(factory(Message::class)->make());
-        });
-        //message_child
-        Message::all()->each(function ($message) {
-            for ($i = 0; $i < 5; $i++) {
-                $message->message_child()->save(factory(Message::class)->make([
-                    'author_id' => User::anyOf()->id
-                ]));
-            }
-        });
-        //message_activity
-        Message::all()->each(function ($message) {
-            $message->message_activity()->save(factory(MessageActivity::class)->make([
-                'recipient_id' => User::anyOf()->id,
-            ]));
-        });
+        /** -------------------------------------------------------------------- **/
+
+        // //message
+        // User::all()->each(function ($user) {
+        //     $user->message()->save(factory(Message::class)->make());
+        // });
+        // //message_child
+        // Message::all()->each(function ($message) {
+        //     for ($i = 0; $i < 5; $i++) {
+        //         $message->message_child()->save(factory(Message::class)->make([
+        //             'author_id' => User::anyOf()->id
+        //         ]));
+        //     }
+        // });
+        // //message_activity
+        // Message::all()->each(function ($message) {
+        //     $message->message_activity()->save(factory(MessageActivity::class)->make([
+        //         'recipient_id' => User::anyOf()->id,
+        //     ]));
+        // });
+
+        /** -------------------------------------------------------------------- **/
+
         //image
-        User::all()->each(function ($user)
-        {
-            $user->image()->saveMany(factory(Image::class, rand(2,5))->make());
+        User::all()->each(function ($user) {
+            $user->image()->saveMany(factory(Image::class, rand(2, 5))->make());
         });
-        
-            Profile::all()->each(function ($profile)
-            {
-                $profile->image()->attach(Image::anyOf());
-            });
-            Business::all()->each(function ($business)
-            {
-                $business->image()->attach(Image::anyOf());
-            });
-            Listing::all()->each(function ($listing)
-            {
-                $listing->image()->attach(Image::anyOf());
-            });
-            Event::all()->each(function ($event)
-            {
-                $event->image()->attach(Image::anyOf());
-            });
-            // Business::anyOf()->image()->save($image);
-            // Listing::anyOf()->image()->save($image);
-            // Event::anyOf()->image()->save($image);
+
+        Profile::all()->each(function ($profile) {
+            $profile->image()->attach(Image::anyOf());
+        });
+        Business::all()->each(function ($business) {
+            $business->image()->attach(Image::anyOf());
+        });
+        Listing::all()->each(function ($listing) {
+            $listing->image()->attach(Image::anyOf());
+        });
+        Event::all()->each(function ($event) {
+            $event->image()->attach(Image::anyOf());
+        });
+        // Business::anyOf()->image()->save($image);
+        // Listing::anyOf()->image()->save($image);
+        // Event::anyOf()->image()->save($image);
 
         //location & parents
         for ($i = 0; $i < 10; $i++) {
@@ -205,16 +203,11 @@ class DatabaseSeeder extends Seeder
 
         //tag
         factory(Tag::class, 10)->create();
-        Tag::all()->each(function ($tag)
-        {
+        Tag::all()->each(function ($tag) {
             $tag->listing()->save(Listing::anyOf());
         });
-        Tag::all()->each(function ($tag)
-        {
+        Tag::all()->each(function ($tag) {
             $tag->event()->save(Event::anyOf());
         });
-        
-
-
     }
 }

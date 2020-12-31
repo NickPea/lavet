@@ -28,7 +28,7 @@
         /** needed for z-index */
         z-index: 1;
 
-        display: flex;
+        display: flex !important;
         align-items: center;
         padding: 0 0.5rem;
     }
@@ -58,16 +58,40 @@
     .chat-messages {
         height: 80%;
         background-color: white;
-        padding: 1rem;
+        padding: 0 1rem;
         overflow-y: auto;
         scroll-behavior: smooth;
+
+        display: flex;
+        flex-direction: column;
+    }
+    .user-chat-message {
+        align-self: flex-end;
+        padding: 0.7rem;
+        margin: 0.2rem;
+        background-color: rgb(74, 74, 197);
+        border-radius: 1rem 1rem 0 1rem;
+        color:white ; 
+        /* font-size: 1.1rem; */
+        max-width: 75%;
     }
 
+    .non-user-chat-message {
+        align-self: flex-start;
+        padding: 0.7rem;
+        margin: 0.2rem;
+        background-color: rgb(180, 180, 180);
+        border-radius: 1rem 1rem 1rem 0;
+        color:black ; 
+        /* font-size: 1.1rem; */
+        max-width: 75%;
+    }
+    
     .chat-input {
         height: 10%;
         width: 100%;
         padding: 1rem;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         font-size: 1rem;
         border: none;
         background-color: rgb(221, 221, 221);
@@ -112,7 +136,8 @@
         </div>
 
         <form data-js="chat-form">
-            <input class="chat-input" name="chatMessage" data-js="chat-input" placeholder="Aa..." autofocus autocomplete="off">
+            <input class="chat-input" name="chatMessage" data-js="chat-input" placeholder="Aa..." autofocus
+                autocomplete="off">
             @csrf
         </form>
 
@@ -124,6 +149,10 @@
 <!-- ------------------------------------------------------------------------------------------ -->
 
 <script>
+
+    'use strict'
+
+
     function ChatBox() {
 
         //------------------------------- UI Functionality --------------------------------------
@@ -148,13 +177,13 @@
    
         
         //Send then refresh chat messages in store 
-        chatForm.addEventListener('submit', () => {
+        chatForm.addEventListener('submit', async () => {
             
             event.preventDefault();
 
             if (chatInput.value != '') {
 
-                sendAndRefreshProfileChatMessages(chatForm);
+                await sendAndRefreshProfileChatMessages(chatForm);
 
                 //clean up
                 chatInput.value = "";
@@ -166,14 +195,21 @@
         //Render chat messages from store on change
         store.subscribe((oldState, newState) => {
             if (!_.isEqual(oldState.messages, newState.messages)) {
-                $messages = newState.messages.map((chat) => {
-                    return `
-                        <div>
-                            ${chat.user}: ${chat.message}
-                        </div>
-                    `;
-                })
-                chatMessages.innerHTML = $messages.join('');
+                let messages = newState.messages.map((chat) => {
+                    
+                    let isUser = <?php echo Auth::user()->id?> == chat.user.id
+                    let mapping;
+
+                    if (isUser) {
+                        mapping = `<span class="user-chat-message">${chat.body}</span>`;
+
+                    } else {
+                        mapping = `<span class="non-user-chat-message">${chat.body}</span>`;
+                    }
+
+                    return mapping;   
+                });
+                chatMessages.innerHTML = messages.join('');
             }//if
         })
 
@@ -192,7 +228,7 @@
                 chatBox.style.width = '350px';
                 chatHeader.style.height = '10%';
                 chatHeaderClose.innerHTML = '@include('svg.remove')'
-                chatMessages.style.display = 'block';
+                chatMessages.style.display = 'flex';
                 chatInput.style.display = 'block';
                 chatInput.focus();
             }
@@ -202,34 +238,32 @@
         chatHeader.click(); //close chatbox on page load/refresh
 
 
+        //-------------------------------SOCKET.IO-CLIENT--------------------------------------
 
+         let userEmailHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
+        //todo: store in database user table on registration
 
-        // //-------------------------------SOCKET.IO-CLIENT--------------------------------------
+        // ----------------- Connect -------------------------
+        const socket = io('http://localhost:5000');
 
-        //  let userEmailHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
-        // //todo: store in database user table on registration
-
-        // // ----------------- Connect -------------------------
-        // const socket = io('http://localhost:5000');
-
-        // // ----------------- Events -------------------------
+        // ----------------- Events -------------------------
         
-        // socket.on('connect', () => {
-        //     console.error(`-- CONNECT -- \n socket.id: ${socket.id}`);
-        //     socket.emit('map-socket-user', {userEmailHash: userEmailHash});
-        //     console.error(`-- MAP-SOCKET-USER -- \n userEmailHash: ${userEmailHash}`);
-        // });
+        socket.on('connect', () => {
+            socket.emit('map-socket-user', {userEmailHash: userEmailHash});
+            console.error(`-- CONNECTED: mapping user & socket -- \n userEmailHash: ${userEmailHash}, socket.id: ${socket.id}`);
+        });
 
-        // socket.on('disconnect', (reason) => {
-        //     console.error(`-- DISCONNECT -- ${reason} \n socket: ${socket.id}, userEmailHash: ${socket.userEmailHash} `);
-        // });
+        socket.on('disconnect', (reason) => {
+            console.error(`-- DISCONNECTED -- ${reason} \n userEmailHash: ${socket.userEmailHash}, socket: ${socket.id},`);
+        });
 
-        // socket.on('WEBSOCKET-MESSAGE', (socketMessage) => {
-        //     //todo:...place message into dom
-        //     console.error(socketMessage);
-        // });
+        socket.on('FROM-NODE-TO-BROWSER', async (data) => {
+            await refreshProfileChatMessages();
+            chatMessages.scrollTo(0, chatMessages.scrollHeight);
 
-        // //-------------------------------// END SOCKET //--------------------------------------//
+        });
+
+        //-------------------------------// END SOCKET //--------------------------------------//
 
 
     }//ChatBox
