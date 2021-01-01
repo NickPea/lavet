@@ -35,7 +35,12 @@ httpServer.listen(5000);
         currentSocket.on("map-socket-user", async (data) => {
             redisCmd.set(data.userEmailHash, currentSocket.id);
             console.log(`-- Mapped: ${data.userEmailHash} - ${currentSocket.id}`);
-        });
+        });       
+        //map socket id to user
+        currentSocket.on("unmap-socket-user", async (data) => {
+            redisCmd.del(data.userEmailHash);
+            console.log(`-- Unmapped: ${data.userEmailHash} - ${currentSocket.id}`);
+        });       
 
         //before disconnect
         currentSocket.on("disconnecting", (/** reason **/) => {

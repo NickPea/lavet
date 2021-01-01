@@ -1,7 +1,6 @@
 {{--  --}}
-
+@auth
 <script>
-
     function WebSockets() {
         
         let userEmailHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
@@ -13,30 +12,35 @@
             socket.emit('map-socket-user', {userEmailHash: userEmailHash});
             console.error(`-- CONNECTED: mapping user & socket -- \n userEmailHash: ${userEmailHash}, socket.id: ${socket.id}`);
         });
-
+        
+        window.addEventListener('beforeunload', () => {
+            socket.emit('unmap-socket-user', {userEmailHash: userEmailHash});
+        });
+        
         socket.on('disconnect', (reason) => {
             console.error(`-- DISCONNECTED -- ${reason} \n userEmailHash: ${socket.userEmailHash}, socket: ${socket.id},`);
         });
-
+        
         socket.on('FROM-NODE-TO-BROWSER', async (data) => {
-
-           switch (data.action) {
-               case 'new-message' : {
-                   try {
+            
+            switch (data.action) {
+                case 'new-message' : {
+                    try {
                         refreshProfileChatMessages();
-                   } catch (error) {
+                    } catch (error) {
                         console.error('new-message'); 
-                   }
+                    }
                     break;
-               }//new-message
-               default:
-                   break;
-           }//sw
-
-        });
-
-    }
-    document.addEventListener('DOMContentLoaded', WebSockets);
-
-
+                }//new-message
+                default:
+                    break;
+                }//sw
+                
+            });
+            
+        }
+        document.addEventListener('DOMContentLoaded', WebSockets);
+        
+        
 </script>
+@endauth
