@@ -30,6 +30,9 @@
     <!-- Bundled Script -->
     <script src="{{ asset('js/app.js') }}"></script>
 
+    <!-- Websockets -->
+    @include('layouts.scripts.socketio')
+
     @stack('scripts')
 
 </body>

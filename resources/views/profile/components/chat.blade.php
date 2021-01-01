@@ -231,32 +231,6 @@
         chatHeader.click(); //close chatbox on page load/refresh
 
 
-        //-------------------------------SOCKET.IO-CLIENT--------------------------------------
-
-         let userEmailHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
-        //todo: store in database user table on registration
-
-        // ----------------- Connect -------------------------
-        const socket = io('http://localhost:5000');
-
-        // ----------------- Events -------------------------
-        
-        socket.on('connect', () => {
-            socket.emit('map-socket-user', {userEmailHash: userEmailHash});
-            console.error(`-- CONNECTED: mapping user & socket -- \n userEmailHash: ${userEmailHash}, socket.id: ${socket.id}`);
-        });
-
-        socket.on('disconnect', (reason) => {
-            console.error(`-- DISCONNECTED -- ${reason} \n userEmailHash: ${socket.userEmailHash}, socket: ${socket.id},`);
-        });
-
-        socket.on('FROM-NODE-TO-BROWSER', async (data) => {
-            await refreshProfileChatMessages();
-        });
-
-        //-------------------------------// END SOCKET //--------------------------------------//
-
-
     }//ChatBox
     document.addEventListener('DOMContentLoaded', ChatBox);
 

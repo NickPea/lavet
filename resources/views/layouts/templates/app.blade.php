@@ -21,15 +21,19 @@
 
 <body>
 
+
+
+    <!-- Toast -->
     @include('layouts.components.toast')
 
+    <!-- NavBar -->
     @include('layouts.components.navbar')
 
     @stack('body')
 
-    
 
-    
+
+
     <!-- Footer -->
     <footer>
         <div class="row mt-5">
@@ -39,9 +43,11 @@
         </div>
     </footer>
 
-
     <!-- Bundled Script -->
     <script src="{{ asset('js/app.js') }}"></script>
+
+    <!-- Websockets -->
+    @include('layouts.scripts.socketio')
 
     @stack('scripts')
 
