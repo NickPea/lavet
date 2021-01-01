@@ -1,6 +1,6 @@
 
 
-@extends('layouts.app')
+@extends('layouts.templates.app')
 
 
 @push('head')

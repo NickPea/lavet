@@ -21,9 +21,9 @@
 
 <body>
 
-    @include('layouts.toast')
+    @include('layouts.components.toast')
 
-    @include('layouts.navbar')
+    @include('layouts.components.navbar')
 
     @stack('body')
 

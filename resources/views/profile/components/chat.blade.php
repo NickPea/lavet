@@ -176,7 +176,7 @@
         !chatForm && console.error('dom query not found');
    
         
-        //on message input
+        //on message sumbit
         chatForm.addEventListener('submit', async () => {
             event.preventDefault();
             if (chatInput.value != '') {

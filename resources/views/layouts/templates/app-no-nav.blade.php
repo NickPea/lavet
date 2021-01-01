@@ -21,7 +21,7 @@
 
 <body>
 
-    @include('layouts.toast')
+    @include('layouts.components.toast')
 
     @stack('body')
 

@@ -38,12 +38,12 @@ httpServer.listen(5000);
         });
 
         //before disconnect
-        currentSocket.on("disconnecting", (reason) => {
+        currentSocket.on("disconnecting", (/** reason **/) => {
             //
         });
 
         //on disconnect
-        currentSocket.on("disconnect", (reason) => {
+        currentSocket.on("disconnect", (/** reason **/) => {
             console.log(`-- Disconnected: ${currentSocket.id}`);
         });
     }); //IO
@@ -56,7 +56,7 @@ httpServer.listen(5000);
     });
 
     redisSub.on("message", async (redisChannel, redisMessage) => {
-        
+
         let data = JSON.parse(redisMessage);
 
         switch (data.action) {
