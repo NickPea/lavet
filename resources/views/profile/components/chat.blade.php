@@ -58,20 +58,21 @@
     .chat-messages {
         height: 80%;
         background-color: white;
-        padding: 0 1rem;
+        padding: 1rem;
         overflow-y: auto;
         scroll-behavior: smooth;
 
         display: flex;
-        flex-direction: column;
+        flex-flow: column nowrap;
     }
+
     .user-chat-message {
         align-self: flex-end;
         padding: 0.7rem;
         margin: 0.2rem;
         background-color: rgb(74, 74, 197);
         border-radius: 1rem 1rem 0 1rem;
-        color:white ; 
+        color: white;
         /* font-size: 1.1rem; */
         max-width: 75%;
     }
@@ -82,11 +83,11 @@
         margin: 0.2rem;
         background-color: rgb(180, 180, 180);
         border-radius: 1rem 1rem 1rem 0;
-        color:black ; 
+        color: black;
         /* font-size: 1.1rem; */
         max-width: 75%;
     }
-    
+
     .chat-input {
         height: 10%;
         width: 100%;
@@ -149,7 +150,6 @@
 <!-- ------------------------------------------------------------------------------------------ -->
 
 <script>
-
     'use strict'
 
 
@@ -176,46 +176,34 @@
         !chatForm && console.error('dom query not found');
    
         
-        //Send then refresh chat messages in store 
+        //on message input
         chatForm.addEventListener('submit', async () => {
-            
             event.preventDefault();
-
             if (chatInput.value != '') {
-
                 await sendAndRefreshProfileChatMessages(chatForm);
-
                 //clean up
                 chatInput.value = "";
-                chatMessages.scrollTo(0, chatMessages.scrollHeight);
-
             }
         });
 
-        //Render chat messages from store on change
+        //Render chat messages from store
         store.subscribe((oldState, newState) => {
             if (!_.isEqual(oldState.messages, newState.messages)) {
                 let messages = newState.messages.map((chat) => {
-                    
-                    let isUser = <?php echo Auth::user()->id?> == chat.user.id
-                    let mapping;
-
-                    if (isUser) {
-                        mapping = `<span class="user-chat-message">${chat.body}</span>`;
-
-                    } else {
-                        mapping = `<span class="non-user-chat-message">${chat.body}</span>`;
-                    }
-
-                    return mapping;   
+                    let isUser = <?php echo Auth::user()->id?> == chat.user.id;
+                    return isUser
+                            ? `<span class="user-chat-message">${chat.body}</span>`
+                            : `<span class="non-user-chat-message">${chat.body}</span>`;
                 });
                 chatMessages.innerHTML = messages.join('');
+                chatMessages.scrollTo(0, chatMessages.scrollHeight);
             }//if
-        })
+        })//render
 
         //toggle chat open and close
         let chatBoxIsOpen = true;
-        chatHeader.addEventListener('click', () => {
+        
+        chatHeader.addEventListener('click', async () => {
             if (chatBoxIsOpen) {
                 chatBox.style.height = '50px';
                 chatBox.style.width  = '50px';
@@ -224,6 +212,8 @@
                 chatMessages.style.display = 'none';
                 chatInput.style.display = 'none';
             } else {
+                //get messages on open
+                await refreshProfileChatMessages();
                 chatBox.style.height = '500px';
                 chatBox.style.width = '350px';
                 chatHeader.style.height = '10%';
@@ -231,6 +221,9 @@
                 chatMessages.style.display = 'flex';
                 chatInput.style.display = 'block';
                 chatInput.focus();
+                //explicit scroll to needed for chrome scrolling bug patch
+                chatMessages.scrollTo(0, chatMessages.scrollHeight);
+                
             }
             chatBoxIsOpen = !chatBoxIsOpen; 
             
@@ -259,8 +252,6 @@
 
         socket.on('FROM-NODE-TO-BROWSER', async (data) => {
             await refreshProfileChatMessages();
-            chatMessages.scrollTo(0, chatMessages.scrollHeight);
-
         });
 
         //-------------------------------// END SOCKET //--------------------------------------//

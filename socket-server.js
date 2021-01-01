@@ -29,24 +29,34 @@ httpServer.listen(5000);
 /** --------------------------------- SOCKET IO -------------------------------------------- **/
 {
     io.on("connection", (currentSocket) => {
+        console.log(`-- Connected: ${currentSocket.id}`);
+
         //map socket id to user
         currentSocket.on("map-socket-user", async (data) => {
             redisCmd.set(data.userEmailHash, currentSocket.id);
+            console.log(`-- Mapped: ${data.userEmailHash} - ${currentSocket.id}`);
         });
 
         //before disconnect
-        currentSocket.on("disconnecting", (reason) => {});
+        currentSocket.on("disconnecting", (reason) => {
+            //
+        });
 
         //on disconnect
-        currentSocket.on("disconnect", (reason) => {});
+        currentSocket.on("disconnect", (reason) => {
+            console.log(`-- Disconnected: ${currentSocket.id}`);
+        });
     }); //IO
 } //ioBlock
 
 /** --------------------------------- REDIS -------------------------------------------- **/
 {
-    redisSub.subscribe(["FROM-LARAVEL-TO-NODE"]);
+    redisSub.subscribe(["FROM-LARAVEL-TO-NODE"], () => {
+        console.log('-- Subscribed to Redis');
+    });
 
     redisSub.on("message", async (redisChannel, redisMessage) => {
+        
         let data = JSON.parse(redisMessage);
 
         switch (data.action) {

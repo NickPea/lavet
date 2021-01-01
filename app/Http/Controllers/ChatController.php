@@ -29,8 +29,8 @@ class ChatController extends Controller
 
         //find previous conversation parent message
 
-        $ConversationParentMessage = Message::select('*')
-            ->join('message_activities', 'messages.id', '=', 'message_activities.message_id')
+        $ConversationParentMessage = Message::
+            join('message_activities', 'messages.id', '=', 'message_activities.message_id')
             ->where(function ($query) use ($senderId, $recipientId) {
                 $query
                     ->where('messages.author_id', $senderId)
@@ -41,6 +41,7 @@ class ChatController extends Controller
                     ->where('messages.author_id', $recipientId)
                     ->where('message_activities.recipient_id', $senderId);
             })
+            ->select('messages.*')
             ->first();
 
 
@@ -80,6 +81,8 @@ class ChatController extends Controller
                 'recipientHash' => $recipientHash,
                 'action' => 'new-message'
             ]);
+            
+
             Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
         }
 
@@ -111,8 +114,8 @@ class ChatController extends Controller
 
         //find previous conversation parent message
 
-        $ConversationParentMessage = Message::select('*')
-            ->join('message_activities', 'messages.id', '=', 'message_activities.message_id')
+        $ConversationParentMessage = Message::
+            join('message_activities', 'messages.id', '=', 'message_activities.message_id')
             ->where(function ($query) use ($senderId, $recipientId) {
                 $query
                     ->where('messages.author_id', $senderId)
@@ -123,6 +126,7 @@ class ChatController extends Controller
                     ->where('messages.author_id', $recipientId)
                     ->where('message_activities.recipient_id', $senderId);
             })
+            ->select('messages.*')
             ->first();
 
 
@@ -144,9 +148,6 @@ class ChatController extends Controller
 
     }//refresh
 }
-
-
-
 
 
 
