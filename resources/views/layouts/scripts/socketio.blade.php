@@ -6,7 +6,7 @@
         let userEmailHash = '<?php echo hash(hash_algos()[5], Auth::user()->email??'')?>'; //SHA-256
         //todo: store in database user table on registration
         
-        const socket = io('http://localhost:5000');
+        window.socket = io('http://localhost:5000');
         
         socket.on('connect', () => {
             socket.emit('map-socket-user', {userEmailHash: userEmailHash});

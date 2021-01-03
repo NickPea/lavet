@@ -21,8 +21,6 @@
 
 <body>
 
-
-
     <!-- Toast -->
     @include('layouts.components.toast')
 

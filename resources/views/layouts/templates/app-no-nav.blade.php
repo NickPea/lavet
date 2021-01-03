@@ -15,6 +15,10 @@
     <!-- App Styles -->
     @include('layouts.styles.page')
 
+    @include('layouts.scripts.state.chat-store')
+    @include('layouts.scripts.state.chat-reducers')
+    @include('layouts.scripts.endpoints')
+
     @stack('head')
 
 </head>
@@ -22,6 +26,7 @@
 <body>
 
     @include('layouts.components.toast')
+    @include('layouts.components.sidechat')
 
     @stack('body')
 

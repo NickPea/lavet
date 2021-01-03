@@ -92,9 +92,10 @@ Route::get('event/{event}', 'EventController@show');
 // --destroy
 
 
-//CHAT
+//PROFILE CHAT
 Route::post('profile/{profile}/chat', 'ChatController@sendAndRefresh');
 Route::get('profile/{profile}/chat', 'ChatController@refresh');
 
 
-
+//SIDE CHAT
+Route::get('sidechat/conversations/refresh', 'SideChatController@refreshConversations');
