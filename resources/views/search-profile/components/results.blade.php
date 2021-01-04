@@ -49,7 +49,7 @@
                     <div class="card rounded-lg hover">
                         <div class="position-relative">
                             
-                            <img class="ml-3 mt-3" style="border-radius:50%; height:100px; width:100px; object-fit:cover;" src={{asset($profile->image->first()->path)}} alt="{{$profile->user->name.' profile image'}}">
+                            <img class="ml-3 mt-3" style="border-radius:50%; height:100px; width:100px; object-fit:cover;" src={{$profile->image->first()->path}} alt="{{$profile->user->name.' profile image'}}">
                             
                             <!-- is_free -->
                             <h5 class="position-absolute" style="top:5%; right:5%;">

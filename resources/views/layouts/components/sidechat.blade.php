@@ -16,7 +16,6 @@
         --footer: white;
         --close: grey;
         --shadow1: 0 0 3px 3px darkgrey;
-        --shadow2: 0 0 10px 10px black;
     }
 
     /* side-chat */
@@ -31,7 +30,7 @@
     }
 
     .side-chat-open {
-        width: 40vw;
+        width: 50vw;
     }
 
     .side-chat-transition {
@@ -67,7 +66,7 @@
     }
 
     .side-chat-body-messenger {
-        flex: 70%;
+        flex: 60%;
         height: 100%;
         background-color: var(--messenger);
         overflow-y: auto;
@@ -75,13 +74,47 @@
     }
 
     .side-chat-body-contacts {
-        flex: 30%;
+        flex: 40%;
         height: 100%;
         background-color: var(--contacts);
         overflow-y: auto;
         border-left: 1px solid darkgrey;
     }
 
+    .side-chat-body-contacts-conversation {
+        display: flex;
+        flex-flow: nowrap;
+        align-items: center;
+        align-content: center;
+
+        padding: 7px;
+        margin: 3px 1rem;
+        border-radius: 0.5rem;
+
+    }
+
+    .side-chat-body-contacts-conversation:hover {
+        background-color: white;
+    }
+
+    .side-chat-body-contacts-conversation img {
+        flex-shrink: 0;
+
+        width: 40px;
+        height: 40px;
+        border: 1px solid lightgrey;
+        border-radius: 50%;
+
+        margin-right: 1rem;
+    }
+
+    .side-chat-body-contacts-conversation span {
+        font-weight: bolder;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     /* footer */
 
@@ -163,6 +196,7 @@
 
 <script>
     function SideChat() {
+        'use strict'
         
         
         //DOM
@@ -201,24 +235,40 @@
 
                 //prep
                 let chatConversations = 
-                    newState.conversations.map((convo) => {
+                    newState.conversations.map((conversationData) => {
                         
                         //TODO
-                        return `<div>convo here</div>`;
+                        return `<div class="side-chat-body-contacts-conversation" 
+                                        data-js="side-chat-body-contacts-conversation"
+                                        data-message-header-id="${conversationData.message_header_id}">
+                                    <img src="${conversationData.image}">
+                                    <span>${conversationData.name}</span>
+                                </div>
+                                `;
                     })
 
                 //append
                 sideChatBodyContacts.innerHTML = chatConversations.join('');
 
+                //setup events
+                
+                let allDomConversations = document.querySelectorAll('[data-js="side-chat-body-contacts-conversation"]');
+                allDomConversations.length==0&&console.error('query selector not found', allDomConversations);
+                
+                allDomConversations.forEach((dOMConversation) => {
+                    dOMConversation.addEventListener('click', (e) => {
+                        let messageHeaderId = dOMConversation.dataset.messageHeaderId;
+
+
+                        //SEND MESSAGE-HEADER-ID THROUGH FETCH REQUEST AND THEN PLACE MESSAGES IN DOM
+
+                    });//click
+                });//each
+
+
+
             }//if
         })//
-
-
-
-
-
-
-
 
 
 
