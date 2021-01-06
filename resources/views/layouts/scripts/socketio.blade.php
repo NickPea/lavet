@@ -24,11 +24,24 @@
         socket.on('FROM-NODE-TO-BROWSER', async (data) => {
             
             switch (data.action) {
-                case 'new-message' : {
+                case 'sidechat/new-message' : {
                     try {
-                        refreshProfileChatMessages();
+                        
+                        //if conversation open in messenger, update messages
+                        if () {}
+                        sideChatRefresh();
+
+                        //otherwise update conversation list and main sidechat button (assuming unread hints configured)
+                        
+                     
+
+
+
+
+
+
                     } catch (error) {
-                        console.error('new-message'); 
+                        console.error('sidechat/new-message'); 
                     }
                     break;
                 }//new-message

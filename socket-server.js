@@ -65,11 +65,11 @@ httpServer.listen(5000);
         let data = JSON.parse(redisMessage);
 
         switch (data.action) {
-            case "new-message":
+            case "sidechat/new-message":
                 {
                     let socketId = await redisCmd.get(data.recipientHash);
                     io.to(socketId).emit("FROM-NODE-TO-BROWSER", {
-                        action: "new-message"
+                        action: data.action,
                     });
                 }
                 break;

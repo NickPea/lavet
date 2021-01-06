@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class SideChatController extends Controller
 {
@@ -56,5 +57,70 @@ class SideChatController extends Controller
         }); //format header
 
         return $conversations;
+    } //
+
+
+
+
+    /**
+     * @param Request $request->message_header_id
+     * @return Message[]
+     */
+    public function refreshMessenger(Request $request)
+    {
+
+        if ($request->message_header_id == null) {
+            return response('Missing argument: message_header_id', 500 );
+        }
+
+        $latestMessages =
+            Message::select('*')
+            ->with('user')
+            ->where('parent_id', $request->message_header_id)
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+
+        //collections sorting hack
+        $sortedLatestMessages = $latestMessages->sortBy('created_at')->values()->all();
+
+        return response($sortedLatestMessages, 200);
     }
-}
+
+    /**
+     * @param Request $request->message_header_id
+     * @return Message $newMessage
+     */
+    public function sendMessage(Request $request)
+    {
+
+        if ($request->message_header_id == null) {
+            return response('Missing argument: message_header_id', 500 );
+        }
+
+        //add message to database
+        $newMessage = Message::create([
+            'parent_id' => $request->message_header_id,
+            'author_id' => $request->user()->id,
+            'body' => $request->chat_message,
+        ]);
+
+        //notify reciever of new message through websocket via redis
+        $recipientEmail = $request->user()->id == $newMessage->message_parent->author_id
+                                    ? $newMessage->message_parent->message_activity->first()->user->email
+                                    : $newMessage->message_parent->user->email;
+        
+        $recipientHash = hash(hash_algos()[5], $recipientEmail); //sha256
+
+        $redisMessage = json_encode([
+            'recipientHash' => $recipientHash,
+            'action' => 'sidechat/new-message'
+        ]);
+        
+        Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
+
+
+        //confirm message created
+        return response($newMessage, 201);
+    }
+}//
