@@ -5,6 +5,19 @@
 <script>
     'use strict'
 
+    function sideChatRefreshTotalUnreadCount() {
+        let url = new URL(`${window.location.origin}/sidechat/refresh-total-unread-count`);
+        fetch(url)
+            .then((data) => data.json())
+            .then((data) => {
+                chatStore.publish({
+                    type: 'total-unread-count/refresh',
+                    payload: data.total_unread_count,
+                })//publish
+            })//then
+        
+    }//
+
     function sideChatRefreshConversations() {
         let url = new URL(`${window.location.origin}/sidechat/refresh-conversations`);
         fetch(url)
@@ -22,11 +35,11 @@
 
     function sideChatRefreshMessenger(form) {
         let url = new URL(`${window.location.origin}/sidechat/refresh-messenger`);
-        let data = new FormData(form)
+        let formData = new FormData(form)
 
         fetch(url, {
             method: 'POST', 
-            body: data,
+            body: formData,
             })
             .then((data) => data.json())
             .then((messages) => {
@@ -38,7 +51,7 @@
 
                 chatStore.publish({
                     type: 'messenger/refresh-conversation-id',
-                    payload: data.get('message_header_id')
+                    payload: formData.get('message_header_id')
                 });
 
             })//then

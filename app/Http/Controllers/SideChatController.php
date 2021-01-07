@@ -10,6 +10,42 @@ use Illuminate\Support\Facades\Redis;
 class SideChatController extends Controller
 {
 
+    public function refreshTotalUnreadCount(Request $request)
+    {
+
+        $totalUnreadCount = 0;
+
+        $requestUserId = $request->user()->id;
+
+            //of all a users conversations
+            $conversations = Message::where('parent_id', null)
+            ->where(function ($query) use ($requestUserId) {
+                $query
+                    ->where('author_id', $requestUserId)
+                    ->orWhereHas('message_activity', function ($query) use ($requestUserId) {
+                        $query->where('recipient_id', $requestUserId);
+                    });
+            })
+            ->get();
+
+            //count all the child messages that
+            // - are sent to the current user (not authored by the current user)
+            // - and are unread
+            $conversations->each(function ($conversation) use($requestUserId, &$totalUnreadCount)
+            {
+                $unreadConversationMessageCount = $conversation->message_child
+                    ->where('author_id', '<>', $requestUserId)
+                    ->where('read_at', null)
+                    ->count();
+                
+                $totalUnreadCount += $unreadConversationMessageCount;
+            });
+                            
+
+        return response(['total_unread_count' => $totalUnreadCount], 200);
+    }
+
+
     public function refreshConversations(Request $request)
     {
         if (Auth::guest()) {
@@ -41,6 +77,10 @@ class SideChatController extends Controller
                     'message_header_id' => $headerMessage->id,
                     'name' => $headerMessage->message_activity->first()->user->name,
                     'image' => $headerMessage->message_activity->first()->user->profile->image->first()->path,
+                    'unread_count' => $headerMessage->message_child
+                        ->where('author_id', '<>', $requestUserId)
+                        ->where('read_at', null)
+                        ->count(),
                 ];
             } //if
 
@@ -51,6 +91,11 @@ class SideChatController extends Controller
                     'message_header_id' => $headerMessage->id,
                     'name' => $headerMessage->user->name,
                     'image' => $headerMessage->user->profile->image->first()->path,
+                    'unread_count' => $headerMessage->message_child
+                        ->where('author_id', '<>', $requestUserId)
+                        ->where('read_at', null)
+                        ->count(),
+
                 ];
             } //if
 
@@ -70,7 +115,7 @@ class SideChatController extends Controller
     {
 
         if ($request->message_header_id == null) {
-            return response('Missing argument: message_header_id', 500 );
+            return response('Missing argument: message_header_id', 500);
         }
 
         $latestMessages =
@@ -95,7 +140,7 @@ class SideChatController extends Controller
     {
 
         if ($request->message_header_id == null) {
-            return response('Missing argument: message_header_id', 500 );
+            return response('Missing argument: message_header_id', 500);
         }
 
         //add message to database
@@ -107,16 +152,19 @@ class SideChatController extends Controller
 
         //notify reciever of new message through websocket via redis
         $recipientEmail = $request->user()->id == $newMessage->message_parent->author_id
-                                    ? $newMessage->message_parent->message_activity->first()->user->email
-                                    : $newMessage->message_parent->user->email;
-        
+            ? $newMessage->message_parent->message_activity->first()->user->email
+            : $newMessage->message_parent->user->email;
+
         $recipientHash = hash(hash_algos()[5], $recipientEmail); //sha256
 
         $redisMessage = json_encode([
             'recipientHash' => $recipientHash,
-            'action' => 'sidechat/new-message'
+            'action' => 'sidechat/new-message',
+            'payload' => [
+                'conversation_id' => $newMessage->parent_id,
+            ]
         ]);
-        
+
         Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
 
 

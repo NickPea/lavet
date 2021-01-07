@@ -17,6 +17,7 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->string('subject')->nullable();
             $table->text('body');
+            $table->dateTime('read_at')->nullable();
             
             $table->timestamps();
             //FK

@@ -101,3 +101,4 @@ Route::get('profile/{profile}/chat', 'ChatController@refresh');
 Route::get('sidechat/refresh-conversations', 'SideChatController@refreshConversations');
 Route::post('sidechat/refresh-messenger', 'SideChatController@refreshMessenger');//TODO:change to get method
 Route::post('sidechat/send-message', 'SideChatController@sendMessage');
+Route::get('sidechat/refresh-total-unread-count', 'SideChatController@refreshTotalUnreadCount');

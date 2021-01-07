@@ -22,7 +22,8 @@
 
     .side-chat {
         height: 100%;
-        width: 0vw; /*closed on page load*/
+        width: 0vw;
+        /*closed on page load*/
 
         z-index: 9999999999999999;
         overflow: hidden;
@@ -161,7 +162,13 @@
         background-color: white;
     }
 
-    .side-chat-body-contacts-conversation img {
+    .side-chat-body-contacts-conversation-overlay {
+        position: relative;
+
+        margin-right: 1rem;
+    }
+
+    .side-chat-body-contacts-conversation-img {
         flex-shrink: 0;
 
         width: 40px;
@@ -170,10 +177,31 @@
         border-radius: 50%;
         object-fit: cover;
 
-        margin-right: 1rem;
     }
 
-    .side-chat-body-contacts-conversation span {
+    .side-chat-body-contacts-conversation-badge {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 20px;
+        height: 20px;
+
+        padding: 0.1rem;
+        border-radius: 50%;
+
+        overflow: hidden;
+
+        color: white;
+        background-color: orange;
+    }
+
+
+    .side-chat-body-contacts-conversation-name {
         font-weight: bolder;
 
         white-space: nowrap;
@@ -204,6 +232,29 @@
         border-radius: 50%;
     }
 
+    .side-chat-open-button-unread-count {
+
+        display: none; /* if has messages then d-flex*/
+
+        position: absolute;
+        top: -5px;
+        left: -5px;
+
+        height: 20px;
+        width: 20px;
+
+        overflow: hidden;
+        border-radius: 50%;
+
+        justify-content: center;
+        align-items: center;
+
+        padding: 0.1rem;
+        background-color: orange;
+    }
+
+
+
     /* utility */
 
     .side-chat-button:hover {
@@ -214,7 +265,6 @@
         box-shadow: none;
         transform: scale(0.9, 0.9);
     }
-
 </style>
 
 
@@ -225,6 +275,7 @@
 <!-- open button -->
 <div class="side-chat-open-button side-chat-button side-chat-variables" data-js="side-chat-open-button">
     @include('svg.chat')
+    <span class="side-chat-open-button-unread-count" data-js="side-chat-open-button-unread-count"></span>
 </div>
 
 
@@ -235,7 +286,8 @@
     <!-- header -->
     <div class="side-chat-header">
         <div class="side-chat-close-button side-chat-button" data-js="side-chat-close-button">
-            @include('svg.arrow-right')</div>
+            @include('svg.arrow-right')
+        </div>
     </div>
 
 
@@ -282,11 +334,14 @@
         'use strict'
         
         //DOM
-        let openButton = document.querySelector('[data-js="side-chat-open-button"]');
-        !openButton&&console.error('query selector not found');
+        let sideChatOpenButton = document.querySelector('[data-js="side-chat-open-button"]');
+        !sideChatOpenButton&&console.error('query selector not found');
         
-        let closeButton = document.querySelector('[data-js="side-chat-close-button"]');
-        !openButton&&console.error('query selector not found');
+        let sideChatOpenButtonUnreadCount = document.querySelector('[data-js="side-chat-open-button-unread-count"]');
+        !sideChatOpenButtonUnreadCount&&console.error('query selector not found');
+        
+        let sideChatCloseButton = document.querySelector('[data-js="side-chat-close-button"]');
+        !sideChatOpenButton&&console.error('query selector not found');
         
         let sideChatMain = document.querySelector('[data-js="side-chat-main"]');
         !sideChatMain&&console.error('query selector not found');
@@ -308,15 +363,15 @@
         
 
         //EVENTS
-        openButton.addEventListener('click', function (e) {
+        sideChatOpenButton.addEventListener('click', function (e) {
             sideChatMain.classList.add('side-chat-open')
-            openButton.style.display = "none";
+            sideChatOpenButton.style.display = "none";
             sideChatRefreshConversations();
         });
        
-        closeButton.addEventListener('click', function (e) {
+        sideChatCloseButton.addEventListener('click', function (e) {
             sideChatMain.classList.remove('side-chat-open')
-            openButton.style.display = "block";
+            sideChatOpenButton.style.display = "block";
         });
 
         //sumbit
@@ -326,6 +381,9 @@
             await sideChatSendMessage(sideChatBodyMessengerForm);
             sideChatRefreshMessenger(sideChatBodyMessengerForm);
 
+            //could potential delete after adding marked read_at func..
+            sideChatRefreshConversations();
+
             sideChatBodyMessengerInput.value = "";
 
         })
@@ -333,6 +391,20 @@
 
         
         //RENDER
+
+        //render TOTAL-UNREAD-MESSAGES
+        chatStore.subscribe((oldState, newState) => {
+            if (!_.isEqual(oldState.total_unread_count, newState.total_unread_count)) {
+                
+                if (newState.total_unread_count > 0) {
+                    sideChatOpenButtonUnreadCount.style.display = 'flex';
+                    sideChatOpenButtonUnreadCount.textContent = newState.total_unread_count;
+                } else {
+                    sideChatOpenButtonUnreadCount.style.display = 'none';
+                    sideChatOpenButtonUnreadCount.textContent = '';
+                }
+            }
+        });
 
         //render CONVERSATIONS
         chatStore.subscribe((oldState, newState) => {
@@ -344,8 +416,11 @@
                         
                         return `<div class="side-chat-body-contacts-conversation" 
                                         data-js="side-chat-body-contacts-conversation">
-                                    <img src="${conversationData.image}">
-                                    <span>${conversationData.name}</span>
+                                    <span class="side-chat-body-contacts-conversation-overlay">
+                                        <img class="side-chat-body-contacts-conversation-img" src="${conversationData.image}">
+                                        <span class="side-chat-body-contacts-conversation-badge">${conversationData.unread_count}</span>
+                                    </span>
+                                    <span class="side-chat-body-contacts-conversation-name">${conversationData.name}</span>
                                     <form>
                                         <input type="hidden" name="message_header_id" value="${conversationData.message_header_id}">
                                         @csrf 
@@ -382,7 +457,7 @@
         })//
 
 
-        //render MESSAGES & CONVERSATION-ID
+        //render MESSAGES
         chatStore.subscribe((oldState, newState) => {
 
             if (!_.isEqual(oldState.messenger_messages, newState.messenger_messages)) {
@@ -410,23 +485,31 @@
             }//if state change
         });//sub
 
+    
+        //ON LOAD
+        sideChatRefreshTotalUnreadCount();
 
     }//
     SideChat();
 
+    
+    
+    /**
+     * TODO:
+     *
+     * WORK ON SOCKETS - TICK
+     *
+     * SHOW HINT FOR UNREAD MESSAGES FOR EACH CONVERSATION IN CONTACT LIST - TICK
+     *
+     * SHOW HINT FOR TOTAL UNREAD MESSAGES ON SIDECHAT BUTTON - TICK
+     * 
+     * ADD SOCKET UPDATE FOR TOTAL UNREAD MESSAGES
+     *
+     * MARK MESSAGES AS READ
+     *
+     * BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
+     *
+     * DISALLOW SELECTING A NEW CONVERSATION WHILST A MESSAGE IS BEING SENT AND REFRESHED
+     *
+     **/
 </script>
- 
-
-   /**
-    * TODO:
-    * 
-    * WORK ON SOCKETS
-    * 
-    * SHOW HINT FOR UNREAD MESSAGES FOR EACH CONVERSATION IN CONTACT LIST
-    * AND OF TOTAL UNREAD MESSAGES ON SIDECHAT BUTTON
-    * 
-    * BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
-    * 
-    * DISALLOW SELECTING A NEW CONVERSATION WHILST A MESSAGE IS BEING SENT AND REFRESHED
-    * 
-    * /

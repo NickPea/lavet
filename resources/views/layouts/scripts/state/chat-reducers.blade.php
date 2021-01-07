@@ -4,6 +4,20 @@
 
 <script>
     // -- 
+
+    chatStore.addReducer(
+        function total_unread_count(state = [], action) {
+            switch (action.type) {
+                case 'total-unread-count/refresh':
+                    return action.payload;
+                    break;
+                default:
+                    return state;
+                    break;
+            }//sw
+        }//fn
+    );//
+
     chatStore.addReducer(
         function conversations(state = [], action) {
             switch (action.type) {

@@ -68,9 +68,7 @@ httpServer.listen(5000);
             case "sidechat/new-message":
                 {
                     let socketId = await redisCmd.get(data.recipientHash);
-                    io.to(socketId).emit("FROM-NODE-TO-BROWSER", {
-                        action: data.action,
-                    });
+                    io.to(socketId).emit("FROM-NODE-TO-BROWSER", {...data});
                 }
                 break;
             default:
