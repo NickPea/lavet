@@ -5,6 +5,34 @@
 <script>
     'use strict'
 
+    function sideChatMarkConversationMessagesAsRead(form) {
+        let url = new URL(`${window.location.origin}/sidechat/mark-conversation-messages-as-read`);
+        let formData = new FormData(form);
+
+        return fetch(url, {
+            method: 'POST',
+            body: formData,
+        })
+            .then((res) => {
+                switch (res.status) {
+                    case 201 :
+                        {
+                            res.json().then((data) => {
+                                console.log(`Marked Messages`);
+                                console.log(data);
+                            });
+                        }
+                        break;
+                    default:
+                        throw res
+                        break;
+                }
+            })
+            .catch((res) => {console.error(res);});
+
+        
+    }//
+
     function sideChatRefreshTotalUnreadCount() {
         let url = new URL(`${window.location.origin}/sidechat/refresh-total-unread-count`);
         fetch(url)
@@ -82,6 +110,9 @@
             .catch((res) => {console.error(res);});
               
     }//
+
+
+    
 
 
 </script>

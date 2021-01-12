@@ -17,8 +17,8 @@ class SideChatController extends Controller
 
         $requestUserId = $request->user()->id;
 
-            //of all a users conversations
-            $conversations = Message::where('parent_id', null)
+        //of all a users conversations
+        $conversations = Message::where('parent_id', null)
             ->where(function ($query) use ($requestUserId) {
                 $query
                     ->where('author_id', $requestUserId)
@@ -28,19 +28,18 @@ class SideChatController extends Controller
             })
             ->get();
 
-            //count all the child messages that
-            // - are sent to the current user (not authored by the current user)
-            // - and are unread
-            $conversations->each(function ($conversation) use($requestUserId, &$totalUnreadCount)
-            {
-                $unreadConversationMessageCount = $conversation->message_child
-                    ->where('author_id', '<>', $requestUserId)
-                    ->where('read_at', null)
-                    ->count();
-                
-                $totalUnreadCount += $unreadConversationMessageCount;
-            });
-                            
+        //count all the child messages that
+        // - are sent to the current user (not authored by the current user)
+        // - and are unread
+        $conversations->each(function ($conversation) use ($requestUserId, &$totalUnreadCount) {
+            $unreadConversationMessageCount = $conversation->message_child
+                ->where('author_id', '<>', $requestUserId)
+                ->where('read_at', null)
+                ->count();
+
+            $totalUnreadCount += $unreadConversationMessageCount;
+        });
+
 
         return response(['total_unread_count' => $totalUnreadCount], 200);
     }
@@ -77,6 +76,7 @@ class SideChatController extends Controller
                     'message_header_id' => $headerMessage->id,
                     'name' => $headerMessage->message_activity->first()->user->name,
                     'image' => $headerMessage->message_activity->first()->user->profile->image->first()->path,
+                    'is_online' => $headerMessage->message_activity->first()->user->profile->is_online,
                     'unread_count' => $headerMessage->message_child
                         ->where('author_id', '<>', $requestUserId)
                         ->where('read_at', null)
@@ -91,6 +91,7 @@ class SideChatController extends Controller
                     'message_header_id' => $headerMessage->id,
                     'name' => $headerMessage->user->name,
                     'image' => $headerMessage->user->profile->image->first()->path,
+                    'is_online' => $headerMessage->message_activity->first()->user->profile->is_online,
                     'unread_count' => $headerMessage->message_child
                         ->where('author_id', '<>', $requestUserId)
                         ->where('read_at', null)
@@ -118,6 +119,7 @@ class SideChatController extends Controller
             return response('Missing argument: message_header_id', 500);
         }
 
+        //get latest messages
         $latestMessages =
             Message::select('*')
             ->with('user')
@@ -170,5 +172,26 @@ class SideChatController extends Controller
 
         //confirm message created
         return response($newMessage, 201);
+    }
+
+    /**
+     * @return int Number of 'Marked as read' 
+     */
+    public function markConversationMessagesAsRead(Request $request)
+    {
+        $conversationId = $request->message_header_id;
+        $userId = $request->user()->id;
+
+        $marked = Message::select('*')
+            ->where('parent_id', $conversationId)
+            ->where('author_id', '!=', $userId)
+            ->where('read_at', null)
+            ->update(['read_at' => now()]);
+
+        return response([
+            'conversation_id' => $conversationId,
+            'count' => $marked,
+            'by_user_id' => $userId,
+        ], 201);
     }
 }//

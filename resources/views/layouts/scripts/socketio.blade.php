@@ -31,6 +31,7 @@
                         {
                             //if relevent conversation open in messenger update/refresh the conversation
                             if(chatStore.getState().messenger_conversation_id == data.payload.conversation_id) {
+                               
                                 sideChatRefreshConversations();
 
                                 //TODO: overide below endpoint to accept just the message header id perhaps
@@ -39,11 +40,12 @@
                                 tempForm.insertAdjacentHTML('afterbegin', `@csrf`);
                                     
                                 sideChatRefreshMessenger(tempForm);
-                                
-                            //else just refresh contact conversations  
-                            } else {
-                                sideChatRefreshConversations();
-                            }
+                            } 
+
+                            //update conversation and total unread counts regardless
+                            sideChatRefreshConversations();
+                            sideChatRefreshTotalUnreadCount();
+
                         }
                     default:
                         break;

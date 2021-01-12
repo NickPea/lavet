@@ -179,7 +179,19 @@
 
     }
 
-    .side-chat-body-contacts-conversation-badge {
+    .side-chat-body-contacts-conversation-online-badge {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: green;
+        border: 1px solid white;
+    }
+
+    .side-chat-body-contacts-conversation-unread-badge {
         position: absolute;
         bottom: -5px;
         right: -5px;
@@ -234,7 +246,8 @@
 
     .side-chat-open-button-unread-count {
 
-        display: none; /* if has messages then d-flex*/
+        display: none;
+        /* if has messages then d-flex*/
 
         position: absolute;
         top: -5px;
@@ -303,7 +316,7 @@
 
             <form class="side-chat-body-messenger-form" data-js="side-chat-body-messenger-form">
                 <input class="side-chat-body-messenger-input" name="chat_message"
-                    data-js="side-chat-body-messenger-input" placeholder="Aa..." autofocus autocomplete="off">
+                    data-js="side-chat-body-messenger-input" placeholder="Aa..." autocomplete="off">
                 <input data-js="side-chat-body-messenger-hidden-input" type="hidden" name="message_header_id">
                 @csrf
             </form>
@@ -331,6 +344,7 @@
 
 <script>
     function SideChat() {
+
         'use strict'
         
         //DOM
@@ -363,18 +377,26 @@
         
 
         //EVENTS
-        sideChatOpenButton.addEventListener('click', function (e) {
+
+        //on load get total message count
+        document.addEventListener('DOMContentLoaded', () => {
+            sideChatRefreshTotalUnreadCount();
+        });
+
+        //open messenger
+        sideChatOpenButton.addEventListener('click', (e) => {
             sideChatMain.classList.add('side-chat-open')
             sideChatOpenButton.style.display = "none";
             sideChatRefreshConversations();
         });
        
-        sideChatCloseButton.addEventListener('click', function (e) {
+        //close messenger
+        sideChatCloseButton.addEventListener('click', (e) => {
             sideChatMain.classList.remove('side-chat-open')
             sideChatOpenButton.style.display = "block";
         });
 
-        //sumbit
+        //send/submit new messsage
         sideChatBodyMessengerForm.addEventListener('submit', async () => {
             event.preventDefault();
 
@@ -388,8 +410,19 @@
 
         })
 
+        //mark messages as read on messenger input focus
+        sideChatBodyMessengerInput.addEventListener('focus', async (e) => {
+            
+            const tempForm = document.createElement('form');
+            tempForm.insertAdjacentHTML('afterbegin', `<input name="message_header_id" value="${chatStore.getState().messenger_conversation_id}">`);
+            tempForm.insertAdjacentHTML('afterbegin', `@csrf`);
 
-        
+            await sideChatMarkConversationMessagesAsRead(tempForm)
+            sideChatRefreshConversations();
+            sideChatRefreshTotalUnreadCount();
+        });
+
+
         //RENDER
 
         //render TOTAL-UNREAD-MESSAGES
@@ -413,20 +446,35 @@
 
                 let chatConversations = 
                     newState.conversations.map((conversationData) => {
-                        
-                        return `<div class="side-chat-body-contacts-conversation" 
-                                        data-js="side-chat-body-contacts-conversation">
-                                    <span class="side-chat-body-contacts-conversation-overlay">
-                                        <img class="side-chat-body-contacts-conversation-img" src="${conversationData.image}">
-                                        <span class="side-chat-body-contacts-conversation-badge">${conversationData.unread_count}</span>
-                                    </span>
-                                    <span class="side-chat-body-contacts-conversation-name">${conversationData.name}</span>
-                                    <form>
-                                        <input type="hidden" name="message_header_id" value="${conversationData.message_header_id}">
-                                        @csrf 
-                                    </form>
-                                </div>
-                                `;
+
+                        let eachConversation = '';
+
+                            eachConversation = `
+                                    <div class="side-chat-body-contacts-conversation" 
+                                            data-js="side-chat-body-contacts-conversation">
+                                        <span class="side-chat-body-contacts-conversation-overlay">
+                                            <img class="side-chat-body-contacts-conversation-img" src="${conversationData.image}">
+                                            ${
+                                                conversationData.unread_count > 0
+                                                    ? `<span class="side-chat-body-contacts-conversation-unread-badge">${conversationData.unread_count}</span>` 
+                                                    : ''
+                                            }
+                                            ${
+                                                conversationData.is_online
+                                                    ? '<span class="side-chat-body-contacts-conversation-online-badge"></span>'
+                                                    : ''
+                                            }
+                                        </span>
+                                        <span class="side-chat-body-contacts-conversation-name">${conversationData.name}</span>
+                                        <form>
+                                            <input type="hidden" name="message_header_id" value="${conversationData.message_header_id}">
+                                            @csrf 
+                                        </form>
+                                    </div>
+                                    `;
+
+                        return eachConversation;
+
                     });
                 sideChatBodyContacts.innerHTML = chatConversations.join('');
 
@@ -438,12 +486,14 @@
                 allDomConversations.forEach((dOMConversation) => {
                     
                     //conversation on click
-                    dOMConversation.addEventListener('click', (e) => {
+                    dOMConversation.addEventListener('click', async (e) => {
 
                         let conversationHiddenForm = dOMConversation.querySelector('form');
 
+                        await sideChatMarkConversationMessagesAsRead(conversationHiddenForm);
                         sideChatRefreshMessenger(conversationHiddenForm);
-
+                        sideChatRefreshConversations();
+                        sideChatRefreshTotalUnreadCount();
 
                         sideChatBodyMessengerInput.focus();
                         sideChatBodyMessengerInput.value = "";
@@ -475,7 +525,7 @@
             }//if state change
         });//sub
 
-        //render CONVERSATION-ID
+        //render CONVERSATION-ID (into hidden input of the send message form)
         chatStore.subscribe((oldState, newState) => {
 
             if (!_.isEqual(oldState.messenger_conversation_id, newState.messenger_conversation_id)) {
@@ -484,10 +534,6 @@
 
             }//if state change
         });//sub
-
-    
-        //ON LOAD
-        sideChatRefreshTotalUnreadCount();
 
     }//
     SideChat();
@@ -503,9 +549,13 @@
      *
      * SHOW HINT FOR TOTAL UNREAD MESSAGES ON SIDECHAT BUTTON - TICK
      * 
-     * ADD SOCKET UPDATE FOR TOTAL UNREAD MESSAGES
+     * ADD SOCKET UPDATE FOR TOTAL UNREAD MESSAGES - TICK
      *
-     * MARK MESSAGES AS READ
+     * MARK MESSAGES AS READ (on conversationa click and input click) - TICK
+     *  
+     * SHOW ONLINE STATUS IS CONVERSATION ICON - TICK 
+     * 
+     * MAKE ONLINE STATUS PULSE -
      *
      * BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
      *
