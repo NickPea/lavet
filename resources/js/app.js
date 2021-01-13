@@ -16,3 +16,6 @@ window._ = require("lodash");
 
 // Socket.io-client
 window.io = require("socket.io-client");
+
+window.moment = require('moment');
+

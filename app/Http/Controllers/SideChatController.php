@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Message;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
@@ -179,17 +180,40 @@ class SideChatController extends Controller
      */
     public function markConversationMessagesAsRead(Request $request)
     {
-        $conversationId = $request->message_header_id;
+
+        $conversationMessageHeader = Message::find($request->message_header_id);
         $userId = $request->user()->id;
 
         $marked = Message::select('*')
-            ->where('parent_id', $conversationId)
+            ->where('parent_id', $conversationMessageHeader->id)
             ->where('author_id', '!=', $userId)
             ->where('read_at', null)
             ->update(['read_at' => now()]);
 
+
+        //notify reciever of new message through websocket via redis
+        $recipientEmail = '';
+        if ($conversationMessageHeader->author_id !== $userId) {
+            $recipientEmail = $conversationMessageHeader->user->email;
+        } else {
+            $recipientEmail = $conversationMessageHeader->message_activity->first()->user->email;
+        }
+
+        $recipientHash = hash(hash_algos()[5], $recipientEmail); //sha256
+
+        $redisMessage = json_encode([
+            'recipientHash' => $recipientHash,
+            'action' => 'sidechat/read-messages',
+            'payload' => [
+                'conversation_id' => $conversationMessageHeader->id,
+            ],
+        ]);
+
+        Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
+
+        
         return response([
-            'conversation_id' => $conversationId,
+            'conversation_id' => $conversationMessageHeader->id,
             'count' => $marked,
             'by_user_id' => $userId,
         ], 201);

@@ -24,29 +24,37 @@
             });
             
             socket.on('FROM-NODE-TO-BROWSER', async (data) => {
-                
+
                 switch (data.action) {
-                    
-                    case 'sidechat/new-message' :
-                        {
-                            //if relevent conversation open in messenger update/refresh the conversation
-                            if(chatStore.getState().messenger_conversation_id == data.payload.conversation_id) {
-                               
+                        case 'sidechat/new-message' :
+                            {
+                                //if relevent conversation open in messenger update/refresh the conversation
+                                if(chatStore.getState().messenger_conversation_id == data.payload.conversation_id) {
+                                    //TODO: overide below endpoint to accept just the message header id perhaps
+                                    let tempForm = document.createElement('form');
+                                    tempForm.insertAdjacentHTML('afterbegin', `<input name="message_header_id" value="${data.payload.conversation_id}">`);
+                                    tempForm.insertAdjacentHTML('afterbegin', `@csrf`);
+                                    sideChatRefreshMessenger(tempForm);
+                                } 
+
+                                //update conversation and total unread counts regardless
                                 sideChatRefreshConversations();
+                                sideChatRefreshTotalUnreadCount();
 
-                                //TODO: overide below endpoint to accept just the message header id perhaps
-                                let tempForm = document.createElement('form');
-                                tempForm.insertAdjacentHTML('afterbegin', `<input name="message_header_id" value="${data.payload.conversation_id}">`);
-                                tempForm.insertAdjacentHTML('afterbegin', `@csrf`);
-                                    
-                                sideChatRefreshMessenger(tempForm);
-                            } 
-
-                            //update conversation and total unread counts regardless
-                            sideChatRefreshConversations();
-                            sideChatRefreshTotalUnreadCount();
-
-                        }
+                            }
+                        break;
+                        case 'sidechat/read-messages' :
+                            {
+                                //if relevent conversation open in messenger update/refresh message to show that they have been read
+                                if(chatStore.getState().messenger_conversation_id == data.payload.conversation_id) {
+                                    // TODO: overide below endpoint to accept just the message header id perhaps
+                                    let tempForm = document.createElement('form');
+                                    tempForm.insertAdjacentHTML('afterbegin', `<input name="message_header_id" value="${data.payload.conversation_id}">`);
+                                    tempForm.insertAdjacentHTML('afterbegin', `@csrf`);
+                                    sideChatRefreshMessenger(tempForm);                                
+                                }
+                            }
+                        break;
                     default:
                         break;
                 }//sw

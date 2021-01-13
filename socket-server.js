@@ -29,17 +29,17 @@ httpServer.listen(5000);
 /** --------------------------------- SOCKET IO -------------------------------------------- **/
 {
     io.on("connection", (currentSocket) => {
-        console.log(`-- Connected: ${currentSocket.id}`);
+        console.log(`-- Browser Connected: ${currentSocket.id}`);
 
         //map socket id to user
         currentSocket.on("map-socket-user", async (data) => {
             redisCmd.set(data.userEmailHash, currentSocket.id);
-            console.log(`-- Mapped: ${data.userEmailHash} - ${currentSocket.id}`);
+            console.log(`-- Mapped User: ${data.userEmailHash} - ${currentSocket.id}`);
         });       
         //map socket id to user
         currentSocket.on("unmap-socket-user", async (data) => {
             redisCmd.del(data.userEmailHash);
-            console.log(`-- Unmapped: ${data.userEmailHash} - ${currentSocket.id}`);
+            console.log(`-- Unmapped User: ${data.userEmailHash} - ${currentSocket.id}`);
         });       
 
         //before disconnect
@@ -49,7 +49,7 @@ httpServer.listen(5000);
 
         //on disconnect
         currentSocket.on("disconnect", (/** reason **/) => {
-            console.log(`-- Disconnected: ${currentSocket.id}`);
+            console.log(`-- Browser Disconnected: ${currentSocket.id}`);
         });
     }); //IO
 } //ioBlock
@@ -63,16 +63,13 @@ httpServer.listen(5000);
     redisSub.on("message", async (redisChannel, redisMessage) => {
 
         let data = JSON.parse(redisMessage);
-
-        switch (data.action) {
-            case "sidechat/new-message":
-                {
-                    let socketId = await redisCmd.get(data.recipientHash);
-                    io.to(socketId).emit("FROM-NODE-TO-BROWSER", {...data});
-                }
-                break;
-            default:
-                break;
-        } //sw
+        
+        console.log(`-- Recieved Message From Redis: ${JSON.stringify(data)}`);
+        
+        let socketId = await redisCmd.get(data.recipientHash);
+        
+        io.to(socketId).emit("FROM-NODE-TO-BROWSER", {...data});
+        
+        
     }); //redisOnMessage
 } //redisblock

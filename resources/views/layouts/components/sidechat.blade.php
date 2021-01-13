@@ -2,234 +2,6 @@
 
 
 <style>
-    /* wrappers */
-
-    .side-chat-position {
-        position: fixed;
-        right: 0;
-    }
-
-    .side-chat-variables {
-        --header: white;
-        --contacts: whitesmoke;
-        --messenger: whitesmoke;
-        --footer: white;
-        --close: grey;
-        --shadow1: 0 0 3px 3px darkgrey;
-    }
-
-    /* side-chat */
-
-    .side-chat {
-        height: 100%;
-        width: 0vw;
-        /*closed on page load*/
-
-        z-index: 9999999999999999;
-        overflow: hidden;
-
-        box-shadow: var(--shadow1)
-    }
-
-    .side-chat-open {
-        width: 50vw;
-    }
-
-    .side-chat-transition {
-        transition: width 200ms ease;
-    }
-
-    /* header */
-
-    .side-chat-header {
-        height: 5%;
-
-        background-color: var(--header);
-        border-bottom: 1px solid black;
-
-        display: flex;
-        flex-flow: nowrap;
-
-    }
-
-    /* close button */
-
-    .side-chat-close-button {
-        align-self: center;
-        padding: 0.5rem;
-
-
-    }
-
-    /* body */
-
-    .side-chat-body {
-        height: 90%;
-        display: flex;
-        flex-flow: row nowrap;
-    }
-
-    .side-chat-body-messenger {
-        flex: 60%;
-        height: 100%;
-        background-color: var(--messenger);
-
-        display: flex;
-        flex-flow: column nowrap;
-
-    }
-
-    .side-chat-body-messenger-messages {
-        height: 90%;
-
-        background-color: white;
-        padding: 1rem;
-
-        overflow-y: auto;
-        /* scroll-behavior: smooth; */
-
-        display: flex;
-        flex-flow: column nowrap;
-    }
-
-    .side-chat-body-messenger-form {
-        height: 10%;
-    }
-
-    .side-chat-body-messenger-input {
-        height: 100%;
-        width: 100%;
-        padding: 1rem;
-        letter-spacing: 2px;
-        font-size: 1rem;
-        border: none;
-        background-color: rgb(221, 221, 221);
-    }
-
-    .side-chat-body-messenger-input:hover {
-        background-color: rgb(199, 199, 199);
-    }
-
-    .side-chat-body-messenger-input:focus {
-        outline: none;
-        background-color: rgb(110, 110, 110);
-        color: white
-    }
-
-    .side-chat-body-messenger-user-message {
-        align-self: flex-end;
-        padding: 0.7rem;
-        margin: 0.2rem;
-        background-color: rgb(74, 74, 197);
-        border-radius: 1rem 1rem 0 1rem;
-        color: white;
-        /* font-size: 1.1rem; */
-        max-width: 75%;
-    }
-
-    .side-chat-body-messenger-non-user-message {
-        align-self: flex-start;
-        padding: 0.7rem;
-        margin: 0.2rem;
-        background-color: rgb(180, 180, 180);
-        border-radius: 1rem 1rem 1rem 0;
-        color: black;
-        /* font-size: 1.1rem; */
-        max-width: 75%;
-    }
-
-    .side-chat-body-contacts {
-        flex: 40%;
-        height: 100%;
-        background-color: var(--contacts);
-        overflow-y: auto;
-        border-left: 1px solid darkgrey;
-    }
-
-    .side-chat-body-contacts-conversation {
-        display: flex;
-        flex-flow: nowrap;
-        align-items: center;
-        align-content: center;
-
-        padding: 7px;
-        margin: 3px 1rem;
-        border-radius: 0.5rem;
-
-    }
-
-    .side-chat-body-contacts-conversation:hover {
-        background-color: white;
-    }
-
-    .side-chat-body-contacts-conversation-overlay {
-        position: relative;
-
-        margin-right: 1rem;
-    }
-
-    .side-chat-body-contacts-conversation-img {
-        flex-shrink: 0;
-
-        width: 40px;
-        height: 40px;
-        border: 1px solid lightgrey;
-        border-radius: 50%;
-        object-fit: cover;
-
-    }
-
-    .side-chat-body-contacts-conversation-online-badge {
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: green;
-        border: 1px solid white;
-    }
-
-    .side-chat-body-contacts-conversation-unread-badge {
-        position: absolute;
-        bottom: -5px;
-        right: -5px;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        width: 20px;
-        height: 20px;
-
-        padding: 0.1rem;
-        border-radius: 50%;
-
-        overflow: hidden;
-
-        color: white;
-        background-color: orange;
-    }
-
-
-    .side-chat-body-contacts-conversation-name {
-        font-weight: bolder;
-
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* footer */
-
-    .side-chat-footer {
-        height: 5%;
-        background-color: var(--footer);
-        border-top: 1px solid black;
-
-    }
-
     /* open button */
 
     .side-chat-open-button {
@@ -266,6 +38,351 @@
         background-color: orange;
     }
 
+
+    /* side-chat-wrappers */
+
+    .side-chat-position {
+        position: fixed;
+        right: 0;
+    }
+
+    .side-chat-variables {
+        --header: white;
+        --contacts: whitesmoke;
+        --messenger: whitesmoke;
+        --footer: white;
+        --close: grey;
+        --shadow1: 0 0 3px 3px darkgrey;
+    }
+
+    .side-chat-transition {
+        transition: width 200ms ease;
+    }
+
+    /* side-chat */
+
+    .side-chat {
+        height: 100%;
+        width: 0vw;
+        /*closed on page load*/
+
+        z-index: 9999999999999999;
+        overflow: hidden;
+
+        box-shadow: var(--shadow1)
+    }
+
+    .side-chat-open {
+        width: 50vw;
+    }
+
+    /* header */
+
+    .side-chat-header {
+        height: 5%;
+        width: 100%;
+
+        background-color: var(--header);
+        border-bottom: 1px solid black;
+
+        display: flex;
+        flex-flow: nowrap;
+
+    }
+
+    /* close button */
+
+    .side-chat-close-button {
+        align-self: center;
+        padding: 0.5rem;
+    }
+
+    /* body */
+
+    .side-chat-body {
+        height: 90%;
+        width: 100%;
+
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    /* left panel */
+
+    .side-chat-body-left-panel {
+        flex: 50%;
+        /* of body flex row width */
+        height: 100%;
+        /* of body 90% */
+        background-color: var(--messenger);
+
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    /* messages */
+
+    .side-chat-body-left-panel-messages {
+        height: 90%;
+        /* of left panel */
+
+        background-color: white;
+        padding: 0 1rem;
+
+        overflow-y: auto;
+        /* scroll-behavior: smooth; */
+
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    .side-chat-body-right-panel-messages-user-wrapper {
+        width: 100%;
+
+        margin-bottom: 2px;
+
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-end;
+    }
+
+    .side-chat-body-right-panel-messages-non-user-wrapper {
+        width: 100%;
+
+        margin-bottom: 2px;
+
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+    }
+
+    .side-chat-body-right-panel-messages-user-body {
+        max-width: 75%;
+
+        position: relative;
+
+        padding: 0.7rem;
+        background-color: rgb(61, 61, 180);
+        border-radius: 1rem 1rem 0 1rem;
+        color: white;
+
+        font-size: 1.05rem;
+
+        word-break: break-word;
+
+    }
+
+    .side-chat-body-right-panel-messages-non-user-body {
+        max-width: 75%;
+
+        position: relative;
+
+        padding: 0.7rem;
+        background-color: rgb(180, 180, 180);
+        border-radius: 1rem 1rem 1rem 0;
+        color: black;
+
+        font-size: 1.05rem;
+
+        word-break: break-word;
+    }
+
+    .side-chat-body-left-panel-messages-created-at {
+        visibility: hidden;
+        
+        color: grey;
+        font-size: 0.8rem;
+    }
+
+    .side-chat-body-right-panel-messages-user-wrapper:hover .side-chat-body-left-panel-messages-created-at {
+        visibility: visible;
+    }
+
+    .side-chat-body-right-panel-messages-non-user-wrapper:hover .side-chat-body-left-panel-messages-created-at {
+        visibility: visible;
+    }
+
+    .side-chat-body-left-panel-messages-user-read-at {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        height: 9px;
+        width: 9px;
+        background-color: green;
+        border: 1px solid white;
+        border-radius: 50%;
+
+    }
+
+    .side-chat-body-left-panel-messages-non-user-read-at {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
+        height: 9px;
+        width: 9px;
+        background-color: green;
+        border: 1px solid white;
+        border-radius: 50%;
+
+    }
+
+
+
+
+    /* input */
+
+    .side-chat-body-left-panel-form {
+        height: 10%;
+        /* of left panel */
+    }
+
+    .side-chat-body-left-panel-input {
+        height: 100%;
+        /* of left panel form */
+        width: 100%;
+
+        padding: 1rem;
+        letter-spacing: 2px;
+        font-size: 1rem;
+
+        border: none;
+        background-color: rgb(221, 221, 221);
+    }
+
+    .side-chat-body-left-panel-input:hover {
+        background-color: rgb(199, 199, 199);
+    }
+
+    .side-chat-body-left-panel-input:focus {
+        outline: none;
+        background-color: rgb(110, 110, 110);
+        color: white
+    }
+
+    /* right panel */
+
+    .side-chat-body-right-panel {
+        flex: 50%;
+        /* of body flex row width */
+        height: 100%;
+        /* of body 90% */
+        background-color: var(--contacts);
+        overflow-y: auto;
+        border-left: 1px solid darkgrey;
+    }
+
+    /* conversations */
+
+    .side-chat-body-right-panel-conversation {
+        display: flex;
+        flex-flow: nowrap;
+        align-items: center;
+        align-content: center;
+
+        padding: 7px;
+        margin: 3px 1rem;
+        border-radius: 0.5rem;
+    }
+
+    .side-chat-body-right-panel-conversation:hover {
+        background-color: white;
+    }
+
+    .side-chat-body-right-panel-conversation-overlay {
+        position: relative;
+
+        margin-right: 1rem;
+    }
+
+    .side-chat-body-right-panel-conversation-img {
+        flex-shrink: 0;
+
+        width: 40px;
+        height: 40px;
+        border: 1px solid lightgrey;
+        border-radius: 50%;
+        object-fit: cover;
+
+    }
+
+    .side-chat-body-right-panel-conversation-offline-badge {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: grey;
+        border: 1px solid white;
+    }
+    .side-chat-body-right-panel-conversation-online-badge {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: green;
+        border: 1px solid white;
+        animation: online-badge-pulse 2.5s infinite;
+    }
+
+    @keyframes online-badge-pulse {
+        0% {
+            box-shadow: 0 0 1px 1px white;
+        }
+
+        50% {
+            box-shadow: 0 0 3px 1px green;
+        }
+
+        100% {
+            box-shadow: 0 0 1px 1px white;
+        }
+    }
+
+    .side-chat-body-right-panel-conversation-unread-badge {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 20px;
+        height: 20px;
+
+        padding: 0.1rem;
+        border-radius: 50%;
+
+        overflow: hidden;
+
+        color: white;
+        background-color: orange;
+    }
+
+
+    .side-chat-body-right-panel-conversation-name {
+        font-weight: bolder;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* footer */
+
+    .side-chat-footer {
+        height: 5%;
+        background-color: var(--footer);
+        border-top: 1px solid black;
+
+    }
 
 
     /* utility */
@@ -308,24 +425,23 @@
     <div class="side-chat-body">
 
         <!-- messenger -->
-        <div class="side-chat-body-messenger">
+        <div class="side-chat-body-left-panel">
 
-            <div class="side-chat-body-messenger-messages" data-js="side-chat-body-messenger-messages">
-                {{-- messages --}}
-            </div>
+            <!-- chat messages -->
+            <div class="side-chat-body-left-panel-messages" data-js="side-chat-body-left-panel-messages"></div>
 
-            <form class="side-chat-body-messenger-form" data-js="side-chat-body-messenger-form">
-                <input class="side-chat-body-messenger-input" name="chat_message"
-                    data-js="side-chat-body-messenger-input" placeholder="Aa..." autocomplete="off">
-                <input data-js="side-chat-body-messenger-hidden-input" type="hidden" name="message_header_id">
+            <!-- text input -->
+            <form class="side-chat-body-left-panel-form" data-js="side-chat-body-left-panel-form">
+                <input class="side-chat-body-left-panel-input" name="chat_message"
+                    data-js="side-chat-body-left-panel-input" placeholder="Aa..." autocomplete="off">
+                <input data-js="side-chat-body-left-panel-hidden-input" type="hidden" name="message_header_id">
                 @csrf
             </form>
 
         </div>
-        <!-- //messenger -->
 
         <!-- contacts -->
-        <div class="side-chat-body-contacts" data-js="side-chat-body-contacts"></div>
+        <div class="side-chat-body-right-panel" data-js="side-chat-body-right-panel"></div>
 
     </div>
 
@@ -360,19 +476,19 @@
         let sideChatMain = document.querySelector('[data-js="side-chat-main"]');
         !sideChatMain&&console.error('query selector not found');
         
-        let sideChatBodyContacts = document.querySelector('[data-js="side-chat-body-contacts"]');
+        let sideChatBodyContacts = document.querySelector('[data-js="side-chat-body-right-panel"]');
         !sideChatBodyContacts&&console.error('query selector not found');
        
-        let sideChatBodyMessengerForm = document.querySelector('[data-js="side-chat-body-messenger-form"]');
+        let sideChatBodyMessengerForm = document.querySelector('[data-js="side-chat-body-left-panel-form"]');
         !sideChatBodyMessengerForm&&console.error('query selector not found');
        
-        let sideChatBodyMessengerInput = document.querySelector('[data-js="side-chat-body-messenger-input"]');
+        let sideChatBodyMessengerInput = document.querySelector('[data-js="side-chat-body-left-panel-input"]');
         !sideChatBodyMessengerInput&&console.error('query selector not found');
        
-        let sideChatBodyMessengerHiddenInput = document.querySelector('[data-js="side-chat-body-messenger-hidden-input"]');
+        let sideChatBodyMessengerHiddenInput = document.querySelector('[data-js="side-chat-body-left-panel-hidden-input"]');
         !sideChatBodyMessengerHiddenInput&&console.error('query selector not found');
         
-        let sideChatBodyMessengerMessages = document.querySelector('[data-js="side-chat-body-messenger-messages"]');
+        let sideChatBodyMessengerMessages = document.querySelector('[data-js="side-chat-body-left-panel-messages"]');
         !sideChatBodyMessengerMessages&&console.error('query selector not found');
         
 
@@ -418,6 +534,7 @@
             tempForm.insertAdjacentHTML('afterbegin', `@csrf`);
 
             await sideChatMarkConversationMessagesAsRead(tempForm)
+            await sideChatRefreshMessenger(tempForm);
             sideChatRefreshConversations();
             sideChatRefreshTotalUnreadCount();
         });
@@ -450,22 +567,22 @@
                         let eachConversation = '';
 
                             eachConversation = `
-                                    <div class="side-chat-body-contacts-conversation" 
-                                            data-js="side-chat-body-contacts-conversation">
-                                        <span class="side-chat-body-contacts-conversation-overlay">
-                                            <img class="side-chat-body-contacts-conversation-img" src="${conversationData.image}">
+                                    <div class="side-chat-body-right-panel-conversation" 
+                                            data-js="side-chat-body-right-panel-conversation">
+                                        <span class="side-chat-body-right-panel-conversation-overlay">
+                                            <img class="side-chat-body-right-panel-conversation-img" src="${conversationData.image}">
                                             ${
                                                 conversationData.unread_count > 0
-                                                    ? `<span class="side-chat-body-contacts-conversation-unread-badge">${conversationData.unread_count}</span>` 
+                                                    ? `<span class="side-chat-body-right-panel-conversation-unread-badge">${conversationData.unread_count}</span>` 
                                                     : ''
                                             }
                                             ${
                                                 conversationData.is_online
-                                                    ? '<span class="side-chat-body-contacts-conversation-online-badge"></span>'
-                                                    : ''
+                                                    ? '<span class="side-chat-body-right-panel-conversation-online-badge"></span>'
+                                                    : '<span class="side-chat-body-right-panel-conversation-offline-badge"></span>'
                                             }
                                         </span>
-                                        <span class="side-chat-body-contacts-conversation-name">${conversationData.name}</span>
+                                        <span class="side-chat-body-right-panel-conversation-name">${conversationData.name}</span>
                                         <form>
                                             <input type="hidden" name="message_header_id" value="${conversationData.message_header_id}">
                                             @csrf 
@@ -479,7 +596,7 @@
                 sideChatBodyContacts.innerHTML = chatConversations.join('');
 
                 //rendered EVENTS
-                let allDomConversations = document.querySelectorAll('[data-js="side-chat-body-contacts-conversation"]');
+                let allDomConversations = document.querySelectorAll('[data-js="side-chat-body-right-panel-conversation"]');
                 allDomConversations.length==0&&console.error('query selector not found', allDomConversations);
                 
                 //each conversation
@@ -495,6 +612,8 @@
                         sideChatRefreshConversations();
                         sideChatRefreshTotalUnreadCount();
 
+
+                        sideChatBodyMessengerMessages.scrollTo(0, sideChatBodyMessengerMessages.scrollHeight);
                         sideChatBodyMessengerInput.focus();
                         sideChatBodyMessengerInput.value = "";
                     });
@@ -513,10 +632,47 @@
             if (!_.isEqual(oldState.messenger_messages, newState.messenger_messages)) {
 
                 let messages = newState.messenger_messages.map((chat) => {
-                    let isUser = <?php echo Auth::user()?Auth::user()->id:''?> == chat.user.id;
+                    const isUser = <?php echo Auth::user()?Auth::user()->id:''?> == chat.user.id;
+                    const chatCreatedAt = window.moment(chat.created_at).fromNow();
+                    const chatReadAt = window.moment.utc(chat.read_at).fromNow();
+                    
                     return isUser
-                            ? `<span class="side-chat-body-messenger-non-user-message">${chat.body}</span>`
-                            : `<span class="side-chat-body-messenger-user-message">${chat.body}</span>`;
+                            //user message
+                            ? `
+                            <span class="side-chat-body-right-panel-messages-user-wrapper">
+                                <span class="side-chat-body-right-panel-messages-user-body">
+                                    ${chat.body}
+                                    ${
+                                        chat.read_at != null
+                                            ? '<span class="side-chat-body-left-panel-messages-user-read-at"></span>'
+                                            : ''
+                                    }
+                                </span>
+                                ${
+                                    chat.read_at != null
+                                        ? `<span class="side-chat-body-left-panel-messages-created-at">${'seen '+ chatReadAt}</span>`
+                                        : `<span class="side-chat-body-left-panel-messages-created-at">${'sent '+ chatCreatedAt}</span>`
+                                }
+                            </span>
+                            `
+                            //non-user message
+                            : `
+                            <span class="side-chat-body-right-panel-messages-non-user-wrapper">
+                                <span class="side-chat-body-right-panel-messages-non-user-body">
+                                    ${chat.body}
+                                    ${
+                                        chat.read_at != null
+                                            ? '<span class="side-chat-body-left-panel-messages-non-user-read-at"></span>'
+                                            : ''
+                                    }
+                                </span>
+                                ${
+                                    chat.read_at != null
+                                        ? `<span class="side-chat-body-left-panel-messages-created-at">${'seen '+ chatReadAt}</span>`
+                                        : `<span class="side-chat-body-left-panel-messages-created-at">${'sent '+ chatCreatedAt}</span>`
+                                }
+                            </span>
+                            `;
                 });
 
                 sideChatBodyMessengerMessages.innerHTML = messages.join('');
@@ -536,14 +692,14 @@
         });//sub
 
     }//
-    SideChat();
+    document.addEventListener('DOMContentLoaded', SideChat);
 
     
     
     /**
      * TODO:
      *
-     * WORK ON SOCKETS - TICK
+     * SETUP UP SOCKETS - TICK
      *
      * SHOW HINT FOR UNREAD MESSAGES FOR EACH CONVERSATION IN CONTACT LIST - TICK
      *
@@ -555,7 +711,15 @@
      *  
      * SHOW ONLINE STATUS IS CONVERSATION ICON - TICK 
      * 
-     * MAKE ONLINE STATUS PULSE -
+     * MAKE ONLINE STATUS PULSE - TICK
+     * 
+     * SHOW CREATED AT AND SEEN TEXT UNDER MESSAGE - TICK
+     * 
+     * SHOW MESSAGES AS READ (currently as green dot) - TICK 
+     * 
+     * SOCKET UPDATE TO RECIPIENT READ MESSAGES - TICK
+     * 
+     * SHOW 'IS TYPING' HINT (with sound..? ) -
      *
      * BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
      *
