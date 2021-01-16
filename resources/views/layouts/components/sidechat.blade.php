@@ -824,7 +824,7 @@
       
       //SOCKET UPDATE TO RECIPIENT READ MESSAGES - TICK
       
-      //SHOW 'IS TYPING' HINT (with sound..? ) -
+      //SHOW 'IS TYPING' HINT  - TICK (no sound yet though)
      
       //BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
      
