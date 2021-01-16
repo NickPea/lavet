@@ -133,7 +133,10 @@ class SideChatController extends Controller
         $sortedLatestMessages = $latestMessages->sortBy('created_at')->values()->all();
 
         return response($sortedLatestMessages, 200);
-    }
+    } //
+
+
+
 
     /**
      * @param Request $request->message_header_id
@@ -173,7 +176,9 @@ class SideChatController extends Controller
 
         //confirm message created
         return response($newMessage, 201);
-    }
+    } //
+
+
 
     /**
      * @return int Number of 'Marked as read' 
@@ -211,11 +216,87 @@ class SideChatController extends Controller
 
         Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
 
-        
+
         return response([
             'conversation_id' => $conversationMessageHeader->id,
             'count' => $marked,
             'by_user_id' => $userId,
         ], 201);
-    }
-}//
+    } //
+
+
+    public function sendStartedTypingHint(Request $request)
+    {
+        $conversationMessageHeader = Message::find($request->message_header_id);
+        $userId = $request->user()->id;
+
+        //get recipient email and name
+        $recipientEmail = '';
+        $recipientName= '';
+
+        if ($conversationMessageHeader->author_id !== $userId) {
+
+            $recipientEmail = $conversationMessageHeader->user->email;
+            $recipientName = $conversationMessageHeader->user->name;
+
+        } else {
+            $recipientEmail = $conversationMessageHeader->message_activity->first()->user->email;
+            $recipientName = $conversationMessageHeader->message_activity->first()->user->name;
+        }
+
+        //hash email
+        $recipientHash = hash(hash_algos()[5], $recipientEmail); //sha256
+
+        //composer redis message
+        $redisMessage = json_encode([
+            'recipientHash' => $recipientHash,
+            'action' => 'sidechat/started-typing',
+            'payload' => [
+                'name' => $recipientName,
+            ],
+        ]);
+
+
+        //send redis message to node socket
+        Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
+            
+
+        return response('', 204);
+    } //
+
+
+    public function sendStoppedTypingHint(Request $request)
+    {
+        $conversationMessageHeader = Message::find($request->message_header_id);
+        $userId = $request->user()->id;
+
+         //get recipient email and name
+         $recipientEmail = '';
+         $recipientName= '';
+ 
+         if ($conversationMessageHeader->author_id !== $userId) {
+ 
+             $recipientEmail = $conversationMessageHeader->user->email;
+             $recipientName = $conversationMessageHeader->user->name;
+ 
+         } else {
+             $recipientEmail = $conversationMessageHeader->message_activity->first()->user->email;
+             $recipientName = $conversationMessageHeader->message_activity->first()->user->name;
+         }
+
+        $recipientHash = hash(hash_algos()[5], $recipientEmail); //sha256
+
+        $redisMessage = json_encode([
+            'recipientHash' => $recipientHash,
+            'action' => 'sidechat/stopped-typing',
+            'payload' => [
+                'name' => $recipientName,
+            ],
+        ]);
+
+        Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
+
+        return response('', 204);
+    } //
+
+} //controller

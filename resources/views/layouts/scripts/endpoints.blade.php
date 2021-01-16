@@ -35,7 +35,7 @@
 
     function sideChatRefreshTotalUnreadCount() {
         let url = new URL(`${window.location.origin}/sidechat/refresh-total-unread-count`);
-        fetch(url)
+        return fetch(url)
             .then((data) => data.json())
             .then((data) => {
                 chatStore.publish({
@@ -48,7 +48,7 @@
 
     function sideChatRefreshConversations() {
         let url = new URL(`${window.location.origin}/sidechat/refresh-conversations`);
-        fetch(url)
+        return fetch(url)
             .then((data) => data.json())
             .then((conversations) => {
                 chatStore.publish({
@@ -65,7 +65,7 @@
         let url = new URL(`${window.location.origin}/sidechat/refresh-messenger`);
         let formData = new FormData(form)
 
-        fetch(url, {
+        return fetch(url, {
             method: 'POST', 
             body: formData,
             })
@@ -110,6 +110,45 @@
             .catch((res) => {console.error(res);});
               
     }//
+
+    function sideChatSendStartedTypingHint(form) {
+        const url = new URL(`${window.location.origin}/sidechat/send-started-typing-hint`);
+        const formData = new FormData(form);
+        return fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then((res) => {
+            switch (res.status) {
+                case 204 :
+                    console.error('started typing');
+                    break;
+                default:
+                    throw res;
+                    break;
+            }
+        })
+    }//
+
+    function sideChatSendStoppedTypingHint(form) {
+        const url = new URL(`${window.location.origin}/sidechat/send-stopped-typing-hint`);
+        const formData = new FormData(form);
+        return fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then((res) => {
+            switch (res.status) {
+                case 204 :
+                    console.error('stopped typing');
+                    break;
+                default:
+                    throw res;
+                    break;
+            }
+        })
+    }//
+
 
 
     

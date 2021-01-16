@@ -55,6 +55,31 @@
                                 }
                             }
                         break;
+                        case 'sidechat/started-typing' :
+                            {
+                                chatStore.publish({
+                                    type: 'currently-typing/add-conversation',
+                                    payload: data.payload.name,
+                                });
+
+                                //remove after timeout just in case user never stops typing
+                                setTimeout(() => {
+                                        console.error('currently typing timed-out');
+                                        chatStore.publish({
+                                            type: 'currently-typing/remove-conversation',
+                                            payload: data.payload.name,
+                                        });
+                                }, 3000);
+                            }
+                        break;
+                        case 'sidechat/stopped-typing' :
+                            {
+                                chatStore.publish({
+                                    type: 'currently-typing/remove-conversation',
+                                    payload: data.payload.name,
+                                });
+                            }
+                        break;
                     default:
                         break;
                 }//sw

@@ -103,3 +103,5 @@ Route::post('sidechat/refresh-messenger', 'SideChatController@refreshMessenger')
 Route::post('sidechat/send-message', 'SideChatController@sendMessage');
 Route::get('sidechat/refresh-total-unread-count', 'SideChatController@refreshTotalUnreadCount');
 Route::post('sidechat/mark-conversation-messages-as-read', 'SideChatController@markConversationMessagesAsRead');
+Route::post('sidechat/send-started-typing-hint', 'SideChatController@sendStartedTypingHint');
+Route::post('sidechat/send-stopped-typing-hint', 'SideChatController@sendStoppedTypingHint');

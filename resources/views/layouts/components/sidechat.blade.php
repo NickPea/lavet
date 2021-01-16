@@ -16,6 +16,34 @@
         border-radius: 50%;
     }
 
+    .side-chat-open-button-currently-typing-hint {
+        display: none;
+        position: absolute;
+
+        z-index: -1;
+
+        top: -7.5px;
+        left: -7.5px;
+
+        height: 30px;
+        width: 30px;
+
+        border-radius: 50%;
+        background-color: orange;
+
+        animation: open-button-currently-typing-hint 1s ease infinite;
+    }
+
+    @keyframes open-button-currently-typing-hint {
+        0% {
+            transform: scale(0)
+        }
+
+        100% {
+        }
+
+    }
+
     .side-chat-open-button-unread-count {
 
         display: none;
@@ -25,8 +53,8 @@
         top: -5px;
         left: -5px;
 
-        height: 20px;
-        width: 20px;
+        height: 25px;
+        width: 25px;
 
         overflow: hidden;
         border-radius: 50%;
@@ -76,6 +104,12 @@
         width: 50vw;
     }
 
+    @media screen and (max-width: 1000px) {
+        .side-chat-open {
+            width: 80vw;
+        }
+    }
+
     /* header */
 
     .side-chat-header {
@@ -92,9 +126,13 @@
 
     /* close button */
 
-    .side-chat-close-button {
+    .side-chat-header-close-button {
         align-self: center;
         padding: 0.5rem;
+    }
+
+    .side-chat-header-hint-message {
+        align-self: center;
     }
 
     /* body */
@@ -189,7 +227,7 @@
 
     .side-chat-body-left-panel-messages-created-at {
         visibility: hidden;
-        
+
         color: grey;
         font-size: 0.8rem;
     }
@@ -318,6 +356,7 @@
         background-color: grey;
         border: 1px solid white;
     }
+
     .side-chat-body-right-panel-conversation-online-badge {
         position: absolute;
         top: 0;
@@ -406,6 +445,8 @@
 <div class="side-chat-open-button side-chat-button side-chat-variables" data-js="side-chat-open-button">
     @include('svg.chat')
     <span class="side-chat-open-button-unread-count" data-js="side-chat-open-button-unread-count"></span>
+    <span class="side-chat-open-button-currently-typing-hint"
+        data-js="side-chat-open-button-currently-typing-hint"></span>
 </div>
 
 
@@ -415,9 +456,11 @@
 
     <!-- header -->
     <div class="side-chat-header">
-        <div class="side-chat-close-button side-chat-button" data-js="side-chat-close-button">
+        <div class="side-chat-header-close-button side-chat-button" data-js="side-chat-header-close-button">
             @include('svg.arrow-right')
         </div>
+
+        <span class="side-chat-header-hint-message" data-js="side-chat-header-hint-message"></span>
     </div>
 
 
@@ -470,7 +513,7 @@
         let sideChatOpenButtonUnreadCount = document.querySelector('[data-js="side-chat-open-button-unread-count"]');
         !sideChatOpenButtonUnreadCount&&console.error('query selector not found');
         
-        let sideChatCloseButton = document.querySelector('[data-js="side-chat-close-button"]');
+        let sideChatCloseButton = document.querySelector('[data-js="side-chat-header-close-button"]');
         !sideChatOpenButton&&console.error('query selector not found');
         
         let sideChatMain = document.querySelector('[data-js="side-chat-main"]');
@@ -491,13 +534,17 @@
         let sideChatBodyMessengerMessages = document.querySelector('[data-js="side-chat-body-left-panel-messages"]');
         !sideChatBodyMessengerMessages&&console.error('query selector not found');
         
+        let sideChatHeaderHintMessage = document.querySelector('[data-js="side-chat-header-hint-message"]');
+        !sideChatHeaderHintMessage&&console.error('query selector not found');
+        
+        let sideChatOpenButtonCurrentlyTypingHint = document.querySelector('[data-js="side-chat-open-button-currently-typing-hint"]');
+        !sideChatOpenButtonCurrentlyTypingHint&&console.error('query selector not found');
+        
 
         //EVENTS
 
-        //on load get total message count
-        document.addEventListener('DOMContentLoaded', () => {
-            sideChatRefreshTotalUnreadCount();
-        });
+        //called on script load, get total unread count
+        sideChatRefreshTotalUnreadCount();
 
         //open messenger
         sideChatOpenButton.addEventListener('click', (e) => {
@@ -539,8 +586,45 @@
             sideChatRefreshTotalUnreadCount();
         });
 
+        // send typing hints to recipient
+        {
+            let previousInputCharLength = 0; //start off with an empty input
+            
+            sideChatBodyMessengerInput.addEventListener('input', async (e) => {
+                
+                const currentConversationId = chatStore.getState().messenger_conversation_id
+                const currentInputCharLength = [...e.target.value].length;
+
+                //if input empty then i've stopped typing, send 'stopped' hint
+                if (currentInputCharLength == 0) {
+                    sideChatSendStoppedTypingHint(sideChatBodyMessengerForm)
+                }
+                
+                //if input not empty AND i just started typing send 'started' hint, 
+                if (currentInputCharLength > 0 && previousInputCharLength == 0) {
+                    sideChatSendStartedTypingHint(sideChatBodyMessengerForm)
+                }
+                
+                previousInputCharLength = currentInputCharLength; //set for next input event
+            });
+
+            // reset previous length to 0 on input form submit
+            sideChatBodyMessengerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                sideChatSendStoppedTypingHint(sideChatBodyMessengerForm);
+                previousInputCharLength = 0;
+            });
+
+        }//end type hinting block scope
+
+
+
+
 
         //RENDER
+
+        //render TYPE HINTING
+
 
         //render TOTAL-UNREAD-MESSAGES
         chatStore.subscribe((oldState, newState) => {
@@ -689,41 +773,62 @@
                 sideChatBodyMessengerHiddenInput.value = newState.messenger_conversation_id;
 
             }//if state change
-        });//sub
+        });//
+
+        // render Typing Hints
+        chatStore.subscribe((oldState, newState) => {
+
+            if (!_.isEqual(oldState.currently_typing, newState.currently_typing)) {
+
+                const currentlyTypingNames = chatStore.getState().currently_typing;
+               
+                if (newState.currently_typing.length !== 0) {
+                    
+                    sideChatHeaderHintMessage.textContent = `${currentlyTypingNames.join(', ')} is typing`;
+                    sideChatOpenButtonCurrentlyTypingHint.style.display = 'block';
+
+                } else {
+                    sideChatHeaderHintMessage.textContent = '';
+                    sideChatOpenButtonCurrentlyTypingHint.style.display = 'none';
+
+                }
+
+            
+
+            }//if state change
+        });//
+
 
     }//
     document.addEventListener('DOMContentLoaded', SideChat);
 
+    // TASK LIST
     
-    
-    /**
-     * TODO:
-     *
-     * SETUP UP SOCKETS - TICK
-     *
-     * SHOW HINT FOR UNREAD MESSAGES FOR EACH CONVERSATION IN CONTACT LIST - TICK
-     *
-     * SHOW HINT FOR TOTAL UNREAD MESSAGES ON SIDECHAT BUTTON - TICK
-     * 
-     * ADD SOCKET UPDATE FOR TOTAL UNREAD MESSAGES - TICK
-     *
-     * MARK MESSAGES AS READ (on conversationa click and input click) - TICK
-     *  
-     * SHOW ONLINE STATUS IS CONVERSATION ICON - TICK 
-     * 
-     * MAKE ONLINE STATUS PULSE - TICK
-     * 
-     * SHOW CREATED AT AND SEEN TEXT UNDER MESSAGE - TICK
-     * 
-     * SHOW MESSAGES AS READ (currently as green dot) - TICK 
-     * 
-     * SOCKET UPDATE TO RECIPIENT READ MESSAGES - TICK
-     * 
-     * SHOW 'IS TYPING' HINT (with sound..? ) -
-     *
-     * BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
-     *
-     * DISALLOW SELECTING A NEW CONVERSATION WHILST A MESSAGE IS BEING SENT AND REFRESHED
-     *
-     **/
+      //SETUP UP SOCKETS - TICK
+     
+      //SHOW HINT FOR UNREAD MESSAGES FOR EACH CONVERSATION IN CONTACT LIST - TICK
+     
+      //SHOW HINT FOR TOTAL UNREAD MESSAGES ON SIDECHAT BUTTON - TICK
+      
+      //ADD SOCKET UPDATE FOR TOTAL UNREAD MESSAGES - TICK
+     
+      //MARK MESSAGES AS READ (on conversationa click and input click) - TICK
+       
+      //SHOW ONLINE STATUS IS CONVERSATION ICON - TICK 
+      
+      //MAKE ONLINE STATUS PULSE - TICK
+      
+      //SHOW CREATED AT AND SEEN TEXT UNDER MESSAGE - TICK
+      
+      //SHOW MESSAGES AS READ (currently as green dot) - TICK 
+      
+      //SOCKET UPDATE TO RECIPIENT READ MESSAGES - TICK
+      
+      //SHOW 'IS TYPING' HINT (with sound..? ) -
+     
+      //BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
+     
+      //DISALLOW SELECTING A NEW CONVERSATION WHILST A MESSAGE IS BEING SENT AND REFRESHED
+     
+     
 </script>

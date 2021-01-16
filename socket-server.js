@@ -34,13 +34,17 @@ httpServer.listen(5000);
         //map socket id to user
         currentSocket.on("map-socket-user", async (data) => {
             redisCmd.set(data.userEmailHash, currentSocket.id);
-            console.log(`-- Mapped User: ${data.userEmailHash} - ${currentSocket.id}`);
-        });       
+            console.log(
+                `-- Mapped User: ${data.userEmailHash} - ${currentSocket.id}`
+            );
+        });
         //map socket id to user
         currentSocket.on("unmap-socket-user", async (data) => {
             redisCmd.del(data.userEmailHash);
-            console.log(`-- Unmapped User: ${data.userEmailHash} - ${currentSocket.id}`);
-        });       
+            console.log(
+                `-- Unmapped User: ${data.userEmailHash} - ${currentSocket.id}`
+            );
+        });
 
         //before disconnect
         currentSocket.on("disconnecting", (/** reason **/) => {
@@ -52,24 +56,22 @@ httpServer.listen(5000);
             console.log(`-- Browser Disconnected: ${currentSocket.id}`);
         });
     }); //IO
-} //ioBlock
+} //io
 
 /** --------------------------------- REDIS -------------------------------------------- **/
 {
     redisSub.subscribe(["FROM-LARAVEL-TO-NODE"], () => {
-        console.log('-- Subscribed to Redis');
+        console.log("-- Subscribed to Redis");
     });
 
     redisSub.on("message", async (redisChannel, redisMessage) => {
-
         let data = JSON.parse(redisMessage);
-        
-        console.log(`-- Recieved Message From Redis: ${JSON.stringify(data)}`);
-        
+
+        console.log("-- Recieved Message From Redis:");
+        console.dir(data);
+
         let socketId = await redisCmd.get(data.recipientHash);
-        
-        io.to(socketId).emit("FROM-NODE-TO-BROWSER", {...data});
-        
-        
+
+        io.to(socketId).emit("FROM-NODE-TO-BROWSER", { ...data });
     }); //redisOnMessage
-} //redisblock
+} //redis
