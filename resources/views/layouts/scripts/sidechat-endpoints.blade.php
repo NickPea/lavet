@@ -59,8 +59,6 @@
         
     }//
 
-    //TODO::WHY AM I POSTING DATA HERE!????
-
     function sideChatRefreshMessenger(form) {
         let url = new URL(`${window.location.origin}/sidechat/refresh-messenger`);
         let formData = new FormData(form)
@@ -97,7 +95,10 @@
                 switch (res.status) {
                     case 201 :
                         {
-                            res.json().then((data) => {console.log(`Message Created: ${data}`)});
+                            res.json().then((data) => {
+                                    console.log(`Message Created:`);
+                                    console.log(data);
+                                });
                             break;
                         }
                     default:
@@ -141,6 +142,44 @@
             switch (res.status) {
                 case 204 :
                     console.error('stopped typing');
+                    break;
+                default:
+                    throw res;
+                    break;
+            }
+        })
+    }//
+    
+    function sideChatAddConversationFromProfileId(profileId) {
+
+        const url = new URL(`${window.location.origin}/sidechat/add-conversation-from-profile-id`);
+
+        const formData = new FormData(document.createElement('form'));
+        formData.set('profile_id', profileId)
+        formData.set('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+
+        return fetch(url, {
+            method: 'POST',
+            body: formData,
+        })
+        .then((res) => {
+            switch (res.status) {
+                case 201 :
+                        return res.json()
+                        .then((data) => {
+                                console.log('Conversation Created:')
+                                console.log(data);
+                                return data;
+                            })
+                    break;
+                case 202 :
+                        return res.json()
+                        .then((data) => {
+                                console.log('Conversation Already Exists:')
+                                console.log(data); 
+                                return data
+                            })
                     break;
                 default:
                     throw res;

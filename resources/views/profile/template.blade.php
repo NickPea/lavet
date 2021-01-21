@@ -115,7 +115,7 @@
 
 </div> <!-- end container -->
 
-@include('profile.components.chat')
+{{-- @include('profile.components.chat') --}}
 
 <!-- Endpoints -->
 @include('profile.scripts.endpoints')

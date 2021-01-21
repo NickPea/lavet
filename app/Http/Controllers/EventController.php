@@ -7,80 +7,72 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    /** TEMPLATE */
+    public function getTemplate(Event $event)
     {
-        //
+        return view('event.template', ['event' => $event]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    /** GET COMMENTS */
+    public function getEventComments(Event $event)
     {
-        //
-    }
+        $comments = $event->comment()->where('parent_id', null)->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Event $event)
+        $formattedComments = $comments->map(function ($comment) {
+            return [
+                'id' => $comment->id,
+                'user_profile_path' => $comment->user->profile->path(),
+                'user_profile_image_path' => $comment->user->profile->image->first()->path,
+                'user_name' => $comment->user->name,
+                'body' => $comment->body,
+                'created_at' => $comment->created_at->diffForHumans(),
+                'reply_comments' => $comment->comment_child->map(function ($replyComment) {
+                    return [
+                        'user_profile_path' => $replyComment->user->profile->path(),
+                        'user_profile_image_path' => $replyComment->user->profile->image->first()->path,
+                        'user_name' => $replyComment->user->name,
+                        'body' => $replyComment->body,
+                        'created_at' => $replyComment->created_at->diffForHumans(),
+                    ];
+                }) //inner map
+            ];
+        }); //outter map        
+
+        return response($formattedComments->toArray(), 200);
+    } //
+
+
+    /** NEW COMMENT */
+    public function newEventComment(Event $event, Request $request)
     {
-        return view('event.view', ['event' => $event]);
+        $createdComment = $event->comment()->create([
+            'body' => $request->new_comment,
+            'user_id' => $request->user()->id,
+        ]);
 
-    }
+        return response($createdComment, 201);
+    } //
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Event $event)
+
+    /** NEW REPLY COMMENT */
+    public function newEventReplyComment(Event $event, Request $request)
     {
-        //
-    }
+        $createdReplyComment = $event->comment()->create([
+            'parent_id' => $request->main_comment_id,
+            'body' => $request->new_reply_comment,
+            'user_id' => $request->user()->id,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Event $event)
-    {
-        //
-    }
+        return response($createdReplyComment, 201);
+    } //
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Event  $event
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Event $event)
-    {
-        //
-    }
-}
+
+
+
+
+
+
+
+}//CONTROLLER

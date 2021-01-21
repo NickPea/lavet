@@ -5,6 +5,23 @@
 <script>
     // -- 
 
+
+    chatStore.addReducer(
+        function messenger_open(state = false, action) {
+            switch (action.type) {
+                case 'messenger/open':
+                    return true;
+                    break;
+                case 'messenger/close':
+                    return false;
+                    break;
+                default:
+                    return state;
+                    break;
+            }//sw
+        }//fn
+    );//
+
     chatStore.addReducer(
         function total_unread_count(state = [], action) {
             switch (action.type) {

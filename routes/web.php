@@ -84,7 +84,10 @@ Route::get('listing/{listing}', 'ListingController@show');
 
 
 // EVENT
-Route::get('event/{event}', 'EventController@show');
+Route::get('event/{event}', 'EventController@getTemplate');
+Route::get('event/{event}/get-event-comments', 'EventController@getEventComments');
+Route::post('event/{event}/new-event-comment', 'EventController@newEventComment');
+Route::post('event/{event}/new-event-reply-comment', 'EventController@newEventReplyComment');
 
 // --retrieve
 // --store
@@ -105,3 +108,4 @@ Route::get('sidechat/refresh-total-unread-count', 'SideChatController@refreshTot
 Route::post('sidechat/mark-conversation-messages-as-read', 'SideChatController@markConversationMessagesAsRead');
 Route::post('sidechat/send-started-typing-hint', 'SideChatController@sendStartedTypingHint');
 Route::post('sidechat/send-stopped-typing-hint', 'SideChatController@sendStoppedTypingHint');
+Route::post('sidechat/add-conversation-from-profile-id', 'SideChatController@addConversationFromProfileId');

@@ -29,7 +29,7 @@
         color: white;
         position: sticky;
         top: 0;
-        z-index: 999999999999999999999999999999999999999999999;
+        z-index: 5;
     }
 
     .search-bar-search-indicator {

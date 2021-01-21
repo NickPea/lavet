@@ -82,6 +82,8 @@ class SideChatController extends Controller
                         ->where('author_id', '<>', $requestUserId)
                         ->where('read_at', null)
                         ->count(),
+                    'last_updated' => $headerMessage->updated_at->toRfc822String(),
+
                 ];
             } //if
 
@@ -97,13 +99,14 @@ class SideChatController extends Controller
                         ->where('author_id', '<>', $requestUserId)
                         ->where('read_at', null)
                         ->count(),
+                    'last_updated' => $headerMessage->updated_at->toRfc822String(),
 
                 ];
             } //if
 
         }); //format header
 
-        return $conversations;
+        return $conversations->sortByDesc('last_updated')->values()->all();
     } //
 
 
@@ -232,13 +235,12 @@ class SideChatController extends Controller
 
         //get recipient email and name
         $recipientEmail = '';
-        $recipientName= '';
+        $recipientName = '';
 
         if ($conversationMessageHeader->author_id !== $userId) {
 
             $recipientEmail = $conversationMessageHeader->user->email;
             $recipientName = $conversationMessageHeader->user->name;
-
         } else {
             $recipientEmail = $conversationMessageHeader->message_activity->first()->user->email;
             $recipientName = $conversationMessageHeader->message_activity->first()->user->name;
@@ -259,7 +261,7 @@ class SideChatController extends Controller
 
         //send redis message to node socket
         Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
-            
+
 
         return response('', 204);
     } //
@@ -270,19 +272,18 @@ class SideChatController extends Controller
         $conversationMessageHeader = Message::find($request->message_header_id);
         $userId = $request->user()->id;
 
-         //get recipient email and name
-         $recipientEmail = '';
-         $recipientName= '';
- 
-         if ($conversationMessageHeader->author_id !== $userId) {
- 
-             $recipientEmail = $conversationMessageHeader->user->email;
-             $recipientName = $conversationMessageHeader->user->name;
- 
-         } else {
-             $recipientEmail = $conversationMessageHeader->message_activity->first()->user->email;
-             $recipientName = $conversationMessageHeader->message_activity->first()->user->name;
-         }
+        //get recipient email and name
+        $recipientEmail = '';
+        $recipientName = '';
+
+        if ($conversationMessageHeader->author_id !== $userId) {
+
+            $recipientEmail = $conversationMessageHeader->user->email;
+            $recipientName = $conversationMessageHeader->user->name;
+        } else {
+            $recipientEmail = $conversationMessageHeader->message_activity->first()->user->email;
+            $recipientName = $conversationMessageHeader->message_activity->first()->user->name;
+        }
 
         $recipientHash = hash(hash_algos()[5], $recipientEmail); //sha256
 
@@ -297,6 +298,64 @@ class SideChatController extends Controller
         Redis::publish('FROM-LARAVEL-TO-NODE', $redisMessage);
 
         return response('', 204);
+    } //
+
+
+    public function addConversationFromProfileId(Request $request)
+    {
+
+        //----
+
+        // //auth
+        // if ($request->user == null) {
+        //     return response('Please Login First', 401);
+        // }
+
+        $userId = $request->user()->id;
+        $profileId = $request->profile_id;
+
+        //find previous conversation parent message
+
+        $ConversationParentMessage = Message::join('message_activities', 'messages.id', '=', 'message_activities.message_id')
+            ->where(function ($query) use ($userId, $profileId) {
+                $query
+                    ->where('messages.author_id', $userId)
+                    ->where('message_activities.recipient_id', $profileId);
+            })
+            ->orWhere(function ($query) use ($userId, $profileId) {
+                $query
+                    ->where('message_activities.recipient_id', $userId)
+                    ->where('messages.author_id', $profileId);
+            })
+            ->select('messages.*')
+            ->first();
+
+        //if conversation exists, return header
+        if ($ConversationParentMessage != null) {
+
+            return response($ConversationParentMessage, 202);
+
+        //else conversation does not exist, create it and return header
+        } else {
+
+            //create conversation parent message
+            $newConversationParentMessage = Message::create([
+                'author_id' => $userId,
+                'body' => 'CONVERSATION HEADER'
+            ]);
+
+            //and link to recipient
+            $newConversationParentMessage->message_activity()->create([
+                'recipient_id' => $profileId
+            ]);
+
+            //reassign previous null variable
+            $ConversationParentMessage = $newConversationParentMessage;
+
+            return response($ConversationParentMessage, 201);
+
+        }
+
     } //
 
 } //controller

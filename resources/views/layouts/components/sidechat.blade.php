@@ -39,8 +39,7 @@
             transform: scale(0)
         }
 
-        100% {
-        }
+        100% {}
 
     }
 
@@ -72,6 +71,7 @@
     .side-chat-position {
         position: fixed;
         right: 0;
+        top: 0;
     }
 
     .side-chat-variables {
@@ -94,7 +94,7 @@
         width: 0vw;
         /*closed on page load*/
 
-        z-index: 9999999999999999;
+        z-index: 99999999999;
         overflow: hidden;
 
         box-shadow: var(--shadow1)
@@ -165,10 +165,10 @@
         /* of left panel */
 
         background-color: white;
-        padding: 0 1rem;
+        padding: 1rem 1rem 0 1rem;
 
         overflow-y: auto;
-        /* scroll-behavior: smooth; */
+        scroll-behavior:auto;
 
         display: flex;
         flex-flow: column nowrap;
@@ -295,8 +295,8 @@
 
     .side-chat-body-left-panel-input:focus {
         outline: none;
-        background-color: rgb(110, 110, 110);
-        color: white
+        /* background-color: rgb(110, 110, 110); */
+        /* color: white */
     }
 
     /* right panel */
@@ -322,11 +322,23 @@
         padding: 7px;
         margin: 3px 1rem;
         border-radius: 0.5rem;
+
+        cursor: pointer;
     }
 
     .side-chat-body-right-panel-conversation:hover {
         background-color: white;
     }
+
+    .side-chat-body-right-panel-conversation-selected {
+        background-color: lightgrey
+    }
+
+    .side-chat-body-right-panel-conversation-selected:hover {
+        background-color: lightgrey;
+    }
+
+
 
     .side-chat-body-right-panel-conversation-overlay {
         position: relative;
@@ -461,6 +473,7 @@
         </div>
 
         <span class="side-chat-header-hint-message" data-js="side-chat-header-hint-message"></span>
+
     </div>
 
 
@@ -546,17 +559,22 @@
         //called on script load, get total unread count
         sideChatRefreshTotalUnreadCount();
 
+
+
+
         //open messenger
         sideChatOpenButton.addEventListener('click', (e) => {
-            sideChatMain.classList.add('side-chat-open')
-            sideChatOpenButton.style.display = "none";
-            sideChatRefreshConversations();
+            chatStore.publish({type: 'messenger/open'});
         });
        
         //close messenger
         sideChatCloseButton.addEventListener('click', (e) => {
-            sideChatMain.classList.remove('side-chat-open')
-            sideChatOpenButton.style.display = "block";
+            chatStore.publish({type: 'messenger/close'});
+        });
+
+        //focus input on message section click
+        sideChatBodyMessengerMessages.addEventListener('click', () => {
+            sideChatBodyMessengerInput.focus();
         });
 
         //send/submit new messsage
@@ -623,7 +641,23 @@
 
         //RENDER
 
-        //render TYPE HINTING
+
+        //render MESSENGER-OPEN
+        chatStore.subscribe((oldState, newState) => {
+            if (!_.isEqual(oldState.messenger_open, newState.messenger_open)) {
+
+                if (newState.messenger_open) {
+                    sideChatMain.classList.add('side-chat-open')
+                    sideChatOpenButton.style.display = "none";
+                    sideChatRefreshConversations();
+                } else {
+                    sideChatMain.classList.remove('side-chat-open')
+                    sideChatOpenButton.style.display = "block";
+                }
+
+            }//if state change
+        });
+                
 
 
         //render TOTAL-UNREAD-MESSAGES
@@ -648,10 +682,11 @@
                 let chatConversations = 
                     newState.conversations.map((conversationData) => {
 
+
                         let eachConversation = '';
 
                             eachConversation = `
-                                    <div class="side-chat-body-right-panel-conversation" 
+                            <div class="side-chat-body-right-panel-conversation ${newState.messenger_conversation_id == conversationData.message_header_id ? 'side-chat-body-right-panel-conversation-selected' : ''}"
                                             data-js="side-chat-body-right-panel-conversation">
                                         <span class="side-chat-body-right-panel-conversation-overlay">
                                             <img class="side-chat-body-right-panel-conversation-img" src="${conversationData.image}">
@@ -692,9 +727,9 @@
                         let conversationHiddenForm = dOMConversation.querySelector('form');
 
                         await sideChatMarkConversationMessagesAsRead(conversationHiddenForm);
-                        sideChatRefreshMessenger(conversationHiddenForm);
-                        sideChatRefreshConversations();
-                        sideChatRefreshTotalUnreadCount();
+                        await sideChatRefreshMessenger(conversationHiddenForm);
+                        await sideChatRefreshConversations();
+                        await sideChatRefreshTotalUnreadCount();
 
 
                         sideChatBodyMessengerMessages.scrollTo(0, sideChatBodyMessengerMessages.scrollHeight);
@@ -709,6 +744,7 @@
             }//if state change
         })//
 
+        //render
 
         //render MESSAGES
         chatStore.subscribe((oldState, newState) => {
@@ -765,15 +801,6 @@
             }//if state change
         });//sub
 
-        //render CONVERSATION-ID (into hidden input of the send message form)
-        chatStore.subscribe((oldState, newState) => {
-
-            if (!_.isEqual(oldState.messenger_conversation_id, newState.messenger_conversation_id)) {
-
-                sideChatBodyMessengerHiddenInput.value = newState.messenger_conversation_id;
-
-            }//if state change
-        });//
 
         // render Typing Hints
         chatStore.subscribe((oldState, newState) => {
@@ -793,10 +820,88 @@
 
                 }
 
-            
+            }//if state change
+        });//
+
+
+
+        //render CONVERSATION-ID (into hidden input of the send message form)
+        chatStore.subscribe((oldState, newState) => {
+
+            if (!_.isEqual(oldState.messenger_conversation_id, newState.messenger_conversation_id)) {
+
+                sideChatBodyMessengerHiddenInput.value = newState.messenger_conversation_id;
+
+                ///FORCE CONVERSTAION RE-RENDER (TERRIBLE REUSE OF CODE)
+                let chatConversations = 
+                    newState.conversations.map((conversationData) => {
+
+
+                        let eachConversation = '';
+
+                            eachConversation = `
+                                    <div class="side-chat-body-right-panel-conversation ${newState.messenger_conversation_id == conversationData.message_header_id ? 'side-chat-body-right-panel-conversation-selected' : ''}"
+                                            data-js="side-chat-body-right-panel-conversation">
+                                        <span class="side-chat-body-right-panel-conversation-overlay">
+                                            <img class="side-chat-body-right-panel-conversation-img" src="${conversationData.image}">
+                                            ${
+                                                conversationData.unread_count > 0
+                                                    ? `<span class="side-chat-body-right-panel-conversation-unread-badge">${conversationData.unread_count}</span>` 
+                                                    : ''
+                                            }
+                                            ${
+                                                conversationData.is_online
+                                                    ? '<span class="side-chat-body-right-panel-conversation-online-badge"></span>'
+                                                    : '<span class="side-chat-body-right-panel-conversation-offline-badge"></span>'
+                                            }
+                                        </span>
+                                        <span class="side-chat-body-right-panel-conversation-name">${conversationData.name}</span>
+                                        <form>
+                                            <input type="hidden" name="message_header_id" value="${conversationData.message_header_id}">
+                                            @csrf 
+                                        </form>
+                                    </div>
+                                    `;
+
+                        return eachConversation;
+
+                    });
+                sideChatBodyContacts.innerHTML = chatConversations.join('');
+
+                //rendered EVENTS
+                let allDomConversations = document.querySelectorAll('[data-js="side-chat-body-right-panel-conversation"]');
+                allDomConversations.length==0&&console.error('query selector not found', allDomConversations);
+                
+                //each conversation
+                allDomConversations.forEach((dOMConversation) => {
+                    
+                    //conversation on click
+                    dOMConversation.addEventListener('click', async (e) => {
+
+                        let conversationHiddenForm = dOMConversation.querySelector('form');
+
+                        await sideChatMarkConversationMessagesAsRead(conversationHiddenForm);
+                        await sideChatRefreshMessenger(conversationHiddenForm);
+                        await sideChatRefreshConversations();
+                        await sideChatRefreshTotalUnreadCount();
+
+
+                        sideChatBodyMessengerMessages.scrollTo(0, sideChatBodyMessengerMessages.scrollHeight);
+                        sideChatBodyMessengerInput.focus();
+                        sideChatBodyMessengerInput.value = "";
+                    });
+
+
+                });//each
 
             }//if state change
         });//
+
+
+
+
+
+
 
 
     }//
@@ -826,9 +931,7 @@
       
       //SHOW 'IS TYPING' HINT  - TICK (no sound yet though)
      
-      //BE ABLE TO ADD A NEW USER (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST)
-     
-      //DISALLOW SELECTING A NEW CONVERSATION WHILST A MESSAGE IS BEING SENT AND REFRESHED
-     
+      //BE ABLE TO ADD A NEW USER -FROM THEIR PROFILE PAGE (CREATE A MESSAGE HEADER ASSUMING DOESNT ALREADY EXIST) - TICK
+          
      
 </script>

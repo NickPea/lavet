@@ -15,9 +15,9 @@
     <!-- App Styles -->
     @include('layouts.styles.page')
 
-    @include('layouts.scripts.state.chat-store')
-    @include('layouts.scripts.state.chat-reducers')
-    @include('layouts.scripts.endpoints')
+    @include('layouts.scripts.state.sidechat-store')
+    @include('layouts.scripts.state.sidechat-reducers')
+    @include('layouts.scripts.sidechat-endpoints')
 
     @stack('head')
 
