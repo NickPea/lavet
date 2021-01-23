@@ -1,10 +1,33 @@
 {{--  --}}
+
 <script>
 
 
 
 function getEventComments() {
     let url = new URL(`${window.location.href}/get-event-comments`);
+
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                    .then((data) => {
+                        return data;
+                    })
+                }
+                break;
+            default:
+                throw res;
+                break;
+        }//switch
+    })//then
+}//
+
+function getEventAttendingAllAttendess() {
+
+    let url = new URL(`${window.location.href}/get-event-attending-all-attendees`);
 
     return fetch(url)
     .then(res => {
@@ -88,6 +111,9 @@ function postNewEventReplyComment(mainCommentId, newReplyCommentText) {
         }//switch
     })//then
 }//
+
+
+
 
 
 </script>

@@ -44,6 +44,24 @@ class EventController extends Controller
     } //
 
 
+
+    /** GET ALL ATTENDEES */
+    public function getEventAttendingAllAttendess(Event $event, Request $request)
+    {
+
+        $attendees = $event->rsvp->map->user->map(function ($user)
+        {
+            return [
+                'name' => $user->name,
+                'image' => $user->profile->image->first()->path,
+                'profile' => $user->profile->path(),
+            ];
+        });
+
+        return response($attendees, 200);
+    }
+
+
     /** NEW COMMENT */
     public function newEventComment(Event $event, Request $request)
     {

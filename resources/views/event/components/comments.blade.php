@@ -53,7 +53,7 @@
                     <input data-js="event-comments-form-textarea" class="form-control" name="new-comment"
                         placeholder="Leave a new comment...">
 
-                    <button class="btn btn-primary align-self-end mt-3" type="submit">Submit</button>
+                    <button class="btn btn-primary align-self-end mt-3" type="submit">New Comment</button>
 
                 </div>
 

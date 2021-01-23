@@ -16,6 +16,7 @@
 // -- ATTEND AND UPDATE ATTENDING & REMAINING SEATS
 // -- SEE ALL ATTENDING
 
+
 // -- ADD AN EVENT WIZARD (FROM OTHER PAGES)
 
 
@@ -56,6 +57,9 @@
 
 
 @push('body')
+
+<!-- modals -->
+@include('event.components.attending-all-modal')
 
 
 <!-- header wrapper -->
