@@ -94,7 +94,7 @@
             window.addEventListener('click', (e) => {
                 if (e.target == modalBackdrop) {
                     store.publish({
-                    type: 'event_attending_modal/hide',
+                    type: 'event-attending-modal/hide',
                     });
                 }
             });

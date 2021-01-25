@@ -96,7 +96,7 @@
             (async function() {
                 const data = await getEventComments() //endpoint
                 store.publish({
-                    type: 'event_comments/refresh',
+                    type: 'event-comments/refresh',
                     payload: data,
                 });
             })();
@@ -116,7 +116,7 @@
                     //refresh comments
                     const data = await getEventComments() //endpoint
                     store.publish({
-                        type: 'event_comments/refresh',
+                        type: 'event-comments/refresh',
                         payload: data,
                     });
 
@@ -253,7 +253,7 @@
                             //no clean up needed when all comments re-rendered
                             const data = await getEventComments() //endpoint
                             store.publish({
-                                type: 'event_comments/refresh',
+                                type: 'event-comments/refresh',
                                 payload: data,
                             });
 

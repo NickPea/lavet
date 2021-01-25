@@ -60,6 +60,7 @@
 
 <!-- modals -->
 @include('event.components.attending-all-modal')
+@include('event.components.rsvp-prompt-modal')
 
 
 <!-- header wrapper -->

@@ -86,9 +86,12 @@ Route::get('listing/{listing}', 'ListingController@show');
 // EVENT
 Route::get('event/{event}', 'EventController@getTemplate');
 Route::get('event/{event}/get-event-comments', 'EventController@getEventComments');
+Route::get('event/{event}/get-event-attending-count', 'EventController@getEventAttendingCount');
+Route::get('event/{event}/get-event-some-attending', 'EventController@getEventSomeAttending');
 Route::get('event/{event}/get-event-attending-all-attendees', 'EventController@getEventAttendingAllAttendess');
 Route::post('event/{event}/new-event-comment', 'EventController@newEventComment');
 Route::post('event/{event}/new-event-reply-comment', 'EventController@newEventReplyComment');
+Route::post('event/{event}/post-rsvp-to-event', 'EventController@postRsvpToEvent');
 
 
 //PROFILE CHAT

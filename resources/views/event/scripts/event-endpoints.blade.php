@@ -2,10 +2,9 @@
 
 <script>
 
-
-
 function getEventComments() {
-    let url = new URL(`${window.location.href}/get-event-comments`);
+    
+    const url = new URL(`${window.location.href}/get-event-comments`);
 
     return fetch(url)
     .then(res => {
@@ -13,21 +12,72 @@ function getEventComments() {
             case 200 :
                 {
                     return res.json()
-                    .then((data) => {
-                        return data;
-                    })
+                        .then((data) => {
+                            return data;
+                        });
                 }
-                break;
+            break;
+            case 403:
+                {
+                    return res.status;
+                }
+            break;
             default:
                 throw res;
-                break;
+            break;
         }//switch
     })//then
 }//
 
+
+function getAttendingCount() {
+
+    const url = new URL(`${window.location.href}/get-event-attending-count`);
+
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventSomeAttending() {
+
+    const url = new URL(`${window.location.href}/get-event-some-attending`);
+
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+
 function getEventAttendingAllAttendess() {
 
-    let url = new URL(`${window.location.href}/get-event-attending-all-attendees`);
+    const url = new URL(`${window.location.href}/get-event-attending-all-attendees`);
 
     return fetch(url)
     .then(res => {
@@ -39,10 +89,10 @@ function getEventAttendingAllAttendess() {
                         return data;
                     })
                 }
-                break;
+            break;
             default:
                 throw res;
-                break;
+            break;
         }//switch
     })//then
 }//
@@ -66,15 +116,20 @@ function postNewEventComment(newCommentText) {
         switch (res.status) {
             case 201 :
                 {
-                    res.json()
-                    .then((data) => {
-                        console.log('New Comment Created');
-                    })
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                        })
                 }
-                break;
+            break;
+            case 403:
+                {
+                    return res.status;
+                }
+            break;
             default:
                 throw res;
-                break;
+            break;
         }//switch
     })//then
 }//
@@ -99,10 +154,51 @@ function postNewEventReplyComment(mainCommentId, newReplyCommentText) {
         switch (res.status) {
             case 201 :
                 {
-                    res.json()
-                    .then((data) => {
-                        console.log('New Reply Comment Created');
-                    })
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                        })
+                }
+            break;
+            case 403:
+                {
+                    return res.status;
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+
+function postRsvpToEvent(eventStatusString) {
+
+    const url = new URL(`${window.location.href}/post-rsvp-to-event`);
+    
+    const formData = new FormData(document.createElement('form'));
+    formData.set('event_status', eventStatusString);
+    formData.set('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+
+    return fetch(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(res => {
+        switch (res.status) {
+            case 201 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                        })
+                }
+                break;
+            case 403:
+                {
+                    return res.status;
                 }
                 break;
             default:
@@ -110,7 +206,7 @@ function postNewEventReplyComment(mainCommentId, newReplyCommentText) {
                 break;
         }//switch
     })//then
-}//
+    }//
 
 
 

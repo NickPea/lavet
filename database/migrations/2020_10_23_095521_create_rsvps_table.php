@@ -15,7 +15,7 @@ class CreateRsvpsTable extends Migration
     {
         Schema::create('rsvps', function (Blueprint $table) {
             $table->id();
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->timestamps();
             //FK
             $table->foreignId('user_id')->constrained('users', 'id');
