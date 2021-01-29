@@ -74,6 +74,188 @@ function getEventSomeAttending() {
     })//then
 }//
 
+function getEventTitle() {
+    const url = new URL(`${window.location.href}/get-event-title`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventHostedBy() {
+    const url = new URL(`${window.location.href}/get-event-hosted-by`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventAbout() {
+
+    const url = new URL(`${window.location.href}/get-event-about`);
+
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+
+function getEventAccess() {
+    const url = new URL(`${window.location.href}/get-event-access`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventWhen() {
+    const url = new URL(`${window.location.href}/get-event-when`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventTime() {
+    const url = new URL(`${window.location.href}/get-event-time`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventLocation() {
+    const url = new URL(`${window.location.href}/get-event-location`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventImage() {
+    const url = new URL(`${window.location.href}/get-event-image`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
+
+function getEventTag() {
+    const url = new URL(`${window.location.href}/get-event-tag`);
+    return fetch(url)
+    .then(res => {
+        switch (res.status) {
+            case 200 :
+                {
+                    return res.json()
+                        .then((data) => {
+                            return data;
+                    })
+                }
+            break;
+            default:
+                throw res;
+            break;
+        }//switch
+    })//then
+}//
 
 function getEventAttendingAllAttendess() {
 

@@ -85,14 +85,29 @@ Route::get('listing/{listing}', 'ListingController@show');
 
 // EVENT
 Route::get('event/{event}', 'EventController@getTemplate');
+
+Route::get('event/{event}/get-event-title', 'EventController@getEventTitle');
+
+Route::get('event/{event}/get-event-hosted-by', 'EventController@getEventHostedBy');
+
+Route::get('event/{event}/get-event-image', 'EventController@getEventImage');
+Route::get('event/{event}/get-event-tag', 'EventController@getEventTag');
+
+Route::get('event/{event}/get-event-access', 'EventController@getEventAccess');
+Route::get('event/{event}/get-event-when', 'EventController@getEventWhen');
+Route::get('event/{event}/get-event-time', 'EventController@getEventTime');
+Route::get('event/{event}/get-event-location', 'EventController@getEventLocation');
+
 Route::get('event/{event}/get-event-comments', 'EventController@getEventComments');
 Route::get('event/{event}/get-event-attending-count', 'EventController@getEventAttendingCount');
 Route::get('event/{event}/get-event-some-attending', 'EventController@getEventSomeAttending');
 Route::get('event/{event}/get-event-attending-all-attendees', 'EventController@getEventAttendingAllAttendess');
+
 Route::post('event/{event}/new-event-comment', 'EventController@newEventComment');
 Route::post('event/{event}/new-event-reply-comment', 'EventController@newEventReplyComment');
 Route::post('event/{event}/post-rsvp-to-event', 'EventController@postRsvpToEvent');
 
+Route::get('event/{event}/get-event-about', 'EventController@getEventAbout');
 
 //PROFILE CHAT
 Route::post('profile/{profile}/chat', 'ChatController@sendAndRefresh');

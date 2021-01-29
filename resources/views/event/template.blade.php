@@ -3,7 +3,7 @@
 
 {{-- 
 
-// -- EDIT WIZARD ECOMPASSING: 
+// -- EDIT WIZARD: 
 // -- -- TITLE
 // -- -- EVENT IMAGE AND TAGS
 // -- -- HOSTED BY (TO ADD COMPANY OR BUSINESS)
@@ -13,16 +13,14 @@
 // -- REPLY TO A COMMENT - TICK
 
 
-// -- ATTEND AND UPDATE ATTENDING & REMAINING SEATS
-// -- SEE ALL ATTENDING
+// -- ATTEND AND UPDATE ATTENDING & REMAINING SEATS - TICK
+// -- SEE ALL ATTENDING - TICK
 
 
 // -- ADD AN EVENT WIZARD (FROM OTHER PAGES)
 
 
  --}}
-
-
 
 
 {{-- ---------------------------------------- LAYOUT ---------------------------------------------- --}}
@@ -36,8 +34,6 @@
 {{-- ---------------------------------------- HEAD ---------------------------------------------- --}}
 
 @push('head')
-
-
 
 
 
@@ -59,6 +55,7 @@
 @push('body')
 
 <!-- modals -->
+@include('event.components.edit-modal')
 @include('event.components.attending-all-modal')
 @include('event.components.rsvp-prompt-modal')
 
@@ -77,14 +74,14 @@
             <!-- col one -->
             <div class="col-8">
 
-                @include('event.components.image-overlay')
+                @include('event.components.visual')
     
             </div>
 
             <!-- col two -->
             <div class="col-4 d-flex flex-column">
     
-                @include('event.components.hosted')
+                @include('event.components.hostedby')
                 @include('event.components.details')
                 @include('event.components.rsvp')
                 @include('event.components.attending')

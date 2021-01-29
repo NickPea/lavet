@@ -15,6 +15,94 @@ class EventController extends Controller
         return view('event.template', ['event' => $event]);
     }
 
+    /** GET TITLE */
+    public function getEventTitle(Event $event)
+    {
+        $title = $event->title;
+
+        return response(['title' => $title], 200);
+    }
+
+    /** GET HOSTED BY */
+    public function getEventHostedBy(Event $event)
+    {
+        $hosted_by = [
+            'link' => $event->user->profile->path(),
+            'image' => $event->user->image->first()->path,
+            'name' => $event->user->name,
+        ];
+
+        return response(['hosted_by' => $hosted_by], 200);
+    }
+
+    /** GET IMAGE */
+    public function getEventImage(Event $event)
+    {
+        $image = $event->image->first()->path;
+
+        return response(['image' => $image], 200);
+    }
+
+    /** GET TAG */
+    public function getEventTag(Event $event)
+    {
+        $tag = $event->tag->map->name;
+
+        return response(['tag' => $tag], 200);
+    }
+
+    /** GET ACCESS */
+    public function getEventAccess(Event $event)
+    {
+        $access = $event->access;
+
+        return response(['access' => $access], 200);
+    }
+
+    /** GET TIME */
+    public function getEventTime(Event $event)
+    {
+        $time = [
+            'start' => $event->start_at->format('g:i A'),
+            'end' => $event->end_at->format('g:i A'),
+        ];
+
+        return response(['time' => $time], 200);
+    }
+
+    /** GET WHEN */
+    public function getEventWhen(Event $event)
+    {
+        $when = [
+            'start' => $event->start_at->format('l jS \\of F Y'),
+            'end' => $event->end_at->format('l jS \\of F Y'),
+        ];
+
+        return response(['when' => $when], 200);
+    }
+
+    /** GET LOCATION */
+    public function getEventLocation(Event $event)
+    {
+        $location = [
+            'township' => $event->location->first()->township->name,
+            'city' => $event->location->first()->city->name,
+            'province' => $event->location->first()->province->name,
+            'country' => $event->location->first()->country->name,
+            'area_code' => $event->location->first()->area_code->name,
+        ];
+
+        return response(['location' => $location], 200);
+    }
+
+    /** GET ABOUT */
+    public function getEventAbout(Event $event)
+    {
+        $about = $event->about;
+
+        return response(['about' => $about], 200);
+    }
+
 
     /** GET COMMENTS */
     public function getEventComments(Event $event)
@@ -57,15 +145,14 @@ class EventController extends Controller
     {
         $someAttending = $event->rsvp->map->user->take(3)->shuffle();
 
-        $someAttendingFormatted = $someAttending->map(function ($user)
-        {
+        $someAttendingFormatted = $someAttending->map(function ($user) {
             return [
                 'name' => $user->name,
                 'image' => $user->profile->image->first()->path,
                 'profile' => $user->profile->path(),
             ];
         });
-        
+
         return response($someAttendingFormatted, 200);
     }
 
