@@ -2,6 +2,8 @@
 
 
 <style>
+    /* modal styles */
+
     .event-edit-modal-wrapper {
         display: none;
         /* toggle */
@@ -20,7 +22,6 @@
         background-color: rgba(0, 0, 0, 0.5);
 
         overflow-y: auto;
-
     }
 
     .event-edit-modal-content {
@@ -40,34 +41,58 @@
 
     }
 
-    .event-edit-modal-content-item-wrapper {
+    /* each item styles */
 
-        width: 100%;
-
-    }
-
-    .event-edit-modal-content-title {
-
+    .event-edit-modal-item-title {
         color: rgb(80, 80, 80);
         font-size: 1.2rem;
         font-weight: bolder;
-
         border-bottom: 2px solid lightgrey;
-        margin-bottom: 8px;
     }
 
-    .event-edit-modal-entry {
+    .event-edit-modal-item-entry {
+
+        width: 90%;
+        margin: 20px auto;
+
         background-color: lightgrey;
-        padding: 1rem;
         border-radius: 10px;
-        margin: 20px 60px;
+
+        padding: 1rem;
 
         cursor: pointer;
     }
 
-    .event-edit-modal-entry:hover {
+    .event-edit-modal-item-entry:hover {
         background-color: rgb(230, 230, 230)
     }
+
+    .event-edit-modal-image-item {
+        min-width: 100%;
+        max-width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .event-edit-modal-item-form {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .event-edit-modal-image-input-hidden {
+        position: absolute !important;
+        height: 1px;
+        width: 1px;
+        overflow: hidden;
+        clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    .event-edit-modal-image-input-label-wrapper {
+        width: 100%;
+        margin-bottom: 0;
+        display: block;
+    }
+    
 </style>
 
 
@@ -82,50 +107,80 @@
 
         <div class="event-edit-modal-content">
 
+            {{-- // -- version-two-feature --
+
             <!-- hosted by -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">Hosted by</span>
-                <div data-js="event-edit-modal-hosted-by-entry" class="event-edit-modal-entry"></div>
-            </div>
+            <span class="event-edit-modal-item-title">Hosted by</span>
+            <div data-js="event-edit-modal-hosted-by-entry" class="event-edit-modal-item-entry"></div> 
+
+            --}}
 
             <!-- title -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">Title</span>
-                <div data-js="event-edit-modal-title-entry" class="event-edit-modal-entry"></div>
-            </div>
+            <span class="event-edit-modal-item-title">Title</span>
+            <div data-js="event-edit-modal-title-entry" class="event-edit-modal-item-entry"></div>
+            <form class="event-edit-modal-item-form">
+                <input name="event_title" class="form-control form-control-lg">
+                <div class="d-flex mt-3">
+                    <button class="btn btn-outline-secondary ml-auto">cancel</button>
+                    <button class="btn btn-primary ml-1">save</button>
+                </div>
+            </form>
+
 
             <!-- image -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">Image</span>
-                <div data-js="event-edit-modal-image-entry" class="event-edit-modal-entry"></div>
-            </div>
+            <span class="event-edit-modal-item-title">Image</span>
+            <label for="event_image" class="event-edit-modal-image-input-label-wrapper">
+                <div data-js="event-edit-modal-image-entry" class="event-edit-modal-item-entry"></div>
+                <input type="file" name="event_image" id="event_image" accept="image/*"
+                    data-js="event-edit-modal-image-input" class="event-edit-modal-image-input-hidden">
+            </label>
+
 
             <!-- when -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">When</span>
-                <div class="event-edit-modal-entry">
-                    <div data-js="event-edit-modal-when-date-entry"></div>
-                    <div data-js="event-edit-modal-when-time-entry"></div>
-                </div>
+            <span class="event-edit-modal-item-title">When</span>
+            <div class="event-edit-modal-item-entry">
+                <div data-js="event-edit-modal-when-date-entry"></div>
+                <div data-js="event-edit-modal-when-time-entry"></div>
             </div>
 
             <!-- where -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">Where</span>
-                <div data-js="event-edit-modal-where-entry" class="event-edit-modal-entry"></div>
-            </div>
+            <span class="event-edit-modal-item-title">Where</span>
+            <div data-js="event-edit-modal-where-entry" class="event-edit-modal-item-entry"></div>
 
-            <!-- tag -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">Tags</span>
-                <div data-js="event-edit-modal-tag-entry" class="event-edit-modal-entry"></div>
-            </div>
+            <form class="event-edit-modal-item-form">
+
+                <label for="event_where_township">Township</label>
+                <input name="event_where_township" id="event_where_township" class="form-control form-control-lg mb-1">
+
+                <label for="event_where_city">City</label>
+                <input name="event_where_city" id="event_where_city" class="form-control form-control-lg mb-1">
+
+                <label for="event_where_province">Province</label>
+                <input name="event_where_province" id="event_where_province" class="form-control form-control-lg mb-1">
+
+                <label for="event_where_country">Country</label>
+                <input name="event_where_country" id="event_where_country" class="form-control form-control-lg mb-1">
+
+                <label for="event_where_area_code">Area Code</label>
+                <input name="event_where_area_code" id="event_where_area_code"
+                    class="form-control form-control-lg mb-1">
+
+                <div class="d-flex mt-3">
+                    <button class="btn btn-outline-secondary ml-auto">cancel</button>
+                    <button class="btn btn-primary ml-1">save</button>
+                </div>
+            </form>
 
             <!-- about -->
-            <div class="event-edit-modal-content-item-wrapper">
-                <span class="event-edit-modal-content-title">About</span>
-                <div data-js="event-edit-modal-about-entry" class="event-edit-modal-entry"></div>
-            </div>
+            <span class="event-edit-modal-item-title">About</span>
+            <div data-js="event-edit-modal-about-entry" class="event-edit-modal-item-entry"></div>
+            <form class="event-edit-modal-item-form">
+                <textarea name="event_about" class="form-control form-control-lg"></textarea>
+                <div class="d-flex mt-3">
+                    <button class="btn btn-outline-secondary ml-auto">cancel</button>
+                    <button class="btn btn-primary ml-1">save</button>
+                </div>
+            </form>
 
 
         </div><!-- //content -->
@@ -142,25 +197,28 @@
     function EventEditModal() {
 
         //DOM
-        const editModalWrapper = document.querySelector('[data-js="event-edit-modal-wrapper"]');
-        const editModalBackdrop = editModalWrapper.querySelector('[data-js="event-edit-modal-backdrop"]');
-            //--entries
-        const hostedByEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-hosted-by-entry"]');
-        const titleEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-title-entry"]');
-        const imageEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-image-entry"]');
-        const whatEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-what-entry"]');
-        const whenDateEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-date-entry"]');
-        const whenTimeEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-time-entry"]');
-        const whereEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-where-entry"]');
-        const tagEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-tag-entry"]');
-        const aboutEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-about-entry"]');
+
+            const editModalWrapper = document.querySelector('[data-js="event-edit-modal-wrapper"]');
+            const editModalBackdrop = editModalWrapper.querySelector('[data-js="event-edit-modal-backdrop"]');
+                //--entries
+            // const hostedByEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-hosted-by-entry"]');
+            // const tagEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-tag-entry"]');
+            const titleEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-title-entry"]');
+            const imageEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-image-entry"]');
+            const imageInput = editModalWrapper.querySelector('[data-js="event-edit-modal-image-input"]');
+            const whatEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-what-entry"]');
+            const whenDateEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-date-entry"]');
+            const whenTimeEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-time-entry"]');
+            const whereEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-where-entry"]');
+            const aboutEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-about-entry"]');
+
+
 
         //EVENTS
 
             //close edit modal on click away (backdrop click)
 
             editModalWrapper.addEventListener('click', (e) => {
-                e.preventDefault();
 
                 if (e.target === editModalBackdrop) {
                     store.publish({
@@ -169,6 +227,37 @@
                 }//if
 
             });
+
+            
+            //upload image after select
+            imageInput.addEventListener('change', async (e) => {
+
+                //show new image and 'saving' indicator 
+                const imgUrl = URL.createObjectURL(e.target.files[0]);
+                imageEntry.innerHTML = `
+                        <div style="position:relative; min-width: 100%;">
+                            <img src="${imgUrl}" style="max-width:10%; min-width:10%;"/>
+                            <span style="position:absolute; top:calc(50% - 10px); right:5%;">Saving...</span>
+                        </div>
+                    `;
+
+                //post new image and refresh state
+                const fetchData = await postEventImage(e.target.files[0]);
+                
+                if (fetchData == 403) {
+                    alert('Please sign in first');
+                    return;
+                }
+
+                store.publish({
+                    type: 'event-image/refresh',
+                    payload: fetchData.image
+                });
+                
+
+            });//oninputchange
+
+
 
 
         //RENDER
@@ -182,21 +271,6 @@
                     } else {
                         editModalWrapper.style.display = 'none';
                     }
-
-                }//ifstatechange
-            });
-            
-            //render HOSTEDBY
-            store.subscribe((oldState, newState) => {
-                if (!_.isEqual(oldState.event_hosted_by, newState.event_hosted_by)) {
-
-                    const selectState = JSON.parse(JSON.stringify(newState.event_hosted_by));
-
-                    hostedByEntry.innerHTML = `
-                        <div>Name: ${selectState.name}</div> 
-                        <div>Image: ${selectState.image}</div> 
-                        <div>Link: ${selectState.link}</div> 
-                    `;
 
                 }//ifstatechange
             });
@@ -223,12 +297,11 @@
                     const selectState = JSON.parse(JSON.stringify(newState.event_image));
 
                     imageEntry.innerHTML = `
-                        ${selectState}
+                        <img src="${selectState}" class="event-edit-modal-image-item"/>
                     `;
 
                 }//ifstatechange
             });
-
 
             //render WHAT
             store.subscribe((oldState, newState) => {
@@ -285,21 +358,6 @@
 
                 }//ifstatechange
             });
-
-            //render TAG
-            store.subscribe((oldState, newState) => {
-                if (!_.isEqual(oldState.event_tag, newState.event_tag)) {
-
-                    const selectState = JSON.parse(JSON.stringify(newState.event_tag));
-
-                    tagEntry.innerHTML = selectState.map((tag) => {
-                        return `
-                            ${tag}
-                        `;
-                    }).join('<br>');
-
-                }//ifstatechange
-            });
             
             //render ABOUT
             store.subscribe((oldState, newState) => {
@@ -313,6 +371,48 @@
 
                 }//ifstatechange
             });
+
+
+
+            // -- version-two-features ---------------------------------------------------------
+
+
+            // //render HOSTEDBY
+            // store.subscribe((oldState, newState) => {
+            //     if (!_.isEqual(oldState.event_hosted_by, newState.event_hosted_by)) {
+
+            //         const selectState = JSON.parse(JSON.stringify(newState.event_hosted_by));
+
+            //         hostedByEntry.innerHTML = `
+            //             <div>Name: ${selectState.name}</div> 
+            //             <div>Image: ${selectState.image}</div> 
+            //             <div>Link: ${selectState.link}</div> 
+            //         `;
+
+            //     }//ifstatechange
+            // });
+
+
+            //render TAG
+            // store.subscribe((oldState, newState) => {
+            //     if (!_.isEqual(oldState.event_tag, newState.event_tag)) {
+
+            //         const selectState = JSON.parse(JSON.stringify(newState.event_tag));
+
+            //         tagEntry.innerHTML = selectState.map((tag) => {
+            //             return `
+            //                 ${tag}
+            //             `;
+            //         }).join('<br>');
+
+            //     }//ifstatechange
+            // });
+
+
+            // --------------------------------------------------------------------------------
+
+
+
 
 
 

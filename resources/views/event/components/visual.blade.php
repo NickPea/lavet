@@ -4,6 +4,13 @@
 
 <style>
 
+    .event-visual-image-entry-img {
+        min-width: 100%;
+        max-width: 100%;
+        height: 550px;
+        object-fit: cover;
+    }
+
 
 </style>
 
@@ -22,9 +29,7 @@
             <div class="position-relative">
 
                 <!-- image backdrop -->
-                <div data-js="event-visual-image-entry">
-                    <img class="w-100 rounded" src={{asset($event->image->first()->path)}} alt="event image">
-                </div>
+                <div data-js="event-visual-image-entry"></div>
 
                 <!-- overlain -->
                 <div class="position-absolute" style="bottom:3%; left:3%">
@@ -86,7 +91,7 @@
                 if (!_.isEqual(oldState.event_image, newState.event_image)) {
 
                     imageEntry.innerHTML = `
-                        <img src="${newState.event_image}">
+                        <img src="${newState.event_image}" class="event-visual-image-entry-img" />
                     `;
 
                 }//ifstatechange

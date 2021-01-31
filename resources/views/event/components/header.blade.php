@@ -64,7 +64,7 @@
     
                     <!-- show edit modal button -->
                     <div class="header-show-edit-modal-button-wrapper">
-                        <span data-js="header-show-edit-modal-button">Edit All</span>
+                        <span data-js="header-show-edit-modal-button">Edit</span>
                     </div>
     
                 </div><!-- //col -->

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class EventController extends Controller
 {
@@ -227,6 +228,41 @@ class EventController extends Controller
 
         return response($newRsvp, 201);
     } //
+
+
+    public function postEventImage(Event $event, Request $request)
+    {
+        //authenticate
+        if (Auth::guest()) {
+            return response('forbidden', 403);
+        }
+
+        //get user
+        $reqUser = $request->user();
+
+        //get user folder path
+        $userFilesPath = Hash::make($reqUser->email);
+
+        //store image under user and get path
+        $newImagePath = $request->file('event_image')->store($userFilesPath);
+
+        //convert to url
+        $newImagePathUrl = secure_url($newImagePath);
+
+        //create db image entry with path 
+        $newDbImage = $reqUser->image()->create([
+            'path' => $newImagePathUrl,
+        ]);
+        
+        //attach/sync new db image entry to event
+        $event->image()->sync($newDbImage->id);
+
+        //get new event db image path
+        $newDbImagePath = $event->image->first()->path;
+
+        //return new db image path
+        return response(['image' => $newDbImagePath], 201);
+    }
 
 
 

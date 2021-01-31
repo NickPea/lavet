@@ -70,24 +70,14 @@
 
 
 <script>
+
     function EventComments() {
-    // ------------------------------------------------------------------------------------------------------
-
-
-
 
         //DOM
 
             const eventCommentsEntry = document.querySelector('[data-js="event-comments-entry"]');
-            !eventCommentsEntry&&console.error('query selector not found');
-            
             const eventCommentsForm = document.querySelector('[data-js="event-comments-form"]');
-            !eventCommentsForm&&console.error('query selector not found');
-            
             const eventCommentsFormTextArea = document.querySelector('[data-js="event-comments-form-textarea"]');
-            !eventCommentsFormTextArea&&console.error('query selector not found');
-
-
 
 
         //EVENTS
@@ -124,8 +114,7 @@
             });//
             
 
-        //RENDER FUNCTIONS
-
+        //RENDER
 
             //render COMMENTS
             store.subscribe((oldState, newState) => {
@@ -267,12 +256,8 @@
 
 
 
-
-
-
-
-
-    // ------------------------------------------------------------------------------------------------------
     }//EventComments() 
     document.addEventListener('DOMContentLoaded', EventComments);
+
+    
 </script>
