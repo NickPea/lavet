@@ -1,8 +1,7 @@
 {{--  --}}
 
 <script>
-
-function getEventComments() {
+    function getEventComments() {
     
     const url = new URL(`${window.location.href}/get-event-comments`);
 
@@ -396,38 +395,65 @@ function postRsvpToEvent(eventStatusString) {
 
 
     function postEventImage(newEventImage) {
+                const url = new URL(`${window.location.href}/post-event-image`);
+                const formData = new FormData(document.createElement('form'));
+                formData.set('event_image', newEventImage);
+                formData.set('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                return fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(res => {
+                    switch (res.status) {
+                        case 201 :
+                            {
+                                return res.json()
+                                    .then((data) => {
+                                        return data;
+                                    })
+                    }
+                    break;
+                case 403:
+                    {
+                        return res.status;
+                    }
+                    break;
+                default:
+                    throw res;
+                    break;
+            }//switch
+        })//then
+    }//
 
-    const url = new URL(`${window.location.href}/post-event-image`);
-
-    const formData = new FormData(document.createElement('form'));
-    formData.set('event_image', newEventImage);
-    formData.set('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-
-
-    return fetch(url, {
-        method: 'POST',
-        body: formData,
-    })
-    .then(res => {
-        switch (res.status) {
-            case 201 :
-                {
-                    return res.json()
-                        .then((data) => {
-                            return data;
-                        })
-                }
-                break;
-            case 403:
-                {
-                    return res.status;
-                }
-                break;
-            default:
-                throw res;
-                break;
-        }//switch
-    })//then
+    function postEventTitle(newEventTitle) {
+                const url = new URL(`${window.location.href}/post-event-title`);
+                const formData = new FormData(document.createElement('form'));
+                formData.set('event_title', newEventTitle);
+                formData.set('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                return fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(res => {
+                    switch (res.status) {
+                        case 201 :
+                            {
+                                return res.json()
+                                    .then((data) => {
+                                        return data;
+                                    })
+                    }
+                    break;
+                case 403:
+                    {
+                        return res.status;
+                    }
+                    break;
+                default:
+                    throw res;
+                    break;
+            }//switch
+        })//then
     }//
 
 

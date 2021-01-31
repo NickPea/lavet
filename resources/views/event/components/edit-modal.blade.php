@@ -2,6 +2,7 @@
 
 
 <style>
+
     /* modal styles */
 
     .event-edit-modal-wrapper {
@@ -75,6 +76,8 @@
     }
 
     .event-edit-modal-item-form {
+        display: none;
+
         width: 90%;
         margin: 20px auto;
     }
@@ -92,7 +95,7 @@
         margin-bottom: 0;
         display: block;
     }
-    
+
 </style>
 
 
@@ -109,25 +112,25 @@
 
             {{-- // -- version-two-feature --
 
-            <!-- hosted by -->
+            <!-- HOSTED BY -->
             <span class="event-edit-modal-item-title">Hosted by</span>
             <div data-js="event-edit-modal-hosted-by-entry" class="event-edit-modal-item-entry"></div> 
 
             --}}
 
-            <!-- title -->
+            <!-- TITLE -->
             <span class="event-edit-modal-item-title">Title</span>
             <div data-js="event-edit-modal-title-entry" class="event-edit-modal-item-entry"></div>
-            <form class="event-edit-modal-item-form">
+            <form data-js="event-edit-modal-title-form" class="event-edit-modal-item-form">
                 <input name="event_title" class="form-control form-control-lg">
                 <div class="d-flex mt-3">
-                    <button class="btn btn-outline-secondary ml-auto">cancel</button>
+                    <button data-js="event-edit-modal-title-form-cancel"
+                        class="btn btn-outline-secondary ml-auto" tabindex="-1">cancel</button>
                     <button class="btn btn-primary ml-1">save</button>
                 </div>
             </form>
 
-
-            <!-- image -->
+            <!-- IMAGE -->
             <span class="event-edit-modal-item-title">Image</span>
             <label for="event_image" class="event-edit-modal-image-input-label-wrapper">
                 <div data-js="event-edit-modal-image-entry" class="event-edit-modal-item-entry"></div>
@@ -135,19 +138,45 @@
                     data-js="event-edit-modal-image-input" class="event-edit-modal-image-input-hidden">
             </label>
 
-
-            <!-- when -->
+            <!-- WHEN -->
             <span class="event-edit-modal-item-title">When</span>
             <div class="event-edit-modal-item-entry">
                 <div data-js="event-edit-modal-when-date-entry"></div>
                 <div data-js="event-edit-modal-when-time-entry"></div>
             </div>
+            <form data-js="event-edit-modal-when-form" class="event-edit-modal-item-form">
+                <div class="row mb-2 font-weight-bold">
+                    <div class="col">&nbsp;From&nbsp;</div>
+                    <div class="col">&nbsp;To&nbsp;</div>
+                </div>
+                <!-- dates -->
+                <div class="row">
+                    <div class="col">
+                        <input type="date" name="event_when_start_date" class="form-control form-control-lg">
+                    </div>
+                    <div class="col">
+                        <input type="date" name="event_when_end_date" class="form-control form-control-lg">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center">-</div>
+                </div>
+                <!-- time -->
+                <div class="row">
+                    <div class="col">
+                        <input type="time" name="event_when_start_time" class="form-control form-control-lg">
+                    </div>
+                    <div class="col">
+                        <input type="time" name="event_when_end_time" class="form-control form-control-lg">
+                    </div>
+                </div>
+            </form>
 
-            <!-- where -->
+            <!-- WHERE -->
             <span class="event-edit-modal-item-title">Where</span>
             <div data-js="event-edit-modal-where-entry" class="event-edit-modal-item-entry"></div>
 
-            <form class="event-edit-modal-item-form">
+            <form data-js="event-edit-modal-where-form" class="event-edit-modal-item-form">
 
                 <label for="event_where_township">Township</label>
                 <input name="event_where_township" id="event_where_township" class="form-control form-control-lg mb-1">
@@ -171,17 +200,16 @@
                 </div>
             </form>
 
-            <!-- about -->
+            <!-- ABOUT -->
             <span class="event-edit-modal-item-title">About</span>
             <div data-js="event-edit-modal-about-entry" class="event-edit-modal-item-entry"></div>
-            <form class="event-edit-modal-item-form">
+            <form data-js="event-edit-modal-about-form" class="event-edit-modal-item-form">
                 <textarea name="event_about" class="form-control form-control-lg"></textarea>
                 <div class="d-flex mt-3">
                     <button class="btn btn-outline-secondary ml-auto">cancel</button>
                     <button class="btn btn-primary ml-1">save</button>
                 </div>
             </form>
-
 
         </div><!-- //content -->
     </div><!-- //backdrop -->
@@ -196,6 +224,11 @@
 <script>
     function EventEditModal() {
 
+
+        //LOCAL STATE
+
+            let titleFormOpen = false;
+
         //DOM
 
             const editModalWrapper = document.querySelector('[data-js="event-edit-modal-wrapper"]');
@@ -205,19 +238,19 @@
             // const tagEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-tag-entry"]');
             const titleEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-title-entry"]');
             const imageEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-image-entry"]');
-            const imageInput = editModalWrapper.querySelector('[data-js="event-edit-modal-image-input"]');
             const whatEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-what-entry"]');
             const whenDateEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-date-entry"]');
             const whenTimeEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-time-entry"]');
             const whereEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-where-entry"]');
             const aboutEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-about-entry"]');
-
-
+                //--forms
+            const imageInput = editModalWrapper.querySelector('[data-js="event-edit-modal-image-input"]');
+            const titleForm = editModalWrapper.querySelector('[data-js="event-edit-modal-title-form"]');
+            const titleFormCancel = titleForm.querySelector('[data-js="event-edit-modal-title-form-cancel"]');
 
         //EVENTS
 
             //close edit modal on click away (backdrop click)
-
             editModalWrapper.addEventListener('click', (e) => {
 
                 if (e.target === editModalBackdrop) {
@@ -225,14 +258,13 @@
                         type: 'event-edit-modal/hide'
                     });
                 }//if
-
             });
 
-            
+
             //upload image after select
             imageInput.addEventListener('change', async (e) => {
 
-                //show new image and 'saving' indicator 
+                //show selected image and 'saving' indicator 
                 const imgUrl = URL.createObjectURL(e.target.files[0]);
                 imageEntry.innerHTML = `
                         <div style="position:relative; min-width: 100%;">
@@ -246,23 +278,71 @@
                 
                 if (fetchData == 403) {
                     alert('Please sign in first');
-                    return;
+
                 }
 
+                //update state
                 store.publish({
                     type: 'event-image/refresh',
                     payload: fetchData.image
                 });
-                
 
-            });//oninputchange
-
+            });//uploadimage
 
 
+            //show title form
+            titleEntry.addEventListener('click', () => {
+                titleFormOpen = true;
+                renderTitleForm();
+                titleForm.elements['event_title'].value = store.getState().event_title;
+                titleForm.elements['event_title'].select();
+            });//
+
+
+            //hide title form
+            titleFormCancel.addEventListener('click', (e) => {
+                e.preventDefault();
+                titleFormOpen = false;
+                renderTitleForm();                     
+            });//
+
+
+            //update title on save button click
+            titleForm.addEventListener('submit', (e) => {
+                updateTitleEventListener(e);
+            });//
+
+
+            //update title on enter key
+            titleForm.elements['event_title'].addEventListener('keydown', (e) => {
+                if (e.key == 'Enter') {
+                    updateTitleEventListener(e);
+                }
+            });//
+
+            //update title helper
+            const updateTitleEventListener = async (e) => {
+
+                e.preventDefault();
+                //get value
+                let newEventTitle = titleForm.elements['event_title'].value;
+                //close form
+                titleFormOpen = false;
+                renderTitleForm();
+                //show saving indicator
+                titleEntry.innerHTML = `<div>Saving...</div>`;
+                //post data
+                const fetchData = await postEventTitle(newEventTitle);
+                //refresh state with returned
+                store.publish({
+                    type: 'event-title/refresh', 
+                    payload: fetchData.title,
+                });
+            }
 
         //RENDER
             
-            //show modal
+            //render EDIT MODAL
             store.subscribe((oldState, newState) => {
                 if (!_.isEqual(oldState.event_edit_modal_show, newState.event_edit_modal_show)) {
 
@@ -302,6 +382,17 @@
 
                 }//ifstatechange
             });
+
+            //render TITLE FORM
+            function renderTitleForm() {
+                if (titleFormOpen) {
+                    titleEntry.style.display = "none";
+                    titleForm.style.display = "block"
+                } else {
+                    titleEntry.style.display = "block";
+                    titleForm.style.display = "none"
+                }//if
+            }//
 
             //render WHAT
             store.subscribe((oldState, newState) => {
@@ -413,10 +504,9 @@
 
 
 
-
-
-
     }//EventEditModal
     document.addEventListener('DOMContentLoaded', EventEditModal);
+
+
 
 </script>

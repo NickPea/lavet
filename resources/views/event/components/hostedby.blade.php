@@ -68,7 +68,7 @@
 
                     rightEntry.innerHTML = `
                         <span class="py-1">
-                            <h6>Event hosted by</h6>
+                            <h6>Hosted by</h6>
                         </span>
                         <a class="text-reset" href="${window.location.origin}/${selectState.link}">
                             <span class="py-1">

@@ -29,7 +29,7 @@ class EventController extends Controller
     {
         $hosted_by = [
             'link' => $event->user->profile->path(),
-            'image' => $event->user->image->first()->path,
+            'image' => $event->user->profile->image->first()->path,
             'name' => $event->user->name,
         ];
 
@@ -230,6 +230,7 @@ class EventController extends Controller
     } //
 
 
+    /** POST IMAGE */
     public function postEventImage(Event $event, Request $request)
     {
         //authenticate
@@ -265,6 +266,17 @@ class EventController extends Controller
     }
 
 
+    /** POST TITLE */
+    public function postEventTitle(Event $event, Request $request) {
+
+        $event->title = $request->event_title;
+
+        $event->save();
+
+        $event->refresh();
+
+        return response(['title' => $event->title], 201);
+    }
 
 
 

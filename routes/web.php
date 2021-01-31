@@ -107,6 +107,7 @@ Route::post('event/{event}/new-event-comment', 'EventController@newEventComment'
 Route::post('event/{event}/new-event-reply-comment', 'EventController@newEventReplyComment');
 Route::post('event/{event}/post-rsvp-to-event', 'EventController@postRsvpToEvent');
 Route::post('event/{event}/post-event-image', 'EventController@postEventImage');
+Route::post('event/{event}/post-event-title', 'EventController@postEventTitle');
 
 Route::get('event/{event}/get-event-about', 'EventController@getEventAbout');
 
