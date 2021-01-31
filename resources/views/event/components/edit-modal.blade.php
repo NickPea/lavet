@@ -2,7 +2,6 @@
 
 
 <style>
-
     /* modal styles */
 
     .event-edit-modal-wrapper {
@@ -95,7 +94,6 @@
         margin-bottom: 0;
         display: block;
     }
-
 </style>
 
 
@@ -124,8 +122,8 @@
             <form data-js="event-edit-modal-title-form" class="event-edit-modal-item-form">
                 <input name="event_title" class="form-control form-control-lg">
                 <div class="d-flex mt-3">
-                    <button data-js="event-edit-modal-title-form-cancel"
-                        class="btn btn-outline-secondary ml-auto" tabindex="-1">cancel</button>
+                    <button data-js="event-edit-modal-title-form-cancel" class="btn btn-outline-secondary ml-auto"
+                        tabindex="-1">cancel</button>
                     <button class="btn btn-primary ml-1">save</button>
                 </div>
             </form>
@@ -204,9 +202,9 @@
             <span class="event-edit-modal-item-title">About</span>
             <div data-js="event-edit-modal-about-entry" class="event-edit-modal-item-entry"></div>
             <form data-js="event-edit-modal-about-form" class="event-edit-modal-item-form">
-                <textarea name="event_about" class="form-control form-control-lg"></textarea>
+                <textarea name="event_about" class="form-control form-control-lg" rows="8"></textarea>
                 <div class="d-flex mt-3">
-                    <button class="btn btn-outline-secondary ml-auto">cancel</button>
+                    <button data-js="event-edit-modal-about-form-cancel" class="btn btn-outline-secondary ml-auto" tabindex="-1">cancel</button>
                     <button class="btn btn-primary ml-1">save</button>
                 </div>
             </form>
@@ -227,7 +225,7 @@
 
         //LOCAL STATE
 
-            let titleFormOpen = false;
+            let titleFormOpen, aboutFormOpen = false;
 
         //DOM
 
@@ -247,6 +245,8 @@
             const imageInput = editModalWrapper.querySelector('[data-js="event-edit-modal-image-input"]');
             const titleForm = editModalWrapper.querySelector('[data-js="event-edit-modal-title-form"]');
             const titleFormCancel = titleForm.querySelector('[data-js="event-edit-modal-title-form-cancel"]');
+            const aboutForm = editModalWrapper.querySelector('[data-js="event-edit-modal-about-form"]');
+            const aboutFormCancel = aboutForm.querySelector('[data-js="event-edit-modal-about-form-cancel"]');
 
         //EVENTS
 
@@ -298,7 +298,6 @@
                 titleForm.elements['event_title'].select();
             });//
 
-
             //hide title form
             titleFormCancel.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -306,23 +305,21 @@
                 renderTitleForm();                     
             });//
 
-
             //update title on save button click
             titleForm.addEventListener('submit', (e) => {
                 updateTitleEventListener(e);
             });//
 
-
             //update title on enter key
             titleForm.elements['event_title'].addEventListener('keydown', (e) => {
                 if (e.key == 'Enter') {
-                    updateTitleEventListener(e);
+                    // updateTitleEventListener(e);
+                    e.preventDefault();
                 }
             });//
 
             //update title helper
             const updateTitleEventListener = async (e) => {
-
                 e.preventDefault();
                 //get value
                 let newEventTitle = titleForm.elements['event_title'].value;
@@ -338,7 +335,44 @@
                     type: 'event-title/refresh', 
                     payload: fetchData.title,
                 });
-            }
+            }//
+
+            //show about form
+            aboutEntry.addEventListener('click', (e) => {
+                aboutFormOpen = true;
+                renderAboutForm();
+                aboutForm.elements['event_about'].value = store.getState().event_about;
+                aboutForm.elements['event_about'].select();
+            });
+
+            //hide about form
+            aboutFormCancel.addEventListener('click', (e) => {
+                e.preventDefault();
+                aboutFormOpen = false;
+                renderAboutForm();
+            });
+
+            //update about on save button click
+            aboutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                //get data
+                const newEventAbout = aboutForm.elements['event_about'].value;
+                //show saving indicator
+                aboutEntry.innerHTML = `<div>Saving...</div>`;
+                //post data
+                const fetchData = await postEventAbout(newEventAbout);
+                //auth
+                if (fetchData == 403) {alert('Please sign in first')}
+                //toggle form
+                aboutFormOpen = false;
+                renderAboutForm();
+                //refresh state
+                store.publish({
+                    type: 'event-about/refresh', 
+                    payload: fetchData.about,
+                })
+            });//
+
 
         //RENDER
             
@@ -382,17 +416,6 @@
 
                 }//ifstatechange
             });
-
-            //render TITLE FORM
-            function renderTitleForm() {
-                if (titleFormOpen) {
-                    titleEntry.style.display = "none";
-                    titleForm.style.display = "block"
-                } else {
-                    titleEntry.style.display = "block";
-                    titleForm.style.display = "none"
-                }//if
-            }//
 
             //render WHAT
             store.subscribe((oldState, newState) => {
@@ -498,6 +521,31 @@
 
             //     }//ifstatechange
             // });
+
+
+
+            //render TITLE FORM
+            function renderTitleForm() {
+                if (titleFormOpen) {
+                    titleEntry.style.display = "none";
+                    titleForm.style.display = "block"
+                } else {
+                    titleEntry.style.display = "block";
+                    titleForm.style.display = "none"
+                }//if
+            }//
+
+
+            //render ABOUT FORM
+            function renderAboutForm() {
+                if (aboutFormOpen) {
+                    aboutEntry.style.display = "none";
+                    aboutForm.style.display = "block"
+                } else {
+                    aboutEntry.style.display = "block";
+                    aboutForm.style.display = "none"
+                }//if
+            }//
 
 
             // --------------------------------------------------------------------------------

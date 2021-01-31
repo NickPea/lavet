@@ -278,6 +278,18 @@ class EventController extends Controller
         return response(['title' => $event->title], 201);
     }
 
+    /** POST ABOUT */
+    public function postEventAbout(Event $event, Request $request) {
+
+        $event->about = $request->event_about;
+
+        $event->save();
+
+        $event->refresh();
+
+        return response(['about' => $event->about], 201);
+    }
+
 
 
 
