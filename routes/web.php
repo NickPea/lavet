@@ -103,14 +103,16 @@ Route::get('event/{event}/get-event-attending-count', 'EventController@getEventA
 Route::get('event/{event}/get-event-some-attending', 'EventController@getEventSomeAttending');
 Route::get('event/{event}/get-event-attending-all-attendees', 'EventController@getEventAttendingAllAttendess');
 
+Route::get('event/{event}/get-event-about', 'EventController@getEventAbout');
+
 Route::post('event/{event}/new-event-comment', 'EventController@newEventComment');
 Route::post('event/{event}/new-event-reply-comment', 'EventController@newEventReplyComment');
 Route::post('event/{event}/post-rsvp-to-event', 'EventController@postRsvpToEvent');
 Route::post('event/{event}/post-event-image', 'EventController@postEventImage');
 Route::post('event/{event}/post-event-title', 'EventController@postEventTitle');
 Route::post('event/{event}/post-event-about', 'EventController@postEventAbout');
+Route::post('event/{event}/post-event-when', 'EventController@postEventWhen');
 
-Route::get('event/{event}/get-event-about', 'EventController@getEventAbout');
 
 //PROFILE CHAT
 Route::post('profile/{profile}/chat', 'ChatController@sendAndRefresh');

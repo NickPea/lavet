@@ -249,20 +249,6 @@
         }
     );
 
-    // -- time
-    store.addReducer(
-        function event_time(state = {}, action) {
-            switch (action.type) {
-                case 'event-time/refresh':
-                    return action.payload;
-                    break;
-                default:
-                    return state;
-                    break;
-            }
-        }
-    );
-
     // -- location
     store.addReducer(
         function event_location(state = {}, action) {

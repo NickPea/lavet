@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -60,23 +61,12 @@ class EventController extends Controller
         return response(['access' => $access], 200);
     }
 
-    /** GET TIME */
-    public function getEventTime(Event $event)
-    {
-        $time = [
-            'start' => $event->start_at->format('g:i A'),
-            'end' => $event->end_at->format('g:i A'),
-        ];
-
-        return response(['time' => $time], 200);
-    }
-
     /** GET WHEN */
     public function getEventWhen(Event $event)
     {
         $when = [
-            'start' => $event->start_at->format('l jS \\of F Y'),
-            'end' => $event->end_at->format('l jS \\of F Y'),
+            'start_date_ISO' => $event->start_at,
+            'end_date_ISO' => $event->end_at,
         ];
 
         return response(['when' => $when], 200);
@@ -288,6 +278,25 @@ class EventController extends Controller
         $event->refresh();
 
         return response(['about' => $event->about], 201);
+    }
+
+    /** POST WHEN */
+    public function postEventWhen(Event $event, Request $request)
+    {
+        // dd($request->event_start_at_UTC, $request->event_end_at_UTC);
+
+        $event->start_at = $request->event_start_at_ISO;
+        $event->end_at = $request->event_end_at_ISO;
+
+        $event->save();
+        $event->refresh();
+
+        $when = [
+            'start_date_ISO' => $event->start_at,
+            'end_date_ISO' => $event->end_at,
+        ];
+
+        return response(['when' => $when], 201);
     }
 
 

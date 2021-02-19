@@ -19,8 +19,8 @@ class CreateEventsTable extends Migration
             $table->text('about')->nullable();
             $table->string('access', 100)->default('public');
             $table->integer('seat_num')->unsigned()->nullable();
-            $table->dateTime('start_at');
-            $table->dateTime('end_at');
+            $table->dateTimeTz('start_at');
+            $table->dateTimeTz('end_at');
             $table->timestamps();
             //FK
             $table->foreignId('user_id')->constrained('users', 'id');

@@ -133,7 +133,7 @@
                 if (!_.isEqual(oldState.event_when, newState.event_when)) {
 
                     whenStartEntry.innerHTML = `
-                         <h6 class="text-secondary">${newState.event_when.start}</h6>
+                         <h6 class="text-secondary">${newState.event_when.start_date_formatted}</h6>
                     `;
 
                 }//ifstatechange

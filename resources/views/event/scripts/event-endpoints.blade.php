@@ -176,25 +176,6 @@ function getEventWhen() {
     })//then
 }//
 
-function getEventTime() {
-    const url = new URL(`${window.location.href}/get-event-time`);
-    return fetch(url)
-    .then(res => {
-        switch (res.status) {
-            case 200 :
-                {
-                    return res.json()
-                        .then((data) => {
-                            return data;
-                    })
-                }
-            break;
-            default:
-                throw res;
-            break;
-        }//switch
-    })//then
-}//
 
 function getEventLocation() {
     const url = new URL(`${window.location.href}/get-event-location`);
@@ -475,11 +456,53 @@ function postRsvpToEvent(eventStatusString) {
                                     })
                     }
                     break;
-                case 403:
+                case 403: 
                     {
-                        return res.status;
+                        return res;
+                    }
+                    break;                
+                case 419: 
+                    {
+                        return res;
+                    }
+                    break;                
+                default:
+                    throw res;
+                    break;
+            }//switch
+        })//then
+    }//
+    
+    function postEventWhen(startDateTimeISO, endDateTimeISO) {
+                const url = new URL(`${window.location.href}/post-event-when`);
+                const formData = new FormData(document.createElement('form'));
+                formData.set('event_start_at_ISO', startDateTimeISO);
+                formData.set('event_end_at_ISO', endDateTimeISO);
+                formData.set('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                return fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(res => {
+                    switch (res.status) {
+                        case 201 :
+                            {
+                                return res.json()
+                                    .then((data) => {
+                                        return data;
+                                    })
                     }
                     break;
+                case 403: 
+                    {
+                        return res;
+                    }
+                    break;                
+                case 419: 
+                    {
+                        return res;
+                    }
+                    break;                
                 default:
                     throw res;
                     break;

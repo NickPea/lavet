@@ -138,7 +138,7 @@
 
             <!-- WHEN -->
             <span class="event-edit-modal-item-title">When</span>
-            <div class="event-edit-modal-item-entry">
+            <div data-js="event-edit-modal-when-entry" class="event-edit-modal-item-entry">
                 <div data-js="event-edit-modal-when-date-entry"></div>
                 <div data-js="event-edit-modal-when-time-entry"></div>
             </div>
@@ -150,10 +150,10 @@
                 <!-- dates -->
                 <div class="row">
                     <div class="col">
-                        <input type="date" name="event_when_start_date" class="form-control form-control-lg">
+                        <input type="date" name="event_when_start_date" class="form-control form-control-lg" required>
                     </div>
                     <div class="col">
-                        <input type="date" name="event_when_end_date" class="form-control form-control-lg">
+                        <input type="date" name="event_when_end_date" class="form-control form-control-lg" required>
                     </div>
                 </div>
                 <div class="row">
@@ -162,11 +162,21 @@
                 <!-- time -->
                 <div class="row">
                     <div class="col">
-                        <input type="time" name="event_when_start_time" class="form-control form-control-lg">
+                        <select data-js="event-edit-modal-when-start-time" name="event_when_start_time" class="form-control form-control-lg" required>
+                            @include('event.components.select-time-options')
+                        </select>
                     </div>
                     <div class="col">
-                        <input type="time" name="event_when_end_time" class="form-control form-control-lg">
+                        <select data-js="event-edit-modal-when-end-time" name="event_when_end_time" class="form-control form-control-lg" required>
+                            @include('event.components.select-time-options')
+                        </select>
                     </div>
+                </div>
+                <!-- buttons -->
+                <div class="d-flex mt-3">
+                    <button data-js="event-edit-modal-when-form-cancel"
+                        class="btn btn-outline-secondary ml-auto">cancel</button>
+                    <button class="btn btn-primary ml-1">save</button>
                 </div>
             </form>
 
@@ -204,7 +214,8 @@
             <form data-js="event-edit-modal-about-form" class="event-edit-modal-item-form">
                 <textarea name="event_about" class="form-control form-control-lg" rows="8"></textarea>
                 <div class="d-flex mt-3">
-                    <button data-js="event-edit-modal-about-form-cancel" class="btn btn-outline-secondary ml-auto" tabindex="-1">cancel</button>
+                    <button data-js="event-edit-modal-about-form-cancel" class="btn btn-outline-secondary ml-auto"
+                        tabindex="-1">cancel</button>
                     <button class="btn btn-primary ml-1">save</button>
                 </div>
             </form>
@@ -223,11 +234,14 @@
     function EventEditModal() {
 
 
-        //LOCAL STATE
+        //LOCAL STATE ===============================================================================
 
-            let titleFormOpen, aboutFormOpen = false;
 
-        //DOM
+            let titleFormOpen, aboutFormOpen, whenFormOpen = false;
+
+
+        //DOM =======================================================================================
+
 
             const editModalWrapper = document.querySelector('[data-js="event-edit-modal-wrapper"]');
             const editModalBackdrop = editModalWrapper.querySelector('[data-js="event-edit-modal-backdrop"]');
@@ -237,6 +251,7 @@
             const titleEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-title-entry"]');
             const imageEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-image-entry"]');
             const whatEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-what-entry"]');
+            const whenEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-entry"]');
             const whenDateEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-date-entry"]');
             const whenTimeEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-when-time-entry"]');
             const whereEntry = editModalWrapper.querySelector('[data-js="event-edit-modal-where-entry"]');
@@ -247,8 +262,14 @@
             const titleFormCancel = titleForm.querySelector('[data-js="event-edit-modal-title-form-cancel"]');
             const aboutForm = editModalWrapper.querySelector('[data-js="event-edit-modal-about-form"]');
             const aboutFormCancel = aboutForm.querySelector('[data-js="event-edit-modal-about-form-cancel"]');
+            const whenForm = editModalWrapper.querySelector('[data-js="event-edit-modal-when-form"]');
+            const whenFormSelectTimeStart = whenForm.querySelector('[data-js="event-edit-modal-when-start-time"]');
+            const whenFormSelectTimeEnd = whenForm.querySelector('[data-js="event-edit-modal-when-end-time"]');
+            const whenFormCancel = whenForm.querySelector('[data-js="event-edit-modal-when-form-cancel"]');
 
-        //EVENTS
+
+        //EVENTS =======================================================================================
+
 
             //close edit modal on click away (backdrop click)
             editModalWrapper.addEventListener('click', (e) => {
@@ -276,9 +297,9 @@
                 //post new image and refresh state
                 const fetchData = await postEventImage(e.target.files[0]);
                 
+                //auth
                 if (fetchData == 403) {
                     alert('Please sign in first');
-
                 }
 
                 //update state
@@ -362,7 +383,8 @@
                 //post data
                 const fetchData = await postEventAbout(newEventAbout);
                 //auth
-                if (fetchData == 403) {alert('Please sign in first')}
+                if (fetchData.status == 403) {alert('Please sign in first'); return;}
+                if (fetchData.status == 419) {alert('Please refresh page'); return;}
                 //toggle form
                 aboutFormOpen = false;
                 renderAboutForm();
@@ -373,8 +395,137 @@
                 })
             });//
 
+            //show when form and pre-fill
+            whenEntry.addEventListener('click', (e) => {
+                
+                //change local open state and show form
+                whenFormOpen = true;
+                renderWhenForm();
 
-        //RENDER
+                const startDateTimeLocal = new Date(store.getState().event_when.start_date_real);
+                const endDateTimeLocal = new Date(store.getState().event_when.end_date_real);
+
+                let startDateYear = startDateTimeLocal.getFullYear();
+                let startDateMonth = startDateTimeLocal.getMonth() + 1
+                startDateMonth = startDateMonth < 10 ? `0${startDateMonth}`: startDateMonth;
+                let startDateDay = startDateTimeLocal.getDay();
+                startDateDay = startDateDay < 10 ? `0${startDateDay}`: startDateDay;
+
+                let endDateYear = endDateTimeLocal.getFullYear()
+                let endDateMonth = endDateTimeLocal.getMonth() + 1
+                endDateMonth = endDateMonth < 10 ? `0${endDateMonth}`: endDateMonth;
+                let endDateDay = startDateTimeLocal.getDay();
+                endDateDay = endDateDay < 10 ? `0${endDateDay}`: endDateDay;
+
+                let startTimeHours = startDateTimeLocal.getHours();
+                let startTimeMinutes = startDateTimeLocal.getMinutes();
+                let endTimeHours = endDateTimeLocal.getHours();
+                let endTimeMinutes = endDateTimeLocal.getMinutes();
+
+                const startDateFormatted = `${startDateYear}-${startDateMonth}-${startDateDay}`
+                const endDateFormatted = `${endDateYear}-${endDateMonth}-${endDateDay}`
+                const startTimeFormatted = `${startTimeHours}:${startTimeMinutes}`
+                const endTimeFormatted = `${endTimeHours}:${endTimeMinutes}`
+
+                //pre-fill start date-picker
+                whenForm.elements['event_when_start_date'].valueAsDate = startDateTimeLocal;
+                whenForm.elements['event_when_start_date'].value = startDateFormatted;
+
+                //pre-fill end date-picker
+                whenForm.elements['event_when_end_date'].valueAsDate = endDateTimeLocal;
+                whenForm.elements['event_when_end_date'].value = endDateFormatted;
+
+                //pre-fill select start time
+                const startTimeSelectOptions = whenForm.elements['event_when_start_time'].options;
+                for (let i = 0; i < startTimeSelectOptions.length; i++) {
+                    if (startTimeSelectOptions[i].value == startTimeFormatted) {
+                        startTimeSelectOptions[i].selected = true;
+                    }//if
+                }//for
+
+                //pre-fill select end time
+                const endTimeSelectOptions = whenForm.elements['event_when_end_time'].options;
+                for (let i = 0; i < endTimeSelectOptions.length; i++) {
+                    if (endTimeSelectOptions[i].value == endTimeFormatted) {
+                        endTimeSelectOptions[i].selected = true;
+                    }//if
+                }//for
+
+            });//
+
+            //hide when form
+            whenFormCancel.addEventListener('click', (e) => {
+                e.preventDefault();
+                whenFormOpen = false;
+                renderWhenForm();
+            });
+
+            //update when date and time
+            whenForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                //get input
+                const startDateInput = whenForm.elements['event_when_start_date'];
+                const endDateInput = whenForm.elements['event_when_end_date'];
+                const startTimeInput = whenForm.elements['event_when_start_time'];
+                const endTimeInput = whenForm.elements['event_when_end_time'];
+
+                //format values
+                const startDateYear = startDateInput.valueAsDate.getFullYear();
+                const startDateMonth = startDateInput.valueAsDate.getMonth()
+                const startDateNoDays = startDateInput.valueAsDate.getDate();
+                const startTimeHours = parseInt(startTimeInput.value.split(':')[0]);
+                const startTimeMinutes = parseInt(startTimeInput.value.split(':')[1]);
+
+                const endDateYear = endDateInput.valueAsDate.getFullYear();
+                const endDateMonth = endDateInput.valueAsDate.getMonth()
+                const endDateNoDays = endDateInput.valueAsDate.getDate();
+                const endTimeHours = parseInt(endTimeInput.value.split(':')[0]);
+                const endTimeMinutes = parseInt(endTimeInput.value.split(':')[1]);
+
+                //create new dates
+                const selectedStartDateTimeLocal = new Date(
+                    startDateYear,
+                    startDateMonth,
+                    startDateNoDays, 
+                    startTimeHours,
+                    startTimeMinutes,
+                );
+
+                const selectedEndDateTimeLocal = new Date(
+                    endDateYear,
+                    endDateMonth,
+                    endDateNoDays, 
+                    endTimeHours,
+                    endTimeMinutes,
+                );
+
+                //ISO format new dates
+                const selectedStartDateTimeISO = selectedStartDateTimeLocal.toISOString();
+                const selectedEndDateTimeISO = selectedStartDateTimeLocal.toISOString();
+
+                //post new dates
+                const fetchData = await postEventWhen(
+                    selectedStartDateTimeISO,
+                    selectedEndDateTimeISO
+                );
+
+                //refresh state
+                store.publish({
+                    type: 'event-when/refresh',
+                    payload: fetchData.when
+                })
+
+                whenFormOpen = false;
+                renderWhenForm();
+
+            });
+
+
+
+
+        //RENDER =======================================================================================
+
             
             //render EDIT MODAL
             store.subscribe((oldState, newState) => {
@@ -436,8 +587,14 @@
 
                     const selectState = JSON.parse(JSON.stringify(newState.event_when));
 
+                    const startDateLocal = new Date(selectState.start_date_real);
+                    const endDateLocal = new Date(selectState.end_date_real);
+
+                    const startDateLocalFormatted = moment(startDateLocal).format('MMMM Do YYYY, h:mm a');
+                    const endDateLocalFormatted = moment(endDateLocal).format('MMMM Do YYYY, h:mm a');
+
                     whenDateEntry.innerHTML = `
-                        <div> <b>Date:</b> ${selectState.start} - ${selectState.end}</div>
+                        <div><b>Date - </b>${startDateLocalFormatted} to ${endDateLocalFormatted}</div>
                     `;
 
                 }//ifstatechange
@@ -544,6 +701,17 @@
                 } else {
                     aboutEntry.style.display = "block";
                     aboutForm.style.display = "none"
+                }//if
+            }//
+
+            //render WHEN FORM
+            function renderWhenForm() {
+                if (whenFormOpen) {
+                    whenEntry.style.display = "none";
+                    whenForm.style.display = "block"
+                } else {
+                    whenEntry.style.display = "block";
+                    whenForm.style.display = "none"
                 }//if
             }//
 

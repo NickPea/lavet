@@ -81,8 +81,8 @@
 
             const detailsWrapper = document.querySelector('[data-js="event-details-wrapper"]');
             const accessEntry = detailsWrapper.querySelector('[data-js="event-details-access-entry"]');
-            const whenStartEntry = detailsWrapper.querySelector('[data-js="event-details-when-start-entry"]');
-            const timeEntry = detailsWrapper.querySelector('[data-js="event-details-time-entry"]');
+            const whenDateStartEntry = detailsWrapper.querySelector('[data-js="event-details-when-start-entry"]');
+            const whenTimeEntry = detailsWrapper.querySelector('[data-js="event-details-time-entry"]');
             const locationEntry = detailsWrapper.querySelector('[data-js="event-details-location-entry"]');
 
 
@@ -105,14 +105,7 @@
                     payload: fetchData.when,
                 });
             })();
-            // onload fetch state - time
-            (async function () {
-                const fetchData = await getEventTime();
-                store.publish({
-                    type: 'event-time/refresh',
-                    payload: fetchData.time,
-                });
-            })();
+           
             // onload fetch state - location
             (async function () {
                 const fetchData = await getEventLocation();
@@ -136,26 +129,22 @@
 
                 }//ifstatechange
             });
+
             //render - when
             store.subscribe((oldState, newState) => {
                 if (!_.isEqual(oldState.event_when, newState.event_when)) {
 
-                    whenStartEntry.innerHTML = `
-                        <b>${newState.event_when.start}</b>
+                    whenDateStartEntry.innerHTML = `
+                        <b>${newState.event_when.start_date_formatted}</b>
+                    `;
+
+                    whenTimeEntry.innerHTML = `
+                        <b>${newState.event_when.start_time_formatted} to ${newState.event_when.end_time_formatted}</b>
                     `;
 
                 }//ifstatechange
             });
-            //render - time
-            store.subscribe((oldState, newState) => {
-                if (!_.isEqual(oldState.event_when_end, newState.event_time)) {
-
-                    timeEntry.innerHTML = `
-                        <b>${newState.event_time.start} to ${newState.event_time.end}</b>
-                    `;
-
-                }//ifstatechange
-            });
+           
             //render - location
             store.subscribe((oldState, newState) => {
                 if (!_.isEqual(oldState.event_location, newState.event_location)) {
